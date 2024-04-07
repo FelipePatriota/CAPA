@@ -7,28 +7,31 @@ export default function App() {
 
   const handleButtonPress = () => {
     console.log("Valor do Input 1:", input1);
-
     console.log("Valor do Input 3:", input3);
     
   };
   return (
-    <View>
-    <TextInput
+    <>
+      <View style={styles.container}>
+        
+        <TextInput
           style={styles.input}
           placeholder="Dados"
           keyboardType="numeric"
           value={input1}
           onChangeText={setInput1}
         />
-        <TextInput
+         <TextInput
           style={styles.input}
-          placeholder="Dados3"
+          placeholder="Dados"
           keyboardType="numeric"
           value={input1}
           onChangeText={setInput3}
         />
+        
         <Button title="Executar" onPress={handleButtonPress} />
       </View>
+    </>
   );
 }
 
