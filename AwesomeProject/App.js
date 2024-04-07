@@ -11,10 +11,8 @@ export default function App() {
     
   };
   return (
-    <>
-      <View style={styles.container}>
-        
-        <TextInput
+    <View>
+    <TextInput
           style={styles.input}
           placeholder="Dados"
           keyboardType="numeric"
@@ -30,7 +28,6 @@ export default function App() {
         />
         <Button title="Executar" onPress={handleButtonPress} />
       </View>
-    </>
   );
 }
 
