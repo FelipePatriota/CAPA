@@ -3,6 +3,7 @@ import { View, TextInput, Button, StyleSheet } from "react-native";
 
 export default function App() {
   const [input1, setInput1] = useState("");
+  const [input3, setInput3] = useState("");
 
   const handleButtonPress = () => {
     console.log("Valor do Input 1:", input1);
@@ -24,7 +25,7 @@ export default function App() {
           placeholder="Dados3"
           keyboardType="numeric"
           value={input1}
-          onChangeText={setInput1}
+          onChangeText={setInput3}
         />
         <Button title="Executar" onPress={handleButtonPress} />
       </View>
