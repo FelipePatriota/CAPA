@@ -3,10 +3,12 @@ import { View, TextInput, Button, StyleSheet } from "react-native";
 
 export default function App() {
   const [input1, setInput1] = useState("");
+  const [inputTHanos, setInputTHanos] = useState("");
   const [input3, setInput3] = useState("");
 
   const handleButtonPress = () => {
     console.log("Valor do Input 1:", input1);
+    console.log("Valor do Input THANOS:", inputTHanos);
     console.log("Valor do Input 3:", input3);
     
   };
@@ -16,14 +18,21 @@ export default function App() {
         
         <TextInput
           style={styles.input}
-          placeholder="Dados"
+          placeholder="Dados1"
           keyboardType="numeric"
           value={input1}
           onChangeText={setInput1}
         />
+        <TextInput
+          style={styles.input}
+          placeholder="THanos"
+          keyboardType="numeric"
+          value={inputTHanos}
+          onChangeText={setInputTHanos}
+        />
          <TextInput
           style={styles.input}
-          placeholder="Dados"
+          placeholder="Dados3"
           keyboardType="numeric"
           value={input1}
           onChangeText={setInput3}
