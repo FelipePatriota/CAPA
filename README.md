@@ -1,5 +1,4 @@
 # CAPA
-
 Introdução
 Como podemos criar uma metodologia de coleta e análise de dados para monitoramento e avaliação de
 iniciativas de inovação?
