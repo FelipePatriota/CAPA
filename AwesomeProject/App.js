@@ -6,6 +6,8 @@ export default function App() {
 
   const handleButtonPress = () => {
     console.log("Valor do Input 1:", input1);
+
+    console.log("Valor do Input 3:", input3);
     
   };
   return (
@@ -15,6 +17,13 @@ export default function App() {
         <TextInput
           style={styles.input}
           placeholder="Dados"
+          keyboardType="numeric"
+          value={input1}
+          onChangeText={setInput1}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Dados3"
           keyboardType="numeric"
           value={input1}
           onChangeText={setInput1}
