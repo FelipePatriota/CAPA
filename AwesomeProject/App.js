@@ -36,7 +36,7 @@ export default function App() {
           style={styles.input}
           placeholder="Dados3"
           keyboardType="numeric"
-          value={input1}
+          value={input3}
           onChangeText={setInput3}
         />
          <TextInput
