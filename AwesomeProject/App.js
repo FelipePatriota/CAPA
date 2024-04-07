@@ -9,10 +9,16 @@ export default function App() {
     
   };
   return (
-    <View style={styles.container}>
-      <Text>OTOCOMMITCAC</Text>
-      <StatusBar style="auto" />
-    </View>
+    <View>
+    <TextInput
+          style={styles.input}
+          placeholder="Dados"
+          keyboardType="numeric"
+          value={input1}
+          onChangeText={setInput1}
+        />
+        <Button title="Executar" onPress={handleButtonPress} />
+      </View>
   );
 }
 
