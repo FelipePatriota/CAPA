@@ -6,13 +6,14 @@ export default function App() {
   const [inputTHanos, setInputTHanos] = useState("");
   const [input3, setInput3] = useState("");
   const [inputLD, setInputLD] = useState("");
+  const [input5, setInput5] = useState("");
 
   const handleButtonPress = () => {
     console.log("Valor do Input 1:", input1);
     console.log("Valor do Input THANOS:", inputTHanos);
     console.log("Valor do Input 3:", input3);
     console.log("Valor do Input 4: ", inputLD);
-
+    
   };
   return (
     <>
@@ -45,6 +46,13 @@ export default function App() {
           keyboardType="numeric"
           value={inputLD}
           onChangeText={setInputLD}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Dados 5"
+          keyboardType="numeric"
+          value={inputLD}
+          onChangeText={setInput5}
         />
         
         <Button title="Executar" onPress={handleButtonPress} />
