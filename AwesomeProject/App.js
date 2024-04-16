@@ -52,7 +52,7 @@ export default function App() {
           style={style.input}
           placeholder="Dados 5"
           keyboardType="numeric"
-          value={inputLD}
+          value={input5}
           onChangeText={setInput5}
         />
         
