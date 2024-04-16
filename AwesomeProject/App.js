@@ -12,7 +12,7 @@ export default function App() {
     console.log("Valor do Input THANOS:", inputTHanos);
     console.log("Valor do Input 3:", input3);
     console.log("Valor do Input 4: ", inputLD);
-    
+
   };
   return (
     <>
