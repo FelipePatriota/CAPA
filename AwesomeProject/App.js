@@ -13,6 +13,7 @@ export default function App() {
     console.log("Valor do Input THANOS:", inputTHanos);
     console.log("Valor do Input 3:", input3);
     console.log("Valor do Input 4: ", inputLD);
+    console.log("Valor do Input 5:", input5);
     
   };
   return (
@@ -28,7 +29,7 @@ export default function App() {
         />
         <TextInput
           style={styles.input}
-          placeholder="THanos"
+          placeholder="Dados2"
           keyboardType="numeric"
           value={inputTHanos}
           onChangeText={setInputTHanos}
