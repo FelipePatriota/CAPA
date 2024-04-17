@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet } from "react-native";
+import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
   const [input1, setInput1] = useState("");
@@ -9,11 +9,16 @@ export default function App() {
   const [input5, setInput5] = useState("");
 
   const handleButtonPress = () => {
-    console.log("Valor do Input 1:", input1);
-    console.log("Valor do Input THANOS:", inputTHanos);
-    console.log("Valor do Input 3:", input3);
-    console.log("Valor do Input 4: ", inputLD);
-    console.log("Valor do Input 5:", input5);
+    var input1Teste = parseFloat(input1);
+    var inputTHanosTeste = parseFloat(inputTHanos);
+    var input3Teste = parseFloat(input3);
+    var inputLDTeste = parseFloat(inputLD);
+    var input5Teste = parseFloat(input5);
+    console.log("Valor do Input 1: ", input1Teste);
+    console.log("Valor do Input 2: ", inputTHanosTeste);
+    console.log("Valor do Input 3: ", input3Teste);
+    console.log("Valor do Input 4: ", inputLDTeste);
+    console.log("Valor do Input 5: ", input5Teste);
     
   };
   return (
@@ -21,42 +26,44 @@ export default function App() {
       <View style={styles.container}>
         
         <TextInput
-          style={styles.input}
+          style={style.input}
           placeholder="Dados1"
-          keyboardType="numeric"
+          inputMode="numeric"
           value={input1}
           onChangeText={setInput1}
         />
         <TextInput
-          style={styles.input}
+          style={style.input}
           placeholder="Dados2"
-          keyboardType="numeric"
+          inputMode="numeric"
           value={inputTHanos}
           onChangeText={setInputTHanos}
         />
          <TextInput
-          style={styles.input}
+          style={style.input}
           placeholder="Dados3"
-          keyboardType="numeric"
+          inputMode="numeric"
           value={input3}
           onChangeText={setInput3}
         />
          <TextInput
           style={style.input}
           placeholder="Dados 4"
-          keyboardType="numeric"
+          inputMode="numeric"
           value={inputLD}
           onChangeText={setInputLD}
         />
         <TextInput
           style={style.input}
           placeholder="Dados 5"
-          keyboardType="numeric"
+          inputMode="numeric"
           value={input5}
           onChangeText={setInput5}
         />
         
-        <Button title="Executar" onPress={handleButtonPress} />
+        <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
+          <Text style={style.touchableButtonText}>Enviar</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -74,10 +81,24 @@ const style = StyleSheet.create({
     height: 40,
     marginBottom: 10,
     borderWidth: 1,
+    fontFamily: "Arial",
     borderColor: "#ccc",
     paddingHorizontal: 10,
   },
-});
+  touchableButton: {
+    backgroundColor: "#2e97b7",
+    color: "white",
+    fontSize: 20,
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  touchableButtonText: {
+    fontFamily: "Arial",
+    color: "white",
+    fontSize: 20,
+  },
+  });
 
 const styles = StyleSheet.create({
   container: {
