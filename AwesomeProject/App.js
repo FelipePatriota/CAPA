@@ -53,7 +53,7 @@ export default function App() {
           style={style.input}
           placeholder="Dados 4"
           inputMode="numeric"
-          value={inputLD}
+          value={setInputDBO}
           onChangeText={setInputDBO}
         />
         <TextInput
