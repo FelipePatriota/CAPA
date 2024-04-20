@@ -5,8 +5,10 @@ export default function App() {
   const [input1, setInput1] = useState("");
   const [inputTHanos, setInputTHanos] = useState("");
   const [input3, setInput3] = useState("");
-  const [inputLD, setInputLD] = useState("");
-  const [input5, setInput5] = useState("");
+  const [inputDBO, setInputDBO] = useState("");
+  const [inputTurbidez, setInputTurbidez] = useState("");
+  const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+
 
   const handleButtonPress = () => {
     var input1Teste = parseFloat(input1);
@@ -17,8 +19,9 @@ export default function App() {
     console.log("Valor do Input 1: ", input1Teste);
     console.log("Valor do Input 2: ", inputTHanosTeste);
     console.log("Valor do Input 3: ", input3Teste);
-    console.log("Valor do Input 4: ", inputLDTeste);
-    console.log("Valor do Input 5: ", input5Teste);
+    console.log("Valor do Input 4: ", inputDBO);
+    console.log("Valor do Input 5: ", inputTurbidez);
+    console.log("Valor do Input 6: ", inputNitrogênioTotal);
     
   };
   return (
@@ -51,14 +54,21 @@ export default function App() {
           placeholder="Dados 4"
           inputMode="numeric"
           value={inputLD}
-          onChangeText={setInputLD}
+          onChangeText={setInputDBO}
         />
         <TextInput
           style={style.input}
           placeholder="Dados 5"
           inputMode="numeric"
           value={input5}
-          onChangeText={setInput5}
+          onChangeText={setInputTurbidez}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Dados 6"
+          inputMode="numeric"
+          value={inputNitrogênioTotal}
+          onChangeText={setInputNitrogênioTotal}
         />
         
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
