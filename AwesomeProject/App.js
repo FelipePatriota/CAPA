@@ -25,12 +25,6 @@ export default function App() {
 
 
   const addDataPoint = () => {
-    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(value) }; //formatar a data para o luxon
-    setData([...data, newDataPoint.y]); //colocar no Y
-    setDate([...date, newDataPoint.x]) //colocar no X
-};
-  const handleButtonPress = () => {
-    // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
     var od = parseFloat(inputOD);
@@ -41,24 +35,20 @@ export default function App() {
     var coliformesTermoTolerantes = parseFloat(inputColiformesT);
     var ResiduosTotais = parseFloat(inputSolidosT);
 
+
     var IQA = calculaIQA(tempAgua, ph, od, dbo, turbidez, nitrogênioTotal, fosforoTotal, coliformesTermoTolerantes, ResiduosTotais);
+    console.log("IQA: ", IQA)
+    var localDate = new Date(ano, mes - 1, dia); //formatar a data para o luxon
 
-    console.log("TA: "+tempAgua);
-    console.log("PH: "+ph);
-    console.log("OD: "+od);
-    console.log("DBO: "+dbo);
-    console.log("Turbidez: "+turbidez);
-    console.log("Nitrogênio Total: "+nitrogênioTotal);
-    console.log("Fósforo Total: "+fosforoTotal);
-    console.log("Coliformes Termotolerantes: "+coliformesTermoTolerantes);
-    console.log("Residuos Totais: "+ResiduosTotais);
-    console.log("IQA: "+IQA);
+    // const newDataPoint = { x: new Date(ano, mes - 1, dia), y: valorCalculado, cor: novaCor };
+    // setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
+    // setDate([...date, new Date(ano, mes - 1, dia)]); // Adicionando nova data ao estado
 
-    var data = new Date(ano, mes - 1, dia)
-    const newDataPoint = { x: data, y: Number(IAQ) }; //formatar a data para o luxon
-    setData([...date, newDataPoint]); //colocar no Y
-    setDate([...date, data]) //colocar no X
-  };
+
+    const newDataPoint = { x: localDate, y: Number(IQA) }; //formatar a data para o luxon
+    setData([...data, newDataPoint]); //colocar no Y
+    setDate([...date, localDate]) //colocar no X
+};
     return (
       <ScrollView style={{ flex: 1 }}>
         <View style={[styles.container, { paddingVertical: 150 }]}>
@@ -149,13 +139,6 @@ export default function App() {
           keyboardType='numeric'
 
         />
-          <TextInput
-          style={styles.input}
-          onChangeText={onChangeValue}
-          value={value}
-          placeholder={"Digite o valor"}
-          keyboardType='numeric'
-        />  
         
         {/* <TextInput
           style={style.input}
@@ -178,7 +161,7 @@ export default function App() {
           value={inputIET}
           onChangeText={setInputIET}
         />    */}
-        <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
+        <TouchableOpacity style={style.touchableButton} onPress={addDataPoint}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
         <VictoryChart        
@@ -231,47 +214,96 @@ export default function App() {
         </View>
       </ScrollView>
   );
-  
-  function calcularPH(ph){
-    qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-  return qPH**0.12;
+
+  function calculaTempAgua(tempAgua){
+    if(tempAgua > 15){
+      qTA = 9;
+    }else if (tempAgua < -5){
+      qTA = 1;
+    } else{
+     qTA = 92*Math.exp(-(((tempAgua-0**2)/2)*(0.25**2)))
+    }
+    return qTA ** 0.1;
   };
+
+  function calcularPH(ph){
+    if(ph > 12){
+      qPH = 3;
+    }else if(ph < 2){
+      qPH = 2;
+    }else{
+      qPH = 93*(Math.exp(-(((ph-7.5)**2)/2)*(0.652**2)))
+    }
+    return qPH ** 0.12;
+  };
+
   function calcularOD(od){
-  qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-  return qOD**0.17;
+    if(od >150){
+      qOD = 47;
+    }else{
+      qOD = 100 * Math.exp(-(((od-100)**2)/2)*(0.025**2))
+    }
+    return qOD ** 0.17;
   };
   
   function calcularDBO(inputDBO){
-  dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-  return dboCalculado ** 0.1;
+    if(inputDBO > 30){
+      qDBO = 2;
+    }else if(inputDBO <=0){
+      qDBO = 100;
+    }else{
+      qDBO = (-30.1) * Math.log(inputDBO) + 103.45;
+    }
+    return qDBO ** 0.1;
   };
   
   function calcularTurbidez(inputTurbidez){
-  turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
-  return turbidezCalculada**0.08;
+    if(inputTurbidez > 100){
+      qTurbidez = 5;
+    }else{
+      qTurbidez = (-26.45) * Math.log(inputTurbidez) + 136.39;
+    }
+    return qTurbidez ** 0.08;
   };
   
   function calcularNitrogenioTotal(inputNitrogênioTotal){
-  qNT = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
-  return nitrogenioTotalCalculado**0.1;
+    if (inputNitrogênioTotal > 100){
+      qNT = 1;
+    }else{
+      qNT = (-20.8) * Math.log(inputNitrogênioTotal) + 93.092;
+    }
+    return qNT**0.1;
   };
   
   function calcularFosforo(fosforoTotal){
-  qFT = -15.49*Math.log(fosforoTotal)+37.202;
-  return qFT**0.1;
+    if(fosforoTotal > 10){
+      qFT = 1;
+    }else{
+      qFT = (-15.49)* Math.log(fosforoTotal) + 37.202;
+    }
+    return qFT**0.1;
   };
   
   function calcularColiformes(coliformesTermoTolerantes){
-  qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-  return qCT**0.15;
+    if(coliformesTermoTolerantes > 100000){
+      qCT = 3;
+    }else{
+     qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
+    }
+    return qCT**0.15;
   };
   
   function calcularResiduosTotais(residuosTotais){ 
-  qRT= 80*Math.exp(-(((residuosTotais-50)**2)/2*(0.003**2)))
-  return qRT**0.08;
+    if(residuosTotais > 500){
+      qRT = 32;
+    }else{
+      qRT = 80*Math.exp(-(((residuosTotais-50)**2)/2)*(0.003**2))
+    }
+    return qRT**0.08;
   };
 
   function calculaIQA(qTA, qPH, qOD, qDBO, qTurbidez, qNT, qFT, qCT, qRT){
+
     var qTA_C = calculaTempAgua(qTA);
     var qPH_C = calcularPH(qPH);
     var qOD_C = calcularOD(qOD);
@@ -281,24 +313,21 @@ export default function App() {
     var qFT_C = calcularFosforo(qFT);
     var qCT_C = calcularColiformes(qCT);
     var qRT_C = calcularResiduosTotais(qRT);
+
+    console.log("qTA_C: ", qTA_C)
+    console.log("qPH_C: ", qPH_C)
+    console.log("qOD_C: ", qOD_C)
+    console.log("qDBO_C: ", qDBO_C)
+    console.log("qTurbidez_C: ", qTurbidez_C)
+    console.log("qNT_C: ", qNT_C)
+    console.log("qFT_C: ", qFT_C)
+    console.log("qCT_C: ", qCT_C)
+    console.log("qRT_C: ", qRT_C)
+
+
     return (qTA_C * qPH_C * qOD_C * qDBO_C * qTurbidez_C * qNT_C * qFT_C * qCT_C * qRT_C);
     
   }
-  // function calculaCL(IETCL){
-  //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
-  //   return cl;
-  //  }
-
-  //  function calculPT(IETPT){
-  //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
-  //   return pt;
-  //  }
-
-  // function calculIET(cl, pt){
-  //   var iet = (cl + pt)/2;
-  //   return iet;
-  //
-  // }
 }
 const style = StyleSheet.create({
   container: {
