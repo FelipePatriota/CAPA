@@ -33,7 +33,7 @@ export default function App() {
       } else if(tempAgua > 15){
         return 9.0;
       } else{
-        qTA = 92*Math.exp(-(((TA-0)^2)/2*(0.25^2)))
+        qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
         return qTA;
       }
     }
@@ -43,8 +43,8 @@ export default function App() {
       } else if (ph > 12.0){
       return 3.0;
       } else {
-        qph= 93*Math.exp(-(((ph-7.5)^2)/2*(0.652^2)))
-        return qph;
+        qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
+        return qPH;
       };
     }
     function calculaOD(od){
@@ -53,15 +53,15 @@ export default function App() {
       } else if(od > 140){
         return 47.0;
       } else {
-        qOD = 100*Math.exp(-(((od-100)^2)/2*(0.025^2)))
+        qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
         return qOD;
       };
     }
-    console.log(calculaOD(od))
-    console.log(calcularPH(ph))
-    console.log(calculaTempAgua(tempAgua))
+    console.log("OD: "+calculaOD(od))
+    console.log("PH: "+calcularPH(ph))
+    console.log("Temp: "+calculaTempAgua(tempAgua))
 
-
+  };
   return (
     <>
       <View style={styles.container}>
@@ -188,4 +188,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 });
-}
