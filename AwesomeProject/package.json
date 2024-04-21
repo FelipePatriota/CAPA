@@ -18,7 +18,8 @@
     "react-native": "0.73.6",
     "react-native-web": "~0.19.6",
     "victory": "^37.0.2",
-    "victory-native": "^40.1.0"
+    "victory-native": "^40.1.0",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
