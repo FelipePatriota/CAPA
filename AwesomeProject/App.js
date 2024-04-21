@@ -13,6 +13,8 @@ export default function App() {
   const [inputSolidosT, setInputSolidosT] = useState("");
 
 
+
+
   const handleButtonPress = () => {
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
@@ -23,6 +25,9 @@ export default function App() {
     var fosforoTotal = parseFloat(inputFosforoT);
     var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
     var SolidosTotais = parseFloat(inputSolidosT)
+    var turbidezCalculada = calcularTurbidez(turbidez);
+    var nitrogenioTotalCalculado = calcularNitrogenioTotal(nitrogênioTotal);
+    var dboCalculado = calcularDBO(dbo);
     console.log("Temperatura da água: " + tempAgua);
     console.log("PH: " + ph);
     console.log("OD: " + od);
@@ -32,6 +37,9 @@ export default function App() {
     console.log("Fósforo Total: " + fosforoTotal);
     console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
     console.log("Sólidos Totais: ", SolidosTotais);
+    console.log("Turbidez Calculada: " + turbidezCalculada);
+    console.log("Nitrogênio Total Calculado: " + nitrogenioTotalCalculado);
+    console.log("DBO Calculado: " + dboCalculado);
   };
 
 
