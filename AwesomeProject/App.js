@@ -270,82 +270,162 @@ export default function App() {
             onChangeText={setInputTA}
           />
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="PH"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+          inputMode="numeric"
+          value={inputTempAgua}
+          onChangeText={setInputTA}
+        />
+        <Text 
+          style={styles.text} 
+          >Insira o PH:</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputPH}
           onChangeText={setInputPH}
         />
+
+        <Text 
+          style={styles.text} 
+          >Insira o OD:</Text>
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="OD"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputOD}
           onChangeText={setInputOD}
         />
+        <Text 
+          style={styles.text} 
+          >Insira o DBO:</Text>
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="DBO"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputDBO}
           onChangeText={setInputDBO}
         />
+        <Text 
+          style={styles.text} 
+          >Insira a Turbidez:</Text>
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="Turbidez"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputTurbidez}
           onChangeText={setInputTurbidez}
         />
+        <Text 
+          style={styles.text} 
+          >Insira o Nitrogênio Total:</Text>
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="Nitrogênio Total"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputNitrogênioTotal}
           onChangeText={setInputNitrogênioTotal}
         />    
+        <Text 
+          style={styles.text} 
+          >Insira o Fósforo Total:</Text>
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="Fósforo Total"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputFosforoT}
           onChangeText={setInputFosforoT}
         />   
+        <Text 
+          style={styles.text} 
+          >Insira os Coliformes Termotolerantes:</Text>
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="Coliformes Termotolerantes"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputColiformesT}
           onChangeText={setInputColiformesT}
         />   
+        <Text 
+          style={styles.text} 
+          >Insira os Solidos Totais:</Text>
         <TextInput
+<<<<<<< HEAD
           style={style.input}
           placeholder="Sólidos Totais"
+=======
+          style={styles.input}
+          placeholder="Exemplo: 8.2 , 2.4 ..."
+>>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
         /> 
-          <TextInput
+        <Text 
+          style={styles.text} 
+          >Digite o Dia</Text>
+        <TextInput
           style={styles.input}
           onChangeText={onChangeDia}
           value={dia}
-          placeholder={"Digite o dia, exemplo: 01, 10..."}
+          placeholder={"Exemplo: 01, 10..."}
           keyboardType='numeric'
-
         />
-          <TextInput
+        <Text 
+          style={styles.text} 
+          >Digite o Mês</Text>
+        <TextInput
           style={styles.input}
           onChangeText={onChangeMes}
           value={mes}
-          placeholder={"Digite o mês, exemplo: 07, 12..."}
+          placeholder={"Exemplo: 07, 12..."}
           keyboardType='numeric'
-
         />
-          <TextInput
+        <Text 
+          style={styles.text} 
+          >Digite o Ano</Text>
+        <TextInput
           style={styles.input}
           onChangeText={onChangeAno}
           value={ano}
-          placeholder={"Digite o ano, exemplo: 2022, 2018..."}
+          placeholder={"Exemplo: 2022, 2018..."}
           keyboardType='numeric'
 
         />
