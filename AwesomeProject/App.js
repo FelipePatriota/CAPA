@@ -14,6 +14,7 @@ export default function App() {
 
 
   const handleButtonPress = () => {
+    // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
     var od = parseFloat(inputOD);
@@ -23,16 +24,44 @@ export default function App() {
     var fosforoTotal = parseFloat(inputFosforoT);
     var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
     var SolidosTotais = parseFloat(inputSolidosT)
-    console.log("Temperatura da água: " + tempAgua);
-    console.log("PH: " + ph);
-    console.log("OD: " + od);
-    console.log("DBO: " + dbo);
-    console.log("Turbidez: " + turbidez);
-    console.log("Nitrogênio Total: " + nitrogênioTotal);
-    console.log("Fósforo Total: " + fosforoTotal);
-    console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
-    console.log("Sólidos Totais: ", SolidosTotais);
-  };
+
+
+
+    function calculaTempAgua(tempAgua){
+      if (tempAgua < -5){
+        return 0.0;
+      } else if(tempAgua > 15){
+        return 9.0;
+      } else{
+        qTA = 92*Math.exp(-(((TA-0)^2)/2*(0.25^2)))
+        return qTA;
+      }
+    }
+    function calcularPH(ph){
+      if (ph < 2.0){
+      return 2.0;
+      } else if (ph > 12.0){
+      return 3.0;
+      } else {
+        qph= 93*Math.exp(-(((ph-7.5)^2)/2*(0.652^2)))
+        return qph;
+      };
+    }
+    function calculaOD(od){
+      if (od < 0){
+        return 0.0;
+      } else if(od > 140){
+        return 47.0;
+      } else {
+        qOD = 100*Math.exp(-(((od-100)^2)/2*(0.025^2)))
+        return qOD;
+      };
+    }
+    console.log(calculaOD(od))
+    console.log(calcularPH(ph))
+    console.log(calculaTempAgua(tempAgua))
+
+
   return (
     <>
       <View style={styles.container}>
@@ -159,3 +188,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 });
+}
