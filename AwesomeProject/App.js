@@ -244,36 +244,36 @@ export default function App() {
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
         /> 
-        <TextInput
-        style={styles.input}
-        onChangeText={onChangeDia}
-        value={dia}
-        placeholder={"Digite o dia, exemplo: 01, 10..."}
-        keyboardType='numeric'
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeDia}
+          value={dia}
+          placeholder={"Digite o dia, exemplo: 01, 10..."}
+          keyboardType='numeric'
 
         />
-        <TextInput
-        style={styles.input}
-        onChangeText={onChangeMes}
-        value={mes}
-        placeholder={"Digite o mês, exemplo: 07, 12..."}
-        keyboardType='numeric'
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeMes}
+          value={mes}
+          placeholder={"Digite o mês, exemplo: 07, 12..."}
+          keyboardType='numeric'
 
         />
-        <TextInput
-        style={styles.input}
-        onChangeText={onChangeAno}
-        value={ano}
-        placeholder={"Digite o ano, exemplo: 2022, 2018..."}
-        keyboardType='numeric'
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeAno}
+          value={ano}
+          placeholder={"Digite o ano, exemplo: 2022, 2018..."}
+          keyboardType='numeric'
 
         />
-        <TextInput
-        style={styles.input}
-        onChangeText={onChangeValue}
-        value={value}
-        placeholder={"Digite o valor"}
-        keyboardType='numeric'
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeValue}
+          value={value}
+          placeholder={"Digite o valor"}
+          keyboardType='numeric'
         />  
         
         {/* <TextInput
