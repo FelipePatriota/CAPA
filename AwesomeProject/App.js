@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
+import { VictoryLine, VictoryChart, VictoryTheme, VictoryLegend, VictoryLabel, VictoryScatter, VictoryAxis } from "victory-native";
+
 
 export default function App() {
   const [inputTempAgua, setInputTA] = useState("");
@@ -11,6 +13,13 @@ export default function App() {
   const [inputFosforoT, setInputFosforoT] = useState("");
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
+
+  const [dia, onChangeDia] = React.useState('');
+  const [mes, onChangeMes] = React.useState('');
+  const [ano, onChangeAno] = React.useState('');
+  const [value, onChangeValue] = React.useState('');
+  const [data, setData] = useState([]); //valores
+  const [date, setDate] = useState([]); //array para settar as datas do X
 
 
 
@@ -187,6 +196,54 @@ export default function App() {
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
+        <VictoryChart
+                    theme={VictoryTheme.material} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
+                >
+                    <VictoryAxis dependentAxis crossAxis
+                        tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
+                    />
+                    <VictoryAxis crossAxis //Valores do X
+                        style={{ tickLabels: { fontSize: 8 } }} //font do X label
+                        data={date}
+                        tickCount={date.length}
+                        tickValues={date}
+                        tickFormat={(x) => {
+                            return x.toLocaleString("pt-BR",
+                                { day: "numeric", month: "numeric", year: 'numeric' }) //formatar datas
+                        }
+                        }
+                        tickLabelComponent={
+                            <VictoryLabel angle={-45} textAnchor="end" /> //angulo do X
+                        }
+                    />
+                    <VictoryScatter
+                        style={{ data: { fill: "#72e073" } }} //pontos
+                        size={5}
+                        data={data}
+                    />
+                    <VictoryLine sortOrder="ascending"
+                        style={{
+                            data: { stroke: "#72e073" },
+                            parent: { border: "1px solid #ccc" }, //linha
+
+                        }}
+                        data={data}
+
+                    />
+                </VictoryChart>
+                <VictoryLegend x={10} y={25}
+                    orientation="horizontal"
+                    height={150}
+                    gutter={20}
+                    itemsPerRow={3}
+                    style={{ border: { stroke: "black" } }}
+                    colorScale={["red", "orange", "yellow", "lightgreen", 'lightblue']}
+                    data={[
+                        { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
+                    ]}
+                />
+        
+
       </View>
     </>
   );
