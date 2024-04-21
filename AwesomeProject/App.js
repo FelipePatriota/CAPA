@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-  const [inputTempAgua, setInputTA] = useState("");
+    const [inputTempAgua, setInputTA] = useState("");
     const [inputPH, setInputPH] = useState("");
     const [inputOD, setInputOD] = useState("");
     const [inputDBO, setInputDBO] = useState("");
