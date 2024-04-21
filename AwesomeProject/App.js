@@ -63,113 +63,52 @@ export default function App() {
     console.log("Coliformes Termotolerantes: ", coliformesTermoTolerantesCalculado);
     console.log("Sólidos Totais: ", solidosTotaisCalculado);
     console.log("QIA: ", multi);
-    //console.log("IET: ", ietCalculado);
-    //console.log("CL: ", clCalculado);
-    
-    
-
-    //console.log("IET(CL): ", IETCL);
-    //console.log("IET(PT): ", IETPT);
     
   };
   function calculaTempAgua(tempAgua){
-    let qTA;
-    if (tempAgua < -5){
-      qTA = 0;
-    } else if(tempAgua > 15){
-      qTA = 9
-    } else{
-      qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
-    }
+    qTA = 92*Math.exp(-((tempAgua-0**2)/2)*(0.25**2))
     return qTA **0.1;
   }
+
   function calcularPH(ph){
-    let qPH;
-    if (ph < 2.0){
-      qPH = 2.0
-    } else if (ph > 12.0){
-      qPH = 3.0
-    } else {
       qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-    }
     return qPH**0.12;
   }
-  function calculaOD(od){
-    let qOD;
-    if (od < 0){
-      qOD = 0
-    } else if(od > 140){
-      qOD = 47.0
-    } else {
-      qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-    }
-    return qOD**0.17;
-  };
-  const calcularDBO = (inputDBO) => {
-    let dboCalculado;
-    if (inputDBO > 30) {
-        dboCalculado = 2; 
-    } else {
 
-      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-    }
+  function calculaOD(od){
+    qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
+    return qOD**0.17;
+  }
+
+  const calcularDBO = (inputDBO) => {
+    dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
     return dboCalculado ** 0.1;
   }
 
   const calcularTurbidez = (inputTurbidez) => {
-    let turbidezCalculada;
-    if (inputTurbidez > 100) {
-        turbidezCalculada = 5;
-    } else {
-
-        turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
-    }
+    turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
     return turbidezCalculada**0.08;
-  };
+  }
 
   const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
-    let nitrogenioTotalCalculado;
-    if (inputNitrogênioTotal > 100) {
-        nitrogenioTotalCalculado = 1; 
-    } else {
-
-      nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
-    }
+    nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
     return nitrogenioTotalCalculado**0.1;
   }
 
-    function calculaFosforo(fosforoTotal){
-      let qFT;
-      if (fosforoTotal > 10){
-        qFT = 1
-      }
-      else {
-        qFT = -15.49*Math.log(fosforoTotal)+37.202;
-      }
-      return qFT**0.1;
-    };
-    function calculaColiformes(coliformesTermoTolerantes){
-      let qCT;
-      if (coliformesTermoTolerantes > 10){
-        qCT = 3;
-            }
-      else {
-        qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
+  function calculaFosforo(fosforoTotal){
+    qFT = -15.49*Math.log(fosforoTotal)+37.202;
+    return qFT**0.1;
+  }
+
+  function calculaColiformes(coliformesTermoTolerantes){
+    qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
+    return qCT**0.15;
+  }
   
-      }
-      return qCT**0.15;
-    };
-    
-    function calculaSolidosTotais(solidosTotais){
-      let qRT;
-      if (solidosTotais > 500){
-        qRT = 32;
-      }
-      else{ 
-        qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
-      }
-      return qRT**0.08;
-    };
+  function calculaSolidosTotais(solidosTotais){ 
+    qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
+    return qRT**0.08;
+  };
 
       //  function calculaCL(IETCL){
       //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
