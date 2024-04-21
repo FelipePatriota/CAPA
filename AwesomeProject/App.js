@@ -96,9 +96,7 @@ export default function App() {
       } else {
         qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
         return qOD;
-      };
-    
-
+      }; 
   };
   return (
     <>
