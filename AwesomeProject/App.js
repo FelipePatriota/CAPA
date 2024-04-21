@@ -38,7 +38,24 @@ export default function App() {
     return multi;
 
   }
- 
+  function colocarCor(){
+    valor = calculoTotal(parseFloat(inputTempAgua), parseFloat(inputPH), parseFloat(inputOD), parseFloat(inputDBO), parseFloat(inputTurbidez), parseFloat(inputNitrogênioTotal), parseFloat(inputFosforoT), parseFloat(inputColiformesT), parseFloat(inputSolidosT));
+    if(valor >= 0 && valor <= 25){
+      return 'red';
+    }
+    else if(valor > 25 && valor <= 50){
+      return 'orange';
+    }
+    else if(valor > 50 && valor <= 70){
+      return 'yellow';
+    }
+    else if(valor > 70 && valor <= 90){
+      return 'lightgreen';
+    }
+    else if(valor > 90 && valor <= 100){
+      return 'lightblue';
+    }
+  }
 
   function calculaTempAgua(tempAgua){
     qTA = 92*Math.exp(-((tempAgua-0**2)/2)*(0.25**2))
@@ -46,7 +63,10 @@ export default function App() {
   }
 
   const addDataPoint = () => {
-    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: calculoTotal(parseFloat(inputTempAgua), parseFloat(inputPH), parseFloat(inputOD), parseFloat(inputDBO), parseFloat(inputTurbidez), parseFloat(inputNitrogênioTotal), parseFloat(inputFosforoT), parseFloat(inputColiformesT), parseFloat(inputSolidosT)) };
+    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: calculoTotal(parseFloat(inputTempAgua), 
+      parseFloat(inputPH), parseFloat(inputOD), parseFloat(inputDBO), parseFloat(inputTurbidez), 
+      parseFloat(inputNitrogênioTotal), parseFloat(inputFosforoT), parseFloat(inputColiformesT), 
+      parseFloat(inputSolidosT)),color: colocarCor()};
     setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
     setDate([...date, new Date(ano, mes - 1, dia)]); // Adicionando nova data ao estado
   }
@@ -226,7 +246,8 @@ export default function App() {
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
         <VictoryChart        
-                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
+                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} 
+                    scale={{ x: 'time' }}
                 >
                     <VictoryAxis dependentAxis crossAxis
                         tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
@@ -246,9 +267,9 @@ export default function App() {
                         }
                     />
                     <VictoryScatter
-                        style={{ data: { fill: "#72e073" } }} //pontos
                         size={5}
                         data={data}
+                        style={{data: { fill: ({ datum }) => datum.color }}} //pontos
                     />
                     <VictoryLine sortOrder="ascending"
                         style={{
