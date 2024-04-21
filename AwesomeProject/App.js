@@ -48,7 +48,7 @@ export default function App() {
   const calcularTurbidez = (inputTurbidez) => {
     let turbidezCalculada;
     if (inputTurbidez > 100) {
-        turbidezCalculada = 5 * 0.08; 
+        turbidezCalculada = 5 ** 0.08; 
     } else {
 
         turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
@@ -59,7 +59,7 @@ export default function App() {
   const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
     let nitrogenioTotalCalculado;
     if (inputNitrogênioTotal > 100) {
-        nitrogenioTotalCalculado = 1 * 0.1; 
+        nitrogenioTotalCalculado = 1 ** 0.1; 
     } else {
 
       nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
@@ -70,7 +70,7 @@ export default function App() {
   const calcularDBO = (inputDBO) => {
     let dboCalculado;
     if (inputDBO > 30) {
-        dboCalculado = 2 * 0.1; 
+        dboCalculado = 2 ** 0.1; 
     } else {
 
       dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
@@ -110,7 +110,7 @@ export default function App() {
       function calculaFosforo(fosforoTotal){
         let qFT;
         if (fosforoTotal > 10){
-          qFT = 0.1 * 1
+          qFT = 0.1 ** 1
         }
         else {
           qFT = -15.49*Math.log(fosforoTotal)+37.202;
@@ -140,7 +140,7 @@ export default function App() {
         }
     
        }
-       
+
       //  function calculaCL(IETCL){
       //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
       //   return cl;
