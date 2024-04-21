@@ -260,6 +260,8 @@ export default function App() {
   function calcularTurbidez(inputTurbidez){
     if(inputTurbidez > 100){
       qTurbidez = 5;
+    }else if(inputTurbidez <=0){
+      qTurbidez = 100;
     }else{
       qTurbidez = (-26.45) * Math.log(inputTurbidez) + 136.39;
     }
@@ -269,6 +271,8 @@ export default function App() {
   function calcularNitrogenioTotal(inputNitrogênioTotal){
     if (inputNitrogênioTotal > 100){
       qNT = 1;
+    }else if(inputNitrogênioTotal <=1){
+      qNT = 100;
     }else{
       qNT = (-20.8) * Math.log(inputNitrogênioTotal) + 93.092;
     }
@@ -278,6 +282,8 @@ export default function App() {
   function calcularFosforo(fosforoTotal){
     if(fosforoTotal > 10){
       qFT = 1;
+    }else if(fosforoTotal <=0){
+      qFT = 100;
     }else{
       qFT = (-15.49)* Math.log(fosforoTotal) + 37.202;
     }
@@ -287,6 +293,8 @@ export default function App() {
   function calcularColiformes(coliformesTermoTolerantes){
     if(coliformesTermoTolerantes > 100000){
       qCT = 3;
+    }else if(coliformesTermoTolerantes <=1){
+      qCT = 95;
     }else{
      qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
     }
@@ -296,6 +304,8 @@ export default function App() {
   function calcularResiduosTotais(residuosTotais){ 
     if(residuosTotais > 500){
       qRT = 32;
+    }else if(residuosTotais <=0){
+      qRT = 80;
     }else{
       qRT = 80*Math.exp(-(((residuosTotais-50)**2)/2)*(0.003**2))
     }
