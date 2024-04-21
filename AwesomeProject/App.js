@@ -5,17 +5,18 @@ export default function App() {
   const [input1, setInput1] = useState("");
   const [inputTHanos, setInputTHanos] = useState("");
   const [input3, setInput3] = useState("");
-  const [inputDBO, setInputDBO] = useState("");
-  const [inputTurbidez, setInputTurbidez] = useState("");
-  const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+  const [input4, setInputDBO] = useState("");
+  const [input5, setInputTurbidez] = useState("");
+  const [input6, setInputNitrogênioTotal] = useState("");
 
 
   const handleButtonPress = () => {
     var input1Teste = parseFloat(input1);
     var inputTHanosTeste = parseFloat(inputTHanos);
     var input3Teste = parseFloat(input3);
-    var inputLDTeste = parseFloat(inputLD);
-    var input5Teste = parseFloat(input5);
+    var inputDBO = parseFloat(input4);
+    var inputTurbidez = parseFloat(input5);
+    var inputNitrogênioTotal = parseFloat(input6);
     console.log("Valor do Input 1: ", input1Teste);
     console.log("Valor do Input 2: ", inputTHanosTeste);
     console.log("Valor do Input 3: ", input3Teste);
@@ -49,25 +50,25 @@ export default function App() {
           value={input3}
           onChangeText={setInput3}
         />
-         <TextInput
+        <TextInput
           style={style.input}
-          placeholder="Dados 4"
+          placeholder="Dados4"
           inputMode="numeric"
-          value={inputDBO}
+          value={input4}
           onChangeText={setInputDBO}
         />
         <TextInput
           style={style.input}
-          placeholder="Dados 5"
+          placeholder="Dados5"
           inputMode="numeric"
-          value={inputTurbidez}
+          value={input5}
           onChangeText={setInputTurbidez}
         />
         <TextInput
           style={style.input}
-          placeholder="Dados 6"
+          placeholder="Dados6"
           inputMode="numeric"
-          value={inputNitrogênioTotal}
+          value={input6}
           onChangeText={setInputNitrogênioTotal}
         />
         
