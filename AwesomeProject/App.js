@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-    const [inputTempAgua, setInputTA] = useState("");
-    const [inputPH, setInputPH] = useState("");
-    const [inputOD, setInputOD] = useState("");
-    const [inputDBO, setInputDBO] = useState("");
-    const [inputTurbidez, setInputTurbidez] = useState("");
-    const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+  const [inputTempAgua, setInputTA] = useState("");
+  const [inputPH, setInputPH] = useState("");
+  const [inputOD, setInputOD] = useState("");
+  const [inputDBO, setInputDBO] = useState("");
+  const [inputTurbidez, setInputTurbidez] = useState("");
+  const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+  const [inputFosforoT, setInputFosforoT] = useState("");
+  const [inputColiformesT, setInputColiformesT] = useState("");
+  const [inputSolidosT, setInputSolidosT] = useState("");
+
+
+
 
   const handleButtonPress = () => {
     var tempAgua = parseFloat(inputTempAgua);
@@ -16,15 +22,62 @@ export default function App() {
     var dbo = parseFloat(inputDBO);
     var turbidez = parseFloat(inputTurbidez);
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
+    var fosforoTotal = parseFloat(inputFosforoT);
+    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
+    var SolidosTotais = parseFloat(inputSolidosT)
+    var turbidezCalculada = calcularTurbidez(turbidez);
+    var nitrogenioTotalCalculado = calcularNitrogenioTotal(nitrogênioTotal);
+    var dboCalculado = calcularDBO(dbo);
     console.log("Temperatura da água: " + tempAgua);
     console.log("PH: " + ph);
     console.log("OD: " + od);
     console.log("DBO: " + dbo);
     console.log("Turbidez: " + turbidez);
     console.log("Nitrogênio Total: " + nitrogênioTotal);
-
-  
+    console.log("Fósforo Total: " + fosforoTotal);
+    console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
+    console.log("Sólidos Totais: ", SolidosTotais);
+    console.log("Turbidez Calculada: " + turbidezCalculada);
+    console.log("Nitrogênio Total Calculado: " + nitrogenioTotalCalculado);
+    console.log("DBO Calculado: " + dboCalculado);
   };
+
+
+
+  const calcularTurbidez = (inputTurbidez) => {
+    let turbidezCalculada;
+    if (inputTurbidez > 100) {
+        turbidezCalculada = 5 * 0.08; 
+    } else {
+
+        turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
+    }
+    return turbidezCalculada;
+  };
+
+  const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
+    let nitrogenioTotalCalculado;
+    if (inputNitrogênioTotal > 100) {
+        nitrogenioTotalCalculado = 1 * 0.1; 
+    } else {
+
+      nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
+    }
+    return nitrogenioTotalCalculado;
+  }
+
+  const calcularDBO = (inputDBO) => {
+    let dboCalculado;
+    if (inputDBO > 30) {
+        dboCalculado = 2 * 0.1; 
+    } else {
+
+      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
+    }
+    return dboCalculado;
+  }
+
+
   return (
     <>
       <View style={styles.container}>
