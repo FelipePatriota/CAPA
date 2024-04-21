@@ -1,62 +1,101 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet } from "react-native";
+import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-  const [input1, setInput1] = useState("");
-  const [inputTHanos, setInputTHanos] = useState("");
-  const [input3, setInput3] = useState("");
-  const [inputLD, setInputLD] = useState("");
-  const [input5, setInput5] = useState("");
+  const [inputTempAgua, setInputTA] = useState("");
+  const [inputPH, setInputPH] = useState("");
+  const [inputOD, setInputOD] = useState("");
+  const [inputDBO, setInputDBO] = useState("");
+  const [inputTurbidez, setInputTurbidez] = useState("");
+  const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+  const [inputFosforoT, setInputFosforoT] = useState("");
+  const [inputColiformesT, setInputColiformesT] = useState("");
+  const [inputSolidosT, setInputSolidosT] = useState("");
+
 
   const handleButtonPress = () => {
-    console.log("Valor do Input 1:", input1);
-    console.log("Valor do Input THANOS:", inputTHanos);
-    console.log("Valor do Input 3:", input3);
-    console.log("Valor do Input 4: ", inputLD);
-    console.log("Valor do Input 5:", input5);
+    var tempAgua = parseFloat(inputTempAgua);
+    var ph = parseFloat(inputPH);
+    var od = parseFloat(inputOD);
+    var dbo = parseFloat(inputDBO);
+    var turbidez = parseFloat(inputTurbidez);
+    var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
+    var fosforoTotal = parseFloat(inputFosforoT);
+    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
+    var SolidosTotais = parseFloat(inputSolidosT)
+   
     
   };
   return (
     <>
       <View style={styles.container}>
-        
         <TextInput
-          style={styles.input}
-          placeholder="Dados1"
-          keyboardType="numeric"
-          value={input1}
-          onChangeText={setInput1}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="THanos"
-          keyboardType="numeric"
-          value={inputTHanos}
-          onChangeText={setInputTHanos}
-        />
-         <TextInput
-          style={styles.input}
-          placeholder="Dados3"
-          keyboardType="numeric"
-          value={input3}
-          onChangeText={setInput3}
-        />
-         <TextInput
           style={style.input}
-          placeholder="Dados 4"
-          keyboardType="numeric"
-          value={inputLD}
-          onChangeText={setInputLD}
+          placeholder="Temperatura da água (°C)"
+          inputMode="numeric"
+          value={inputTempAgua}
+          onChangeText={setInputTA}
         />
         <TextInput
           style={style.input}
-          placeholder="Dados 5"
-          keyboardType="numeric"
-          value={input5}
-          onChangeText={setInput5}
+          placeholder="PH"
+          inputMode="numeric"
+          value={inputPH}
+          onChangeText={setInputPH}
         />
+        <TextInput
+          style={style.input}
+          placeholder="OD"
+          inputMode="numeric"
+          value={inputOD}
+          onChangeText={setInputOD}
+        />
+        <TextInputInput
+          style={style.input}
+          placeholder="DBO"
+          inputMode="numeric"
+          value={inputDBO}
+          onChangeText={setInputDBO}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Turbidez"
+          inputMode="numeric"
+          value={inputTurbidez}
+          onChangeText={setInputTurbidez}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Nitrogênio Total"
+          inputMode="numeric"
+          value={inputNitrogênioTotal}
+          onChangeText={setInputNitrogênioTotal}
+        />    
+        <TextInput
+          style={style.input}
+          placeholder="Fósforo Total"
+          inputMode="numeric"
+          value={inputFosforoT}
+          onChangeText={setInputFosforoT}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="Coliformes Termotolerantes"
+          inputMode="numeric"
+          value={inputColiformesT}
+          onChangeText={setInputColiformesT}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="Sólidos Totais"
+          inputMode="numeric"
+          value={inputSolidosT}
+          onChangeText={setInputSolidosT}
+        />   
         
-        <Button title="Executar" onPress={handleButtonPress} />
+        <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
+          <Text style={style.touchableButtonText}>Enviar</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -74,10 +113,24 @@ const style = StyleSheet.create({
     height: 40,
     marginBottom: 10,
     borderWidth: 1,
+    fontFamily: "Arial",
     borderColor: "#ccc",
     paddingHorizontal: 10,
   },
-});
+  touchableButton: {
+    backgroundColor: "#2e97b7",
+    color: "white",
+    fontSize: 20,
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  touchableButtonText: {
+    fontFamily: "Arial",
+    color: "white",
+    fontSize: 20,
+  },
+  });
 
 const styles = StyleSheet.create({
   container: {
