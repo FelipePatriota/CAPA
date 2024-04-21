@@ -120,7 +120,6 @@ const style = StyleSheet.create({
     height: 40,
     marginBottom: 10,
     borderWidth: 1,
-    fontFamily: "Arial",
     borderColor: "#ccc",
     paddingHorizontal: 10,
   },
@@ -133,7 +132,6 @@ const style = StyleSheet.create({
     marginTop: 10,
   },
   touchableButtonText: {
-    fontFamily: "Arial",
     color: "white",
     fontSize: 20,
   },
