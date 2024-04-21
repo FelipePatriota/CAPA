@@ -26,7 +26,7 @@ export default function App() {
 
   const addDataPoint = () => {
     const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(value) }; //formatar a data para o luxon
-    setData([...data, newDataPoint]); //colocar no Y
+    setData([...data, newDataPoint.y]); //colocar no Y
     setDate([...date, newDataPoint.x]) //colocar no X
 };
   const handleButtonPress = () => {
@@ -40,6 +40,8 @@ export default function App() {
     var turbidez = parseFloat(inputTurbidez);
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
     var fosforoTotal = parseFloat(inputFosforoT);
+    var coliformesTermoTolerantes = parseFloat(inputColiformesT);
+    var solidosTotais = parseFloat(inputSolidosT);
 
     var tempAguaCalculada = calculaTempAgua(tempAgua);
     var phCalculado = calcularPH(ph);
@@ -64,6 +66,10 @@ export default function App() {
     console.log("Coliformes Termotolerantes: ", coliformesTermoTolerantesCalculado);
     console.log("Sólidos Totais: ", solidosTotaisCalculado);
     console.log("QIA: ", multi);
+
+    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(multi) }; //formatar a data para o luxon
+    setData([...data, newDataPoint.y]); //colocar no Y
+    setDate([...date, newDataPoint.x]) //colocar no X
     
   };
   function calculaTempAgua(tempAgua){
@@ -248,10 +254,7 @@ export default function App() {
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
-        <VictoryChart
-        
-                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
-        
+        <VictoryChart        
                     theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
                 >
                     <VictoryAxis dependentAxis crossAxis
@@ -300,11 +303,6 @@ export default function App() {
 
         </View>
       </ScrollView>
-   
-
-        </View>
-      </ScrollView>
-   
   );
 }
 
