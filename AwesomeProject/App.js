@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-  const [inputTempAgua, setInputTA] = useState("");
+    const [inputTempAgua, setInputTA] = useState("");
     const [inputPH, setInputPH] = useState("");
     const [inputOD, setInputOD] = useState("");
     const [inputDBO, setInputDBO] = useState("");
@@ -16,6 +16,13 @@ export default function App() {
     var dbo = parseFloat(inputDBO);
     var turbidez = parseFloat(inputTurbidez);
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
+    console.log("Temperatura da água: " + tempAgua);
+    console.log("PH: " + ph);
+    console.log("OD: " + od);
+    console.log("DBO: " + dbo);
+    console.log("Turbidez: " + turbidez);
+    console.log("Nitrogênio Total: " + nitrogênioTotal);
+
   
   };
   return (
@@ -42,7 +49,7 @@ export default function App() {
           value={inputOD}
           onChangeText={setInputOD}
         />
-        <TextInputInput
+        <TextInput
           style={style.input}
           placeholder="DBO"
           inputMode="numeric"
@@ -62,7 +69,7 @@ export default function App() {
           inputMode="numeric"
           value={inputNitrogênioTotal}
           onChangeText={setInputNitrogênioTotal}
-        />    
+        />
 
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
