@@ -11,6 +11,8 @@ export default function App() {
   const [inputFosforoT, setInputFosforoT] = useState("");
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
+  //const [inputIETCL, setInputCL] = useState("");
+  //const [inputIETPT, setInputPT] = useState("");
 
 
 
@@ -23,8 +25,10 @@ export default function App() {
     var turbidez = parseFloat(inputTurbidez);
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
     var fosforoTotal = parseFloat(inputFosforoT);
-    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
-    var SolidosTotais = parseFloat(inputSolidosT)
+    var coliformesTermoTolerantes = parseFloat(inputColiformesT);
+    var solidosTotais = parseFloat(inputSolidosT)
+    //var IETCL = parseFloat(inputIETCL);
+    //var IETPT = parseFloat(inputIETPT);
     
     console.log("OD: "+calculaOD(od))
     console.log("PH: "+calcularPH(ph))
@@ -32,13 +36,18 @@ export default function App() {
     console.log("Tubidez: "+calcularTurbidez(turbidez));
     console.log("NT: "+calcularNitrogenioTotal(nitrogênioTotal));
     console.log("DBO: "+calcularDBO(dbo));
+    console.log("Fósforo Total: " + fosforoTotal);
+    console.log("Coliformes Termotolerantes: " + coliformesTermoTolerantes);
+    console.log("Sólidos Totais: ", solidosTotais);
+    //console.log("IET(CL): ", IETCL);
+    //console.log("IET(PT): ", IETPT);
     
   };
 
   const calcularTurbidez = (inputTurbidez) => {
     let turbidezCalculada;
     if (inputTurbidez > 100) {
-        turbidezCalculada = 5 * 0.08; 
+        turbidezCalculada = 5 ** 0.08; 
     } else {
 
         turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
@@ -49,7 +58,7 @@ export default function App() {
   const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
     let nitrogenioTotalCalculado;
     if (inputNitrogênioTotal > 100) {
-        nitrogenioTotalCalculado = 1 * 0.1; 
+        nitrogenioTotalCalculado = 1 ** 0.1; 
     } else {
 
       nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
@@ -60,7 +69,7 @@ export default function App() {
   const calcularDBO = (inputDBO) => {
     let dboCalculado;
     if (inputDBO > 30) {
-        dboCalculado = 2 * 0.1; 
+        dboCalculado = 2 ** 0.1; 
     } else {
 
       dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
@@ -96,7 +105,58 @@ export default function App() {
         qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
         return qOD;
       }; 
+  }
+  function calculaFosforo(fosforoTotal){
+    let qFT;
+    if (fosforoTotal > 10){
+      qFT = 0.1 ** 1
+    }
+    else {
+      qFT = -15.49*Math.log(fosforoTotal)+37.202;
+    }
+    return qFT;
+    }
+    function calculaColiformes(ColiformesTermoTolerantes){
+      let qCT;
+      if (ColiformesTermoTolerantes > 10){
+        qCT = 3 ** 0.15;
+            }
+                  else {
+        qCT = -8.723*Math.log(ColiformesTermoTolerantes)+88.714;
+  
+      }
+      return qCT;
+  }
+
+   function calculaSolidosTotais(solidosTotais){
+    let qRT;
+    if (solidosTotais > 500){
+      qRT = 32**0.08;
+    
+    }
+    else{ 
+      qRT=80*Math.log(-(((solidosTotais-50)^2)/2*(0.003^2)))
+    }
+
+   }
+  //  function calculaCL(IETCL){
+  //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
+  //   return cl;
+  //  }
+
+  //  function calculPT(IETPT){
+  //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
+  //   return pt;
+  //  }
+
+  // function calculIET(cl, pt){
+  //   var iet = (cl + pt)/2;
+  //   return iet;
+  //
+  // }
   };
+
+
   return (
     <>
       <View style={styles.container}>
