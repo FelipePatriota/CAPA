@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
+import { VictoryChart, VictoryLine, VictoryTheme } from "victory-native";
 
 export default function App() {
   const [inputTempAgua, setInputTA] = useState("");
@@ -167,11 +168,10 @@ export default function App() {
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
 
-        <VictoryChart maxDomain={{y:100}} minDomain={{y:0}} responsive={true} scale="linear">
-
-
+        <VictoryChart >
 
         </VictoryChart>
+
       </View>
     </>
   );
