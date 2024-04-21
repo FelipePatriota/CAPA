@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-  const [input1, setInput1] = useState("");
-  const [inputTHanos, setInputTHanos] = useState("");
-  const [input3, setInput3] = useState("");
+  
+
+
   const [inputDBO, setInputDBO] = useState("");
   const [inputTurbidez, setInputTurbidez] = useState("");
   const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+
+
 
 
   const handleButtonPress = () => {
@@ -28,27 +30,7 @@ export default function App() {
     <>
       <View style={styles.container}>
         
-        <TextInput
-          style={style.input}
-          placeholder="Dados1"
-          inputMode="numeric"
-          value={input1}
-          onChangeText={setInput1}
-        />
-        <TextInput
-          style={style.input}
-          placeholder="Dados2"
-          inputMode="numeric"
-          value={inputTHanos}
-          onChangeText={setInputTHanos}
-        />
-         <TextInput
-          style={style.input}
-          placeholder="Dados3"
-          inputMode="numeric"
-          value={input3}
-          onChangeText={setInput3}
-        />
+        
          <TextInput
           style={style.input}
           placeholder="Dados 4"
