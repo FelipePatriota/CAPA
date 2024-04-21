@@ -2,33 +2,24 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-  const [inputTempAgua, setInputTA] = useState("");
-  const [inputPH, setInputPH] = useState("");
-  const [inputOD, setInputOD] = useState("");
-
-
-
-
-
-
+  const [input1, setInput1] = useState("");
+  const [inputTHanos, setInputTHanos] = useState("");
+  const [input3, setInput3] = useState("");
+  const [inputLD, setInputLD] = useState("");
+  const [input5, setInput5] = useState("");
 
   const handleButtonPress = () => {
-    var inputTempAgua = parseFloat(inputTempAgua);
-    var inputPH = parseFloat(inputPH);
-    var inputOD = parseFloat(inputOD);
-
-
-
-
-
-
-
+    const [inputTempAgua, setInputTA] = useState("");
+    const [inputPH, setInputPH] = useState("");
+    const [inputOD, setInputOD] = useState("");
+    const [inputDBO, setInputDBO] = useState("");
+    const [inputTurbidez, setInputTurbidez] = useState("");
+    const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
   };
   return (
     <>
       <View style={styles.container}>
-        
-        <TextInput
+      <TextInput
           style={style.input}
           placeholder="Temperatura da água (°C)"
           inputMode="numeric"
@@ -48,6 +39,14 @@ export default function App() {
           inputMode="numeric"
           value={inputOD}
           onChangeText={setInputOD}
+        />
+       
+        <TextInput
+          style={style.input}
+          placeholder="OD"
+          inputMode="numeric"
+          value={input5}
+          onChangeText={setInput5}
         />
 
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
