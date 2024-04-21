@@ -70,7 +70,27 @@ export default function App() {
           value={inputNitrogênioTotal}
           onChangeText={setInputNitrogênioTotal}
         />
-
+        <TextInput
+          style={style.input}
+          placeholder="Fósforo Total"
+          inputMode="numeric"
+          value={inputFosforoT}
+          onChangeText={setInputFosforoT}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="Coliformes Termotolerantes"
+          inputMode="numeric"
+          value={inputColiformesT}
+          onChangeText={setInputColiformesT}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="Sólidos Totais"
+          inputMode="numeric"
+          value={inputSolidosT}
+          onChangeText={setInputSolidosT}
+        />   
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
