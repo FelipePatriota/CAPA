@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 import { VictoryLine, VictoryChart, VictoryTheme, VictoryLegend, VictoryLabel, VictoryScatter, VictoryAxis } from "victory-native";
-
+import { ScrollView } from 'react-native';
 
 export default function App() {
   const [inputTempAgua, setInputTA] = useState("");
@@ -13,6 +13,8 @@ export default function App() {
   const [inputFosforoT, setInputFosforoT] = useState("");
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
+  //const [inputIETCL, setInputCL] = useState("");
+  //const [inputIETPT, setInputPT] = useState("");
 
   const [dia, onChangeDia] = React.useState('');
   const [mes, onChangeMes] = React.useState('');
@@ -25,6 +27,7 @@ export default function App() {
 
   const handleButtonPress = () => {
     // Inicializando as variáveis de parametros
+    // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
     var od = parseFloat(inputOD);
@@ -32,8 +35,10 @@ export default function App() {
     var turbidez = parseFloat(inputTurbidez);
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
     var fosforoTotal = parseFloat(inputFosforoT);
-    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
-    var SolidosTotais = parseFloat(inputSolidosT)
+    var coliformesTermoTolerantes = parseFloat(inputColiformesT);
+    var solidosTotais = parseFloat(inputSolidosT)
+    //var IETCL = parseFloat(inputIETCL);
+    //var IETPT = parseFloat(inputIETPT);
     
     console.log("OD: "+calculaOD(od))
     console.log("PH: "+calcularPH(ph))
@@ -41,13 +46,20 @@ export default function App() {
     console.log("Tubidez: "+calcularTurbidez(turbidez));
     console.log("NT: "+calcularNitrogenioTotal(nitrogênioTotal));
     console.log("DBO: "+calcularDBO(dbo));
+    console.log("Fósforo Total: " + fosforoTotal);
+    console.log("Coliformes Termotolerantes: " + coliformesTermoTolerantes);
+    console.log("Sólidos Totais: ", solidosTotais);
+    //console.log("IET(CL): ", IETCL);
+    //console.log("IET(PT): ", IETPT);
     
   };
+    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
+    var SolidosTotais = parseFloat(inputSolidosT)
 
   const calcularTurbidez = (inputTurbidez) => {
     let turbidezCalculada;
     if (inputTurbidez > 100) {
-        turbidezCalculada = 5 * 0.08; 
+        turbidezCalculada = 5 ** 0.08;
     } else {
 
         turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
@@ -58,7 +70,7 @@ export default function App() {
   const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
     let nitrogenioTotalCalculado;
     if (inputNitrogênioTotal > 100) {
-        nitrogenioTotalCalculado = 1 * 0.1; 
+        nitrogenioTotalCalculado = 1 ** 0.1; 
     } else {
 
       nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
@@ -69,7 +81,7 @@ export default function App() {
   const calcularDBO = (inputDBO) => {
     let dboCalculado;
     if (inputDBO > 30) {
-        dboCalculado = 2 * 0.1; 
+        dboCalculado = 2 ** 0.1; 
     } else {
 
       dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
@@ -105,17 +117,70 @@ export default function App() {
         qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
         return qOD;
       }; 
-  };
-  return (
-    <>
-      <View style={styles.container}>
-        <TextInput
-          style={style.input}
-          placeholder="Temperatura da água (°C)"
-          inputMode="numeric"
-          value={inputTempAgua}
-          onChangeText={setInputTA}
-        />
+
+      function calculaFosforo(fosforoTotal){
+        let qFT;
+        if (fosforoTotal > 10){
+          qFT = 0.1 ** 1
+        }
+        else {
+          qFT = -15.49*Math.log(fosforoTotal)+37.202;
+        }
+        return qFT;
+        }
+        function calculaColiformes(coliformesTermoTolerantes){
+          let qCT;
+          if (coliformesTermoTolerantes > 10){
+            qCT = 3 ** 0.15;
+                }
+          else {
+            qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
+      
+          }
+          return qCT;
+      }
+    
+       function calculaSolidosTotais(solidosTotais){
+        let qRT;
+        if (solidosTotais > 500){
+          qRT = 32**0.08;
+        }
+        else{ 
+          qRT=80*Math.log(-(((solidosTotais-50)^2)/2*(0.003^2)))
+        }
+        return qRT;
+    
+       }
+
+      //  function calculaCL(IETCL){
+      //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
+      //   return cl;
+      //  }
+    
+      //  function calculPT(IETPT){
+      //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
+      //   return pt;
+      //  }
+    
+      // function calculIET(cl, pt){
+      //   var iet = (cl + pt)/2;
+      //   return iet;
+      //
+      // }
+    
+    };
+
+
+    return (
+      <ScrollView style={{ flex: 1 }}>
+        <View style={[styles.container, { paddingVertical: 150 }]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Temperatura da água (°C)"
+            inputMode="numeric"
+            value={inputTempAgua}
+            onChangeText={setInputTA}
+          />
         <TextInput
           style={style.input}
           placeholder="PH"
@@ -197,7 +262,8 @@ export default function App() {
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
         <VictoryChart
-                    theme={VictoryTheme.material} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
+        
+                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
                 >
                     <VictoryAxis dependentAxis crossAxis
                         tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
@@ -242,10 +308,10 @@ export default function App() {
                         { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
                     ]}
                 />
-        
 
-      </View>
-    </>
+        </View>
+      </ScrollView>
+   
   );
 }
 
