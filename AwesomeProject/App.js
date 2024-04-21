@@ -42,7 +42,27 @@ export default function App() {
           value={inputOD}
           onChangeText={setInputOD}
         />
-       
+        <TextInputInput
+          style={style.input}
+          placeholder="DBO"
+          inputMode="numeric"
+          value={inputDBO}
+          onChangeText={setInputDBO}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Turbidez"
+          inputMode="numeric"
+          value={inputTurbidez}
+          onChangeText={setInputTurbidez}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Nitrogênio Total"
+          inputMode="numeric"
+          value={inputNitrogênioTotal}
+          onChangeText={setInputNitrogênioTotal}
+        />    
 
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
