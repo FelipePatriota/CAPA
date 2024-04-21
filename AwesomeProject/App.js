@@ -13,8 +13,6 @@ export default function App() {
   const [inputFosforoT, setInputFosforoT] = useState("");
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
-  //const [inputIETCL, setInputCL] = useState("");
-  //const [inputIETPT, setInputPT] = useState("");
 
   const [dia, onChangeDia] = React.useState('');
   const [mes, onChangeMes] = React.useState('');
@@ -37,11 +35,6 @@ export default function App() {
     
     var IQA = calculaIQA(tempAgua, ph, od, dbo, turbidez, nitrogênioTotal, fosforoTotal, coliformesTermoTolerantes, ResiduosTotais);
     console.log("IQA: ", IQA)
-
-    // const newDataPoint = { x: new Date(ano, mes - 1, dia), y: valorCalculado, cor: novaCor };
-    // setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
-    // setDate([...date, new Date(ano, mes - 1, dia)]); // Adicionando nova data ao estado
-
 
     const newDataPoint = { x: new Date(ano, mes - 1, dia), y: IQA ,color: colocarCor(IQA)};
     setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
@@ -66,70 +59,6 @@ export default function App() {
         return 'lightblue';
       }
 }
-
-  function calculaTempAgua(tempAgua){
-    qTA = 92*Math.exp(-((tempAgua-0**2)/2)*(0.25**2))
-    return qTA **0.1;
-  }
-
-
-
-  function calcularPH(ph){
-      qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-    return qPH**0.12;
-  }
-
-  function calculaOD(od){
-    qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-    return qOD**0.17;
-  }
-
-
-  const calcularDBO = (inputDBO) => {
-    dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-    return dboCalculado ** 0.1;
-  }
-
-  const calcularTurbidez = (inputTurbidez) => {
-    turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
-    return turbidezCalculada**0.08;
-  }
-
-  const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
-    nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
-    return nitrogenioTotalCalculado**0.1;
-  }
-
-  function calculaFosforo(fosforoTotal){
-    qFT = -15.49*Math.log(fosforoTotal)+37.202;
-    return qFT**0.1;
-  }
-
-  function calculaColiformes(coliformesTermoTolerantes){
-    qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-    return qCT**0.15;
-  }
-  
-  function calculaSolidosTotais(solidosTotais){ 
-    qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
-    return qRT**0.08;
-  };
-
-      //  function calculaCL(IETCL){
-      //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
-      //   return cl;
-      //  }
-    
-      //  function calculPT(IETPT){
-      //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
-      //   return pt;
-      //  }
-    
-      // function calculIET(cl, pt){
-      //   var iet = (cl + pt)/2;
-      //   return iet;
-      //
-      // }
     return (
       <ScrollView style={{ flex: 1 }}>
         <View style={[styles.container, { paddingVertical: 150 }]}>
@@ -220,79 +149,56 @@ export default function App() {
           keyboardType='numeric'
 
         />
-
-        
-        {/* <TextInput
-          style={style.input}
-          placeholder="IET(CL)"
-          inputMode="numeric"
-          value={inputIETCL}
-          onChangeText={setInputCL}
-        />   
-        <TextInput
-          style={style.input}
-          placeholder="IET(PT)"
-          inputMode="numeric"
-          value={inputIETPT}
-          onChangeText={setInputPT}
-        />   
-        <TextInput
-          style={style.input}
-          placeholder="IET"
-          inputMode="numeric"
-          value={inputIET}
-          onChangeText={setInputIET}
-        />    */}
         <TouchableOpacity style={style.touchableButton} onPress={addDataPoint}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
         <VictoryChart        
-                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} 
-                    scale={{ x: 'time' }}
+          theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} 
+          scale={{ x: 'time' }}
                 >
-                    <VictoryAxis dependentAxis crossAxis
-                        tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
-                    />
-                    <VictoryAxis crossAxis //Valores do X
-                        style={{ tickLabels: { fontSize: 8 } }} //font do X label
-                        data={date}
-                        tickCount={date.length}
-                        tickValues={date}
-                        tickFormat={(x) => {
-                            return x.toLocaleString("pt-BR",
-                                { day: "numeric", month: "numeric", year: 'numeric' }) //formatar datas
-                        }
-                        }
-                        tickLabelComponent={
-                            <VictoryLabel angle={-45} textAnchor="end" /> //angulo do X
-                        }
-                    />
-                    <VictoryScatter
-                        size={5}
-                        data={data}
-                        style={{data: { fill: ({ datum }) => datum.color }}} //pontos
-                    />
-                    <VictoryLine sortOrder="ascending"
-                        style={{
-                            data: { stroke: "#72e073" },
-                            parent: { border: "1px solid #ccc" }, //linha
-
-                        }}
-                        data={data}
-
-                    />
-                </VictoryChart>
-                <VictoryLegend x={10} y={25}
-                    orientation="horizontal"
-                    height={150}
-                    gutter={20}
-                    itemsPerRow={3}
-                    style={{ border: { stroke: "black" } }}
-                    colorScale={["red", "orange", "yellow", "lightgreen", 'lightblue']}
-                    data={[
-                        { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
-                    ]}
+            <VictoryAxis dependentAxis crossAxis
+                tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
+            />
+            <VictoryAxis crossAxis //Valores do X
+                style={{ tickLabels: { fontSize: 8 } }} //font do X label
+                data={date}
+                tickCount={date.length}
+                tickValues={date}
+                tickFormat={(x) => {
+                    return x.toLocaleString("pt-BR",
+                        { day: "numeric", month: "numeric", year: 'numeric' }) //formatar datas
+                }
+                }
+                tickLabelComponent={
+                    <VictoryLabel angle={-45} textAnchor="end" /> //angulo do X
+                }
                 />
+                <VictoryLine sortOrder="ascending"
+                    style={{
+                        data: { stroke: "#0b0b64" },
+                        parent: { border: "1px solid #ccc" }, //linha
+
+                    }}
+                    data={data}
+            />
+            <VictoryScatter
+                size={5}
+                data={data}
+                style={{data: { fill: ({ datum }) => datum.color }}} //pontos
+              />
+            </VictoryChart>
+
+        <VictoryLegend x={10} y={25}
+            orientation="horizontal"
+            height={150}
+            gutter={20}
+            itemsPerRow={3}
+            style={{ border: { stroke: "black" } }}
+            colorScale={["red", "orange", "yellow", "lightgreen", 'lightblue']}
+            data={[
+                { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
+            ]}
+        />
 
         </View>
       </ScrollView>
