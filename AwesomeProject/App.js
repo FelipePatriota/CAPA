@@ -57,7 +57,7 @@ export default function App() {
           value={inputOD}
           onChangeText={setInputOD}
         />
-        <TextInputInput
+        <TextInput
           style={style.input}
           placeholder="DBO"
           inputMode="numeric"
