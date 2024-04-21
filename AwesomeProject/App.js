@@ -163,7 +163,27 @@ export default function App() {
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
         />   
-        
+        {/* <TextInput
+          style={style.input}
+          placeholder="IET(CL)"
+          inputMode="numeric"
+          value={inputIETCL}
+          onChangeText={setInputCL}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="IET(PT)"
+          inputMode="numeric"
+          value={inputIETPT}
+          onChangeText={setInputPT}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="IET"
+          inputMode="numeric"
+          value={inputIET}
+          onChangeText={setInputIET}
+        />    */}
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
