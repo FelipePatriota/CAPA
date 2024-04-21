@@ -250,8 +250,8 @@ export default function App() {
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
 
-        <VictoryChart >
-
+        <VictoryChart maxDomain={{y: 100}} minDomain={{y:0}} responsive={true} scale={{x: "time"}} >
+          
         </VictoryChart>
 
       </View>
