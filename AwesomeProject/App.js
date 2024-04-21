@@ -172,8 +172,8 @@ export default function App() {
 
 
     return (
-      <ScrollView>
-        <View style={styles.container}>
+      <ScrollView style={{ flex: 1 }}>
+        <View style={[styles.container, { paddingVertical: 150 }]}>
           <TextInput
             style={styles.input}
             placeholder="Temperatura da água (°C)"
