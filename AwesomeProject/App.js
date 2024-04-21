@@ -23,7 +23,15 @@ export default function App() {
     var fosforoTotal = parseFloat(inputFosforoT);
     var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
     var SolidosTotais = parseFloat(inputSolidosT)
-   
+    console.log("Temperatura da água: " + tempAgua);
+    console.log("PH: " + ph);
+    console.log("OD: " + od);
+    console.log("DBO: " + dbo);
+    console.log("Turbidez: " + turbidez);
+    console.log("Nitrogênio Total: " + nitrogênioTotal);
+    console.log("Fósforo Total: " + fosforoTotal);
+    console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
+    console.log("Sólidos Totais: ", SolidosTotais);
     
   };
   return (
