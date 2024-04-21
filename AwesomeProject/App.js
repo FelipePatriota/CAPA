@@ -24,8 +24,13 @@ export default function App() {
   const [date, setDate] = useState([]); //array para settar as datas do X
 
 
-
+  const addDataPoint = () => {
+    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(value) }; //formatar a data para o luxon
+    setData([...data, newDataPoint]); //colocar no Y
+    setDate([...date, newDataPoint.x]) //colocar no X
+};
   const handleButtonPress = () => {
+    // Inicializando as variáveis de parametros
     // Inicializando as variáveis de parametros
     // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
@@ -35,10 +40,6 @@ export default function App() {
     var turbidez = parseFloat(inputTurbidez);
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
     var fosforoTotal = parseFloat(inputFosforoT);
-    var coliformesTermoTolerantes = parseFloat(inputColiformesT);
-    var solidosTotais = parseFloat(inputSolidosT)
-    //var IETCL = parseFloat(inputIETCL);
-    //var IETPT = parseFloat(inputIETPT);
 
     var tempAguaCalculada = calculaTempAgua(tempAgua);
     var phCalculado = calcularPH(ph);
@@ -190,7 +191,39 @@ export default function App() {
           inputMode="numeric"
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
-        />   
+        /> 
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeDia}
+          value={dia}
+          placeholder={"Digite o dia, exemplo: 01, 10..."}
+          keyboardType='numeric'
+
+        />
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeMes}
+          value={mes}
+          placeholder={"Digite o mês, exemplo: 07, 12..."}
+          keyboardType='numeric'
+
+        />
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeAno}
+          value={ano}
+          placeholder={"Digite o ano, exemplo: 2022, 2018..."}
+          keyboardType='numeric'
+
+        />
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeValue}
+          value={value}
+          placeholder={"Digite o valor"}
+          keyboardType='numeric'
+        />  
+        
         {/* <TextInput
           style={style.input}
           placeholder="IET(CL)"
@@ -216,6 +249,8 @@ export default function App() {
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
         <VictoryChart
+        
+                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
         
                     theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
                 >
@@ -262,6 +297,10 @@ export default function App() {
                         { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
                     ]}
                 />
+
+        </View>
+      </ScrollView>
+   
 
         </View>
       </ScrollView>
