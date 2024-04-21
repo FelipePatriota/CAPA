@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-<<<<<<< Updated upstream
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
@@ -12,7 +11,8 @@ export default function App() {
   const [inputFosforoT, setInputFosforoT] = useState("");
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
-
+  //const [inputIETCL, setInputCL] = useState("");
+  //const [inputIETPT, setInputPT] = useState("");
 
   const handleButtonPress = () => {
     var tempAgua = parseFloat(inputTempAgua);
@@ -24,6 +24,10 @@ export default function App() {
     var fosforoTotal = parseFloat(inputFosforoT);
     var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
     var SolidosTotais = parseFloat(inputSolidosT)
+    //var IETCL = parseFloat(inputIETCL);
+    //var IETPT = parseFloat(inputIETPT);
+   
+
     console.log("Temperatura da água: " + tempAgua);
     console.log("PH: " + ph);
     console.log("OD: " + od);
@@ -33,33 +37,65 @@ export default function App() {
     console.log("Fósforo Total: " + fosforoTotal);
     console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
     console.log("Sólidos Totais: ", SolidosTotais);
-=======
-import { View, TextInput, Button, StyleSheet } from "react-native";
-//import {StatusBar} from 'expo-status-bar';
-//import {StyleSheet, Text, View } from 'react-native';
-
-export default function App() {
+    //console.log("IET(CL): ", IETCL);
+    //console.log("IET(PT): ", IETPT);
+   
 
 
 
+  function calculaFosforo(fosforoTotal){
+    let qFT;
+    if (fosforoTotal > 10){
+      qFT = 0.1 * 1
+    }
+    else {
+      qFT = -15.49*Math.log(fosforoTotal)+37.202;
+    }
+    return qFT;
+    }
+    function calculaColiformes(ColiformesTermoTolerantes){
+      let qCT;
+      if (ColiformesTermoTolerantes > 10){
+        qCT = 3 ** 0.15;
+            }
+                  else {
+        qCT = -8.723*Math.log(ColiformesTermoTolerantes)+88.714;
+  
+      }
+      return qCT;
+  }
 
-
-
-  const [inputFosforoTotal, setInputFosforoTotal] = useState("");
-  const [inputColiformesT, setColiformesT] = useState("");
-  const [inputSolidosT, setSolidosT] = useState("");
-
-  const handleButtonPress = () => {
-    console.log("Valor do Input 1:", input1);
-    var ForsforoTotal = parseFloat()
->>>>>>> Stashed changes
+   function calculaSolidosTotais(SolidosTotais){
+    let qRT;
+    if (SolidosTotais > 500){
+      qRT = 32**0.08;
     
+    }
+    else{ 
+      qRT=80*Math.log(-(((SolidosTotais-50)^2)/2*(0.003^2)))
+    }
+
+   }
+  //  function calculaCL(IETCL){
+  //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
+  //   return cl;
+  //  }
+
+  //  function calculPT(IETPT){
+  //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
+  //   return pt;
+  //  }
+
+  // function calculIET(cl, pt){
+  //   var iet = (cl + pt)/2;
+  //   return iet;
+  //
+  // }
   };
   return (
     <>
       <View style={styles.container}>
         <TextInput
-<<<<<<< Updated upstream
           style={style.input}
           placeholder="Temperatura da água (°C)"
           inputMode="numeric"
@@ -122,34 +158,32 @@ export default function App() {
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
         />   
-        
+
+
+        {/* <TextInput
+          style={style.input}
+          placeholder="IET(CL)"
+          inputMode="numeric"
+          value={inputIETCL}
+          onChangeText={setInputCL}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="IET(PT)"
+          inputMode="numeric"
+          value={inputIETPT}
+          onChangeText={setInputPT}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="IET"
+          inputMode="numeric"
+          value={inputIET}
+          onChangeText={setInputIET}
+        />    */}
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
-=======
-          style={styles.input}
-          placeholder="Fósforo Total"
-          keyboardType="numeric"
-          value={inputFosforoTotal}
-          onChangeText={setInputFosforoTotal}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Coliformes Termotolerantes"
-          keyboardType="numeric"
-          value={inputColiformesT}
-          onChangeText={setColiformesT}
-        />
-         <TextInput
-          style={styles.input}
-          placeholder="Dados3"
-          keyboardType="numeric"
-          value={inputSolidosT}
-          onChangeText={setSolidosT}
-        />
-      
-        <Button title="Executar" onPress={handleButtonPress} />
->>>>>>> Stashed changes
       </View>
     </>
   );
@@ -208,4 +242,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 });
-
