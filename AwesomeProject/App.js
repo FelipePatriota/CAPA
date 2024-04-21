@@ -34,7 +34,6 @@ export default function App() {
 
     
     var IQA = calculaIQA(tempAgua, ph, od, dbo, turbidez, nitrogênioTotal, fosforoTotal, coliformesTermoTolerantes, ResiduosTotais);
-    console.log("IQA: ", IQA)
 
     const newDataPoint = { x: new Date(ano, mes - 1, dia), y: IQA ,color: colocarCor(IQA)};
     setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
@@ -312,16 +311,6 @@ export default function App() {
     var qFT_C = calcularFosforo(qFT);
     var qCT_C = calcularColiformes(qCT);
     var qRT_C = calcularResiduosTotais(qRT);
-
-    console.log("qTA_C: ", qTA_C)
-    console.log("qPH_C: ", qPH_C)
-    console.log("qOD_C: ", qOD_C)
-    console.log("qDBO_C: ", qDBO_C)
-    console.log("qTurbidez_C: ", qTurbidez_C)
-    console.log("qNT_C: ", qNT_C)
-    console.log("qFT_C: ", qFT_C)
-    console.log("qCT_C: ", qCT_C)
-    console.log("qRT_C: ", qRT_C)
 
 
     return (qTA_C * qPH_C * qOD_C * qDBO_C * qTurbidez_C * qNT_C * qFT_C * qCT_C * qRT_C);
