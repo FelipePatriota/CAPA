@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 import { VictoryLine, VictoryChart, VictoryTheme, VictoryLegend, VictoryLabel, VictoryScatter, VictoryAxis } from "victory-native";
-
+import { ScrollView } from 'react-native';
 
 export default function App() {
   const [inputTempAgua, setInputTA] = useState("");
@@ -171,16 +171,16 @@ export default function App() {
     };
 
 
-  return (
-    <>
-      <View style={styles.container}>
-        <TextInput
-          style={style.input}
-          placeholder="Temperatura da água (°C)"
-          inputMode="numeric"
-          value={inputTempAgua}
-          onChangeText={setInputTA}
-        />
+    return (
+      <ScrollView>
+        <View style={styles.container}>
+          <TextInput
+            style={styles.input}
+            placeholder="Temperatura da água (°C)"
+            inputMode="numeric"
+            value={inputTempAgua}
+            onChangeText={setInputTA}
+          />
         <TextInput
           style={style.input}
           placeholder="PH"
@@ -308,10 +308,10 @@ export default function App() {
                         { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
                     ]}
                 />
-        
 
-      </View>
-    </>
+        </View>
+      </ScrollView>
+   
   );
 }
 
