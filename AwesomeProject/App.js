@@ -5,18 +5,16 @@ export default function App() {
   const [input1, setInput1] = useState("");
   const [inputTHanos, setInputTHanos] = useState("");
   const [input3, setInput3] = useState("");
-  const [input4, setInputDBO] = useState("");
-  const [input5, setInputTurbidez] = useState("");
-  const [input6, setInputNitrogênioTotal] = useState("");
-
+  const [inputDBO, setInputDBO] = useState("");
+  const [inputTurbidez, setInputTurbidez] = useState("");
+  const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
 
   const handleButtonPress = () => {
     var input1Teste = parseFloat(input1);
     var inputTHanosTeste = parseFloat(inputTHanos);
     var input3Teste = parseFloat(input3);
-    var inputDBO = parseFloat(input4);
-    var inputTurbidez = parseFloat(input5);
-    var inputNitrogênioTotal = parseFloat(input6);
+    var inputLDTeste = parseFloat(inputLD);
+    var input5Teste = parseFloat(input5);
     console.log("Valor do Input 1: ", input1Teste);
     console.log("Valor do Input 2: ", inputTHanosTeste);
     console.log("Valor do Input 3: ", input3Teste);
@@ -28,50 +26,49 @@ export default function App() {
   return (
     <>
       <View style={styles.container}>
-        
-        <TextInput
+      <TextInput
           style={style.input}
-          placeholder="Dados1"
+          placeholder="Temperatura da água (°C)"
           inputMode="numeric"
-          value={input1}
-          onChangeText={setInput1}
+          value={inputTempAgua}
+          onChangeText={setInputTA}
         />
         <TextInput
           style={style.input}
-          placeholder="Dados2"
+          placeholder="PH"
           inputMode="numeric"
-          value={inputTHanos}
-          onChangeText={setInputTHanos}
-        />
-         <TextInput
-          style={style.input}
-          placeholder="Dados3"
-          inputMode="numeric"
-          value={input3}
-          onChangeText={setInput3}
+          value={inputPH}
+          onChangeText={setInputPH}
         />
         <TextInput
           style={style.input}
-          placeholder="Dados4"
+          placeholder="OD"
+          inputMode="numeric"
+          value={inputOD}
+          onChangeText={setInputOD}
+        />
+        <TextInput
+          style={style.input}
+          placeholder="Dados 4"
           inputMode="numeric"
           value={input4}
           onChangeText={setInputDBO}
         />
         <TextInput
           style={style.input}
-          placeholder="Dados5"
+          placeholder="Dados 5"
           inputMode="numeric"
           value={input5}
           onChangeText={setInputTurbidez}
         />
         <TextInput
           style={style.input}
-          placeholder="Dados6"
+          placeholder="Dados 6"
           inputMode="numeric"
           value={input6}
           onChangeText={setInputNitrogênioTotal}
         />
-        
+
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
