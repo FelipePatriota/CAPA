@@ -16,7 +16,6 @@ export default function App() {
    
   
 
-
   const handleButtonPress = () => {
     // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
