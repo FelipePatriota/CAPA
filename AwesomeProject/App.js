@@ -13,6 +13,7 @@ export default function App() {
   const [inputFosforoT, setInputFosforoT] = useState("");
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
+  cons [value, setInputValue] = useState("");
   //const [inputIETCL, setInputCL] = useState("");
   //const [inputIETPT, setInputPT] = useState("");
 
@@ -24,7 +25,11 @@ export default function App() {
   const [date, setDate] = useState([]); //array para settar as datas do X
 
 
-
+  const addDataPoint = () => {
+    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(value) }; //formatar a data para o luxon
+    setData([...data, newDataPoint]); //colocar no Y
+    setDate([...date, newDataPoint.x]) //colocar no X
+};
   const handleButtonPress = () => {
     // Inicializando as variáveis de parametros
     // Inicializando as variáveis de parametros
@@ -37,6 +42,7 @@ export default function App() {
     var fosforoTotal = parseFloat(inputFosforoT);
     var coliformesTermoTolerantes = parseFloat(inputColiformesT);
     var solidosTotais = parseFloat(inputSolidosT)
+
     //var IETCL = parseFloat(inputIETCL);
     //var IETPT = parseFloat(inputIETPT);
     
@@ -46,11 +52,12 @@ export default function App() {
     console.log("Tubidez: "+calcularTurbidez(turbidez));
     console.log("NT: "+calcularNitrogenioTotal(nitrogênioTotal));
     console.log("DBO: "+calcularDBO(dbo));
-    console.log("Fósforo Total: " + fosforoTotal);
-    console.log("Coliformes Termotolerantes: " + coliformesTermoTolerantes);
-    console.log("Sólidos Totais: ", solidosTotais);
+    console.log("Fósforo Total: " + calculaFosforo(fosforoTotal));
+    console.log("Coliformes Termotolerantes: " + calcularcoliformes(coliformesTermoTolerantes));
+    console.log("Sólidos Totais: ", calcularsolidosTotais(solidosTotais));
     //console.log("IET(CL): ", IETCL);
     //console.log("IET(PT): ", IETPT);
+
     
   };
     var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
@@ -236,7 +243,39 @@ export default function App() {
           inputMode="numeric"
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
-        />   
+        /> 
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangeDia}
+        value={dia}
+        placeholder={"Digite o dia, exemplo: 01, 10..."}
+        keyboardType='numeric'
+
+        />
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangeMes}
+        value={mes}
+        placeholder={"Digite o mês, exemplo: 07, 12..."}
+        keyboardType='numeric'
+
+        />
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangeAno}
+        value={ano}
+        placeholder={"Digite o ano, exemplo: 2022, 2018..."}
+        keyboardType='numeric'
+
+        />
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangeValue}
+        value={value}
+        placeholder={"Digite o valor"}
+        keyboardType='numeric'
+        />  
+        
         {/* <TextInput
           style={style.input}
           placeholder="IET(CL)"
