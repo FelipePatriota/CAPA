@@ -262,7 +262,8 @@ export default function App() {
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
         <VictoryChart
-                    theme={VictoryTheme.material} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
+        
+                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
                 >
                     <VictoryAxis dependentAxis crossAxis
                         tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
