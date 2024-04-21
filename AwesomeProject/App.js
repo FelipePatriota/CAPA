@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
+import { VictoryLine, VictoryChart, VictoryTheme, VictoryLegend, VictoryLabel, VictoryScatter, VictoryAxis } from "victory-native";
+import { ScrollView } from 'react-native';
 
 export default function App() {
   const [inputTempAgua, setInputTA] = useState("");
@@ -14,9 +16,17 @@ export default function App() {
   //const [inputIETCL, setInputCL] = useState("");
   //const [inputIETPT, setInputPT] = useState("");
 
+  const [dia, onChangeDia] = React.useState('');
+  const [mes, onChangeMes] = React.useState('');
+  const [ano, onChangeAno] = React.useState('');
+  const [value, onChangeValue] = React.useState('');
+  const [data, setData] = useState([]); //valores
+  const [date, setDate] = useState([]); //array para settar as datas do X
+
 
 
   const handleButtonPress = () => {
+    // Inicializando as variáveis de parametros
     // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
@@ -29,116 +39,137 @@ export default function App() {
     var solidosTotais = parseFloat(inputSolidosT)
     //var IETCL = parseFloat(inputIETCL);
     //var IETPT = parseFloat(inputIETPT);
+
+    var tempAguaCalculada = calculaTempAgua(tempAgua);
+    var phCalculado = calcularPH(ph);
+    var odCalculado = calculaOD(od);
+    var dboCalculado = calcularDBO(dbo);
+    var turbidezCalculada = calcularTurbidez(turbidez);
+    var nitrogênioTotalCalculado = calcularNitrogenioTotal(nitrogênioTotal);
+    var fosforoTotalCalculado = calculaFosforo(fosforoTotal);
+    var coliformesTermoTolerantesCalculado = calculaColiformes(coliformesTermoTolerantes);
+    var solidosTotaisCalculado = calculaSolidosTotais(solidosTotais);
+    var multi = tempAguaCalculada * phCalculado * odCalculado * dboCalculado * turbidezCalculada * nitrogênioTotalCalculado * fosforoTotalCalculado * coliformesTermoTolerantesCalculado * solidosTotaisCalculado;
+    //var ietCalculado = calculIET(IETCL, IETPT);
+    //var clCalculado = calculaCL(IETCL);
+
+    console.log("Temperatura da água: ", tempAguaCalculada);
+    console.log("PH: ", phCalculado);
+    console.log("OD: ", odCalculado);
+    console.log("DBO: ", dboCalculado);
+    console.log("Turbidez: ", turbidezCalculada);
+    console.log("Nitrogênio Total: ", nitrogênioTotalCalculado);
+    console.log("Fósforo Total: ", fosforoTotalCalculado);
+    console.log("Coliformes Termotolerantes: ", coliformesTermoTolerantesCalculado);
+    console.log("Sólidos Totais: ", solidosTotaisCalculado);
+    console.log("QIA: ", multi);
+    //console.log("IET: ", ietCalculado);
+    //console.log("CL: ", clCalculado);
     
-    console.log("OD: "+calculaOD(od))
-    console.log("PH: "+calcularPH(ph))
-    console.log("Temp: "+calculaTempAgua(tempAgua))
-    console.log("Tubidez: "+calcularTurbidez(turbidez));
-    console.log("NT: "+calcularNitrogenioTotal(nitrogênioTotal));
-    console.log("DBO: "+calcularDBO(dbo));
-    console.log("Fósforo Total: " + fosforoTotal);
-    console.log("Coliformes Termotolerantes: " + coliformesTermoTolerantes);
-    console.log("Sólidos Totais: ", solidosTotais);
+    
+
     //console.log("IET(CL): ", IETCL);
     //console.log("IET(PT): ", IETPT);
     
   };
+  function calculaTempAgua(tempAgua){
+    let qTA;
+    if (tempAgua < -5){
+      qTA = 0;
+    } else if(tempAgua > 15){
+      qTA = 9
+    } else{
+      qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
+    }
+    return qTA **0.1;
+  }
+  function calcularPH(ph){
+    let qPH;
+    if (ph < 2.0){
+      qPH = 2.0
+    } else if (ph > 12.0){
+      qPH = 3.0
+    } else {
+      qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
+    }
+    return qPH**0.12;
+  }
+  function calculaOD(od){
+    let qOD;
+    if (od < 0){
+      qOD = 0
+    } else if(od > 140){
+      qOD = 47.0
+    } else {
+      qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
+    }
+    return qOD**0.17;
+  };
+  const calcularDBO = (inputDBO) => {
+    let dboCalculado;
+    if (inputDBO > 30) {
+        dboCalculado = 2; 
+    } else {
+
+      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
+    }
+    return dboCalculado ** 0.1;
+  }
 
   const calcularTurbidez = (inputTurbidez) => {
     let turbidezCalculada;
     if (inputTurbidez > 100) {
-        turbidezCalculada = 5 ** 0.08;
+        turbidezCalculada = 5;
     } else {
 
         turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
     }
-    return turbidezCalculada;
+    return turbidezCalculada**0.08;
   };
 
   const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
     let nitrogenioTotalCalculado;
     if (inputNitrogênioTotal > 100) {
-        nitrogenioTotalCalculado = 1 ** 0.1; 
+        nitrogenioTotalCalculado = 1; 
     } else {
 
       nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
     }
-    return nitrogenioTotalCalculado;
+    return nitrogenioTotalCalculado**0.1;
   }
 
-  const calcularDBO = (inputDBO) => {
-    let dboCalculado;
-    if (inputDBO > 30) {
-        dboCalculado = 2 ** 0.1; 
-    } else {
-
-      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-    }
-    return dboCalculado;
-  }
-    function calculaTempAgua(tempAgua){
-      if (tempAgua < -5){
-        return 0.0;
-      } else if(tempAgua > 15){
-        return 9.0;
-      } else{
-        qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
-        return qTA;
+    function calculaFosforo(fosforoTotal){
+      let qFT;
+      if (fosforoTotal > 10){
+        qFT = 1
       }
-    }
-    function calcularPH(ph){
-      if (ph < 2.0){
-      return 2.0;
-      } else if (ph > 12.0){
-      return 3.0;
-      } else {
-        qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-        return qPH;
-      };
-    }
-    function calculaOD(od){
-      if (od < 0){
-        return 0.0;
-      } else if(od > 140){
-        return 47.0;
-      } else {
-        qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-        return qOD;
-      }; 
-
-      function calculaFosforo(fosforoTotal){
-        let qFT;
-        if (fosforoTotal > 10){
-          qFT = 0.1 ** 1
-        }
-        else {
-          qFT = -15.49*Math.log(fosforoTotal)+37.202;
-        }
-        return qFT;
-        }
-        function calculaColiformes(coliformesTermoTolerantes){
-          let qCT;
-          if (coliformesTermoTolerantes > 10){
-            qCT = 3 ** 0.15;
-                }
-          else {
-            qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-      
-          }
-          return qCT;
+      else {
+        qFT = -15.49*Math.log(fosforoTotal)+37.202;
       }
+      return qFT**0.1;
+    };
+    function calculaColiformes(coliformesTermoTolerantes){
+      let qCT;
+      if (coliformesTermoTolerantes > 10){
+        qCT = 3;
+            }
+      else {
+        qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
+  
+      }
+      return qCT**0.15;
+    };
     
-       function calculaSolidosTotais(solidosTotais){
-        let qRT;
-        if (solidosTotais > 500){
-          qRT = 32**0.08;
-        }
-        else{ 
-          qRT=80*Math.log(-(((solidosTotais-50)^2)/2*(0.003^2)))
-        }
-        return qRT;
-    
-       }
+    function calculaSolidosTotais(solidosTotais){
+      let qRT;
+      if (solidosTotais > 500){
+        qRT = 32;
+      }
+      else{ 
+        qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
+      }
+      return qRT**0.08;
+    };
 
       //  function calculaCL(IETCL){
       //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
@@ -155,19 +186,16 @@ export default function App() {
       //   return iet;
       //
       // }
-    
-    };
-
-  return (
-    <>
-      <View style={styles.container}>
-        <TextInput
-          style={style.input}
-          placeholder="Temperatura da água (°C)"
-          inputMode="numeric"
-          value={inputTempAgua}
-          onChangeText={setInputTA}
-        />
+    return (
+      <ScrollView style={{ flex: 1 }}>
+        <View style={[styles.container, { paddingVertical: 150 }]}>
+          <TextInput
+            style={styles.input}
+            placeholder="Temperatura da água (°C)"
+            inputMode="numeric"
+            value={inputTempAgua}
+            onChangeText={setInputTA}
+          />
         <TextInput
           style={style.input}
           placeholder="PH"
@@ -248,8 +276,57 @@ export default function App() {
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
-      </View>
-    </>
+        <VictoryChart
+        
+                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
+                >
+                    <VictoryAxis dependentAxis crossAxis
+                        tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
+                    />
+                    <VictoryAxis crossAxis //Valores do X
+                        style={{ tickLabels: { fontSize: 8 } }} //font do X label
+                        data={date}
+                        tickCount={date.length}
+                        tickValues={date}
+                        tickFormat={(x) => {
+                            return x.toLocaleString("pt-BR",
+                                { day: "numeric", month: "numeric", year: 'numeric' }) //formatar datas
+                        }
+                        }
+                        tickLabelComponent={
+                            <VictoryLabel angle={-45} textAnchor="end" /> //angulo do X
+                        }
+                    />
+                    <VictoryScatter
+                        style={{ data: { fill: "#72e073" } }} //pontos
+                        size={5}
+                        data={data}
+                    />
+                    <VictoryLine sortOrder="ascending"
+                        style={{
+                            data: { stroke: "#72e073" },
+                            parent: { border: "1px solid #ccc" }, //linha
+
+                        }}
+                        data={data}
+
+                    />
+                </VictoryChart>
+                <VictoryLegend x={10} y={25}
+                    orientation="horizontal"
+                    height={150}
+                    gutter={20}
+                    itemsPerRow={3}
+                    style={{ border: { stroke: "black" } }}
+                    colorScale={["red", "orange", "yellow", "lightgreen", 'lightblue']}
+                    data={[
+                        { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
+                    ]}
+                />
+
+        </View>
+      </ScrollView>
+   
   );
 }
 
@@ -258,11 +335,11 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   input: {
     width: "100%",
-    height: 40,
+    height: 30,
     marginBottom: 10,
     borderWidth: 1,
     borderColor: "#ccc",
