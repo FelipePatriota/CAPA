@@ -47,7 +47,7 @@ export default function App() {
   const calcularTurbidez = (inputTurbidez) => {
     let turbidezCalculada;
     if (inputTurbidez > 100) {
-        turbidezCalculada = 5 ** 0.08; 
+        turbidezCalculada = 5 ** 0.08;
     } else {
 
         turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
@@ -121,7 +121,7 @@ export default function App() {
           if (coliformesTermoTolerantes > 10){
             qCT = 3 ** 0.15;
                 }
-                      else {
+          else {
             qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
       
           }
@@ -132,11 +132,11 @@ export default function App() {
         let qRT;
         if (solidosTotais > 500){
           qRT = 32**0.08;
-        
         }
         else{ 
           qRT=80*Math.log(-(((solidosTotais-50)^2)/2*(0.003^2)))
         }
+        return qRT;
     
        }
 
