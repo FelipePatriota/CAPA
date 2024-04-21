@@ -19,11 +19,11 @@ export default function App() {
   const [dia, onChangeDia] = React.useState('');
   const [mes, onChangeMes] = React.useState('');
   const [ano, onChangeAno] = React.useState('');
+  const [value, onChangeValue] = React.useState('');
   const [data, setData] = useState([]); //valores
   const [date, setDate] = useState([]); //array para settar as datas do X
 
 
-<<<<<<< HEAD
   const addDataPoint = () => {
     const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(value) }; //formatar a data para o luxon
     setData([...data, newDataPoint.y]); //colocar no Y
@@ -43,10 +43,6 @@ export default function App() {
     var coliformesTermoTolerantes = parseFloat(inputColiformesT);
     var solidosTotais = parseFloat(inputSolidosT);
 
-=======
-  function calculoTotal(tempAgua, ph, od, dbo, turbidez, nitrogênioTotal, fosforoTotal, coliformesTermoTolerantes, solidosTotais){
-    
->>>>>>> Felipe-Patriota
     var tempAguaCalculada = calculaTempAgua(tempAgua);
     var phCalculado = calcularPH(ph);
     var odCalculado = calculaOD(od);
@@ -57,7 +53,6 @@ export default function App() {
     var coliformesTermoTolerantesCalculado = calculaColiformes(coliformesTermoTolerantes);
     var solidosTotaisCalculado = calculaSolidosTotais(solidosTotais);
     var multi = tempAguaCalculada * phCalculado * odCalculado * dboCalculado * turbidezCalculada * nitrogênioTotalCalculado * fosforoTotalCalculado * coliformesTermoTolerantesCalculado * solidosTotaisCalculado;
-<<<<<<< HEAD
     //var ietCalculado = calculIET(IETCL, IETPT);
     //var clCalculado = calculaCL(IETCL);
 
@@ -90,36 +85,7 @@ export default function App() {
   function calculaOD(od){
     qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
     return qOD**0.17;
-=======
-    return multi;
-
->>>>>>> Felipe-Patriota
   }
- 
-
-  function calculaTempAgua(tempAgua){
-    qTA = 92*Math.exp(-((tempAgua-0**2)/2)*(0.25**2))
-    return qTA **0.1;
-  }
-
-  const addDataPoint = () => {
-    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: calculoTotal(parseFloat(inputTempAgua), parseFloat(inputPH), parseFloat(inputOD), parseFloat(inputDBO), parseFloat(inputTurbidez), parseFloat(inputNitrogênioTotal), parseFloat(inputFosforoT), parseFloat(inputColiformesT), parseFloat(inputSolidosT)) };
-    setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
-    setDate([...date, new Date(ano, mes - 1, dia)]); // Adicionando nova data ao estado
-  }
-
-
-
-  function calcularPH(ph){
-      qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-    return qPH**0.12;
-  }
-
-  function calculaOD(od){
-    qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-    return qOD**0.17;
-  }
-
 
   const calcularDBO = (inputDBO) => {
     dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
@@ -256,7 +222,13 @@ export default function App() {
           keyboardType='numeric'
 
         />
-
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeValue}
+          value={value}
+          placeholder={"Digite o valor"}
+          keyboardType='numeric'
+        />  
         
         {/* <TextInput
           style={style.input}
@@ -279,7 +251,7 @@ export default function App() {
           value={inputIET}
           onChangeText={setInputIET}
         />    */}
-        <TouchableOpacity style={style.touchableButton} onPress={addDataPoint}>
+        <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
         <VictoryChart        
