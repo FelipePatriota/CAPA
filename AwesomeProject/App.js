@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+<<<<<<< Updated upstream
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
@@ -32,12 +33,33 @@ export default function App() {
     console.log("Fósforo Total: " + fosforoTotal);
     console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
     console.log("Sólidos Totais: ", SolidosTotais);
+=======
+import { View, TextInput, Button, StyleSheet } from "react-native";
+//import {StatusBar} from 'expo-status-bar';
+//import {StyleSheet, Text, View } from 'react-native';
+
+export default function App() {
+
+
+
+
+
+
+  const [inputFosforoTotal, setInputFosforoTotal] = useState("");
+  const [inputColiformesT, setColiformesT] = useState("");
+  const [inputSolidosT, setSolidosT] = useState("");
+
+  const handleButtonPress = () => {
+    console.log("Valor do Input 1:", input1);
+    var ForsforoTotal = parseFloat()
+>>>>>>> Stashed changes
     
   };
   return (
     <>
       <View style={styles.container}>
         <TextInput
+<<<<<<< Updated upstream
           style={style.input}
           placeholder="Temperatura da água (°C)"
           inputMode="numeric"
@@ -104,6 +126,30 @@ export default function App() {
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
+=======
+          style={styles.input}
+          placeholder="Fósforo Total"
+          keyboardType="numeric"
+          value={inputFosforoTotal}
+          onChangeText={setInputFosforoTotal}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Coliformes Termotolerantes"
+          keyboardType="numeric"
+          value={inputColiformesT}
+          onChangeText={setColiformesT}
+        />
+         <TextInput
+          style={styles.input}
+          placeholder="Dados3"
+          keyboardType="numeric"
+          value={inputSolidosT}
+          onChangeText={setSolidosT}
+        />
+      
+        <Button title="Executar" onPress={handleButtonPress} />
+>>>>>>> Stashed changes
       </View>
     </>
   );
