@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-    const [inputTempAgua, setInputTA] = useState("");
-    const [inputPH, setInputPH] = useState("");
-    const [inputOD, setInputOD] = useState("");
-    const [inputDBO, setInputDBO] = useState("");
-    const [inputTurbidez, setInputTurbidez] = useState("");
-    const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+  const [inputTempAgua, setInputTA] = useState("");
+  const [inputPH, setInputPH] = useState("");
+  const [inputOD, setInputOD] = useState("");
+  const [inputDBO, setInputDBO] = useState("");
+  const [inputTurbidez, setInputTurbidez] = useState("");
+  const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+  const [inputFosforoT, setInputFosforoT] = useState("");
+  const [inputColiformesT, setInputColiformesT] = useState("");
+  const [inputSolidosT, setInputSolidosT] = useState("");
+
 
   const handleButtonPress = () => {
     var tempAgua = parseFloat(inputTempAgua);
@@ -16,19 +20,24 @@ export default function App() {
     var dbo = parseFloat(inputDBO);
     var turbidez = parseFloat(inputTurbidez);
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
+    var fosforoTotal = parseFloat(inputFosforoT);
+    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
+    var SolidosTotais = parseFloat(inputSolidosT)
     console.log("Temperatura da água: " + tempAgua);
     console.log("PH: " + ph);
     console.log("OD: " + od);
     console.log("DBO: " + dbo);
     console.log("Turbidez: " + turbidez);
     console.log("Nitrogênio Total: " + nitrogênioTotal);
-
-  
+    console.log("Fósforo Total: " + fosforoTotal);
+    console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
+    console.log("Sólidos Totais: ", SolidosTotais);
+    
   };
   return (
     <>
       <View style={styles.container}>
-      <TextInput
+        <TextInput
           style={style.input}
           placeholder="Temperatura da água (°C)"
           inputMode="numeric"
@@ -49,7 +58,7 @@ export default function App() {
           value={inputOD}
           onChangeText={setInputOD}
         />
-        <TextInput
+        <TextInputInput
           style={style.input}
           placeholder="DBO"
           inputMode="numeric"
@@ -69,7 +78,7 @@ export default function App() {
           inputMode="numeric"
           value={inputNitrogênioTotal}
           onChangeText={setInputNitrogênioTotal}
-        />
+        />    
         <TextInput
           style={style.input}
           placeholder="Fósforo Total"
@@ -91,6 +100,7 @@ export default function App() {
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
         />   
+        
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
@@ -152,4 +162,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 });
-
