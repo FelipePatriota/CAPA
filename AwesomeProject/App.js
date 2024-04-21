@@ -12,9 +12,6 @@ export default function App() {
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
 
-
-
-
   const handleButtonPress = () => {
     // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
@@ -97,6 +94,7 @@ export default function App() {
         qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
         return qOD;
       }; 
+
   };
   return (
     <>
@@ -168,6 +166,12 @@ export default function App() {
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
+
+        <VictoryChart maxDomain={{y:100}} minDomain={{y:0}} responsive={true} scale="linear">
+
+
+
+        </VictoryChart>
       </View>
     </>
   );
