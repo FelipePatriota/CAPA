@@ -13,8 +13,8 @@ export default function App() {
   const [inputSolidosT, setInputSolidosT] = useState("");
   //const [inputIETCL, setInputCL] = useState("");
   //const [inputIETPT, setInputPT] = useState("");
-   
-  
+
+
 
   const handleButtonPress = () => {
     // Inicializando as variáveis de parametros
@@ -29,7 +29,7 @@ export default function App() {
     var solidosTotais = parseFloat(inputSolidosT)
     //var IETCL = parseFloat(inputIETCL);
     //var IETPT = parseFloat(inputIETPT);
-
+    
     console.log("OD: "+calculaOD(od))
     console.log("PH: "+calcularPH(ph))
     console.log("Temp: "+calculaTempAgua(tempAgua))
@@ -41,7 +41,7 @@ export default function App() {
     console.log("Sólidos Totais: ", solidosTotais);
     //console.log("IET(CL): ", IETCL);
     //console.log("IET(PT): ", IETPT);
-
+    
   };
 
   const calcularTurbidez = (inputTurbidez) => {
@@ -156,8 +156,8 @@ export default function App() {
       //
       // }
     
+    };
 
-  };
   return (
     <>
       <View style={styles.container}>
