@@ -2,19 +2,21 @@ import React, { useState } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
 
 export default function App() {
-  const [input1, setInput1] = useState("");
-  const [inputTHanos, setInputTHanos] = useState("");
-  const [input3, setInput3] = useState("");
-  const [inputLD, setInputLD] = useState("");
-  const [input5, setInput5] = useState("");
-
-  const handleButtonPress = () => {
-    const [inputTempAgua, setInputTA] = useState("");
+  const [inputTempAgua, setInputTA] = useState("");
     const [inputPH, setInputPH] = useState("");
     const [inputOD, setInputOD] = useState("");
     const [inputDBO, setInputDBO] = useState("");
     const [inputTurbidez, setInputTurbidez] = useState("");
     const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
+
+  const handleButtonPress = () => {
+    var tempAgua = parseFloat(inputTempAgua);
+    var ph = parseFloat(inputPH);
+    var od = parseFloat(inputOD);
+    var dbo = parseFloat(inputDBO);
+    var turbidez = parseFloat(inputTurbidez);
+    var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
+  
   };
   return (
     <>
@@ -41,13 +43,6 @@ export default function App() {
           onChangeText={setInputOD}
         />
        
-        <TextInput
-          style={style.input}
-          placeholder="OD"
-          inputMode="numeric"
-          value={input5}
-          onChangeText={setInput5}
-        />
 
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
