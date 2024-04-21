@@ -13,17 +13,26 @@ export default function App() {
   const [inputFosforoT, setInputFosforoT] = useState("");
   const [inputColiformesT, setInputColiformesT] = useState("");
   const [inputSolidosT, setInputSolidosT] = useState("");
+  cons [value, setInputValue] = useState("");
   //const [inputIETCL, setInputCL] = useState("");
   //const [inputIETPT, setInputPT] = useState("");
 
   const [dia, onChangeDia] = React.useState('');
   const [mes, onChangeMes] = React.useState('');
   const [ano, onChangeAno] = React.useState('');
+  const [value, onChangeValue] = React.useState('');
   const [data, setData] = useState([]); //valores
   const [date, setDate] = useState([]); //array para settar as datas do X
 
-
   const addDataPoint = () => {
+    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(value) }; //formatar a data para o luxon
+    setData([...data, newDataPoint]); //colocar no Y
+    setDate([...date, newDataPoint.x]) //colocar no X
+  };
+  
+  const handleButtonPress = () => {
+    // Inicializando as variáveis de parametros
+    // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
     var od = parseFloat(inputOD);
@@ -32,88 +41,123 @@ export default function App() {
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
     var fosforoTotal = parseFloat(inputFosforoT);
     var coliformesTermoTolerantes = parseFloat(inputColiformesT);
-    var ResiduosTotais = parseFloat(inputSolidosT);
+    var solidosTotais = parseFloat(inputSolidosT)
+
+    //var IETCL = parseFloat(inputIETCL);
+    //var IETPT = parseFloat(inputIETPT);
+    
+    console.log("OD: "+calculaOD(od))
+    console.log("PH: "+calcularPH(ph))
+    console.log("Temp: "+calculaTempAgua(tempAgua))
+    console.log("Tubidez: "+calcularTurbidez(turbidez));
+    console.log("NT: "+calcularNitrogenioTotal(nitrogênioTotal));
+    console.log("DBO: "+calcularDBO(dbo));
+    console.log("Fósforo Total: " + calculaFosforo(fosforoTotal));
+    console.log("Coliformes Termotolerantes: " + calcularcoliformes(coliformesTermoTolerantes));
+    console.log("Sólidos Totais: ", calcularsolidosTotais(solidosTotais));
+    //console.log("IET(CL): ", IETCL);
+    //console.log("IET(PT): ", IETPT);
 
     
-    var IQA = calculaIQA(tempAgua, ph, od, dbo, turbidez, nitrogênioTotal, fosforoTotal, coliformesTermoTolerantes, ResiduosTotais);
-    console.log("IQA: ", IQA)
-
-    // const newDataPoint = { x: new Date(ano, mes - 1, dia), y: valorCalculado, cor: novaCor };
-    // setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
-    // setDate([...date, new Date(ano, mes - 1, dia)]); // Adicionando nova data ao estado
-
-
-    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: IQA ,color: colocarCor(IQA)};
-    setData([...data, newDataPoint]); // Adicionando novo ponto de dados ao estado
-    setDate([...date, new Date(ano, mes - 1, dia)]); // Adicionando nova data ao estado
-  
-};
-  function colocarCor(valor){
-
-      if(valor >= 0 && valor <= 25){
-        return 'red';
-      }
-      else if(valor > 25 && valor <= 50){
-        return 'orange';
-      }
-      else if(valor > 50 && valor <= 70){
-        return 'yellow';
-      }
-      else if(valor > 70 && valor <= 90){
-        return 'lightgreen';
-      }
-      else if(valor > 90 && valor <= 100){
-        return 'lightblue';
-      }
-}
-
-  function calculaTempAgua(tempAgua){
-    qTA = 92*Math.exp(-((tempAgua-0**2)/2)*(0.25**2))
-    return qTA **0.1;
-  }
-
-
-
-  function calcularPH(ph){
-      qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-    return qPH**0.12;
-  }
-
-  function calculaOD(od){
-    qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-    return qOD**0.17;
-  }
-
-
-  const calcularDBO = (inputDBO) => {
-    dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-    return dboCalculado ** 0.1;
-  }
+  };
+    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
+    var SolidosTotais = parseFloat(inputSolidosT)
 
   const calcularTurbidez = (inputTurbidez) => {
-    turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
-    return turbidezCalculada**0.08;
-  }
+    let turbidezCalculada;
+    if (inputTurbidez > 100) {
+        turbidezCalculada = 5 ** 0.08;
+    } else {
+
+        turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
+    }
+    return turbidezCalculada;
+  };
 
   const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
-    nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
-    return nitrogenioTotalCalculado**0.1;
+    let nitrogenioTotalCalculado;
+    if (inputNitrogênioTotal > 100) {
+        nitrogenioTotalCalculado = 1 ** 0.1; 
+    } else {
+
+      nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
+    }
+    return nitrogenioTotalCalculado;
   }
 
-  function calculaFosforo(fosforoTotal){
-    qFT = -15.49*Math.log(fosforoTotal)+37.202;
-    return qFT**0.1;
-  }
+  const calcularDBO = (inputDBO) => {
+    let dboCalculado;
+    if (inputDBO > 30) {
+        dboCalculado = 2 ** 0.1; 
+    } else {
 
-  function calculaColiformes(coliformesTermoTolerantes){
-    qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-    return qCT**0.15;
+      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
+    }
+    return dboCalculado;
   }
-  
-  function calculaSolidosTotais(solidosTotais){ 
-    qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
-    return qRT**0.08;
-  };
+    function calculaTempAgua(tempAgua){
+      if (tempAgua < -5){
+        return 0.0;
+      } else if(tempAgua > 15){
+        return 9.0;
+      } else{
+        qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
+        return qTA;
+      }
+    }
+    function calcularPH(ph){
+      if (ph < 2.0){
+      return 2.0;
+      } else if (ph > 12.0){
+      return 3.0;
+      } else {
+        qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
+        return qPH;
+      };
+    }
+    function calculaOD(od){
+      if (od < 0){
+        return 0.0;
+      } else if(od > 140){
+        return 47.0;
+      } else {
+        qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
+        return qOD;
+      }; 
+
+      function calculaFosforo(fosforoTotal){
+        let qFT;
+        if (fosforoTotal > 10){
+          qFT = 0.1 ** 1
+        }
+        else {
+          qFT = -15.49*Math.log(fosforoTotal)+37.202;
+        }
+        return qFT;
+        }
+        function calculaColiformes(coliformesTermoTolerantes){
+          let qCT;
+          if (coliformesTermoTolerantes > 10){
+            qCT = 3 ** 0.15;
+                }
+          else {
+            qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
+      
+          }
+          return qCT;
+      }
+    
+       function calculaSolidosTotais(solidosTotais){
+        let qRT;
+        if (solidosTotais > 500){
+          qRT = 32**0.08;
+        }
+        else{ 
+          qRT=80*Math.log(-(((solidosTotais-50)^2)/2*(0.003^2)))
+        }
+        return qRT;
+    
+       }
 
       //  function calculaCL(IETCL){
       //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
@@ -130,6 +174,10 @@ export default function App() {
       //   return iet;
       //
       // }
+    
+    };
+
+
     return (
       <ScrollView style={{ flex: 1 }}>
         <View style={[styles.container, { paddingVertical: 150 }]}>
@@ -220,7 +268,13 @@ export default function App() {
           keyboardType='numeric'
 
         />
-
+          <TextInput
+          style={styles.input}
+          onChangeText={onChangeValue}
+          value={value}
+          placeholder={"Digite o valor"}
+          keyboardType='numeric'
+        />  
         
         {/* <TextInput
           style={style.input}
@@ -243,12 +297,12 @@ export default function App() {
           value={inputIET}
           onChangeText={setInputIET}
         />    */}
-        <TouchableOpacity style={style.touchableButton} onPress={addDataPoint}>
+        <TouchableOpacity style={style.touchableButton} onPress={ADD}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
-        <VictoryChart        
-                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} 
-                    scale={{ x: 'time' }}
+        <VictoryChart
+        
+                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
                 >
                     <VictoryAxis dependentAxis crossAxis
                         tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
@@ -268,9 +322,9 @@ export default function App() {
                         }
                     />
                     <VictoryScatter
+                        style={{ data: { fill: "#72e073" } }} //pontos
                         size={5}
                         data={data}
-                        style={{data: { fill: ({ datum }) => datum.color }}} //pontos
                     />
                     <VictoryLine sortOrder="ascending"
                         style={{
@@ -296,132 +350,10 @@ export default function App() {
 
         </View>
       </ScrollView>
+   
   );
-
-  function calculaTempAgua(tempAgua){
-    if(tempAgua > 15){
-      qTA = 9;
-    }else if (tempAgua < -5){
-      qTA = 1;
-    } else{
-     qTA = 92*Math.exp(-(((tempAgua-0**2)/2)*(0.25**2)))
-    }
-    return qTA ** 0.1;
-  };
-
-  function calcularPH(ph){
-    if(ph > 12){
-      qPH = 3;
-    }else if(ph < 2){
-      qPH = 2;
-    }else{
-      qPH = 93*(Math.exp(-(((ph-7.5)**2)/2)*(0.652**2)))
-    }
-    return qPH ** 0.12;
-  };
-
-  function calcularOD(od){
-    if(od >150){
-      qOD = 47;
-    }else{
-      qOD = 100 * Math.exp(-(((od-100)**2)/2)*(0.025**2))
-    }
-    return qOD ** 0.17;
-  };
-  
-  function calcularDBO(inputDBO){
-    if(inputDBO > 30){
-      qDBO = 2;
-    }else if(inputDBO <=0){
-      qDBO = 100;
-    }else{
-      qDBO = (-30.1) * Math.log(inputDBO) + 103.45;
-    }
-    return qDBO ** 0.1;
-  };
-  
-  function calcularTurbidez(inputTurbidez){
-    if(inputTurbidez > 100){
-      qTurbidez = 5;
-    }else if(inputTurbidez <=0){
-      qTurbidez = 100;
-    }else{
-      qTurbidez = (-26.45) * Math.log(inputTurbidez) + 136.39;
-    }
-    return qTurbidez ** 0.08;
-  };
-  
-  function calcularNitrogenioTotal(inputNitrogênioTotal){
-    if (inputNitrogênioTotal > 100){
-      qNT = 1;
-    }else if(inputNitrogênioTotal <=1){
-      qNT = 100;
-    }else{
-      qNT = (-20.8) * Math.log(inputNitrogênioTotal) + 93.092;
-    }
-    return qNT**0.1;
-  };
-  
-  function calcularFosforo(fosforoTotal){
-    if(fosforoTotal > 10){
-      qFT = 1;
-    }else if(fosforoTotal <=0){
-      qFT = 100;
-    }else{
-      qFT = (-15.49)* Math.log(fosforoTotal) + 37.202;
-    }
-    return qFT**0.1;
-  };
-  
-  function calcularColiformes(coliformesTermoTolerantes){
-    if(coliformesTermoTolerantes > 100000){
-      qCT = 3;
-    }else if(coliformesTermoTolerantes <=1){
-      qCT = 95;
-    }else{
-     qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-    }
-    return qCT**0.15;
-  };
-  
-  function calcularResiduosTotais(residuosTotais){ 
-    if(residuosTotais > 500){
-      qRT = 32;
-    }else if(residuosTotais <=0){
-      qRT = 80;
-    }else{
-      qRT = 80*Math.exp(-(((residuosTotais-50)**2)/2)*(0.003**2))
-    }
-    return qRT**0.08;
-  };
-
-  function calculaIQA(qTA, qPH, qOD, qDBO, qTurbidez, qNT, qFT, qCT, qRT){
-
-    var qTA_C = calculaTempAgua(qTA);
-    var qPH_C = calcularPH(qPH);
-    var qOD_C = calcularOD(qOD);
-    var qDBO_C = calcularDBO(qDBO);
-    var qTurbidez_C = calcularTurbidez(qTurbidez);
-    var qNT_C = calcularNitrogenioTotal(qNT);
-    var qFT_C = calcularFosforo(qFT);
-    var qCT_C = calcularColiformes(qCT);
-    var qRT_C = calcularResiduosTotais(qRT);
-
-    console.log("qTA_C: ", qTA_C)
-    console.log("qPH_C: ", qPH_C)
-    console.log("qOD_C: ", qOD_C)
-    console.log("qDBO_C: ", qDBO_C)
-    console.log("qTurbidez_C: ", qTurbidez_C)
-    console.log("qNT_C: ", qNT_C)
-    console.log("qFT_C: ", qFT_C)
-    console.log("qCT_C: ", qCT_C)
-    console.log("qRT_C: ", qRT_C)
-
-
-    return (qTA_C * qPH_C * qOD_C * qDBO_C * qTurbidez_C * qNT_C * qFT_C * qCT_C * qRT_C);
-    
-  }
 }
+
 const style = StyleSheet.create({
   container: {
     flex: 1,
