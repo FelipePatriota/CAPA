@@ -266,11 +266,6 @@ export default function App() {
                             <VictoryLabel angle={-45} textAnchor="end" /> //angulo do X
                         }
                     />
-                    <VictoryScatter
-                        size={5}
-                        data={data}
-                        style={{data: { fill: ({ datum }) => datum.color }}} //pontos
-                    />
                     <VictoryLine sortOrder="ascending"
                         style={{
                             data: { stroke: "#72e073" },
@@ -278,7 +273,11 @@ export default function App() {
 
                         }}
                         data={data}
-
+                    />
+                    <VictoryScatter
+                        size={5}
+                        data={data}
+                        style={{data: { fill: ({ datum }) => datum.color }}} //pontos
                     />
                 </VictoryChart>
                 <VictoryLegend x={10} y={25}
