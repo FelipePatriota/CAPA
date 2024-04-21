@@ -33,6 +33,43 @@ export default function App() {
     console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
     console.log("Sólidos Totais: ", SolidosTotais);
   };
+
+
+
+  const calcularTurbidez = (inputTurbidez) => {
+    let turbidezCalculada;
+    if (inputTurbidez > 100) {
+        turbidezCalculada = 5 * 0.08; 
+    } else {
+
+        turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
+    }
+    return turbidezCalculada;
+  };
+
+  const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
+    let nitrogenioTotalCalculado;
+    if (inputNitrogênioTotal > 100) {
+        nitrogenioTotalCalculado = 1 * 0.1; 
+    } else {
+
+      nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
+    }
+    return nitrogenioTotalCalculado;
+  }
+
+  const calcularDBO = (inputDBO) => {
+    let dboCalculado;
+    if (inputDBO > 30) {
+        dboCalculado = 2 * 0.1; 
+    } else {
+
+      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
+    }
+    return dboCalculado;
+  }
+
+
   return (
     <>
       <View style={styles.container}>
