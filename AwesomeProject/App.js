@@ -32,7 +32,6 @@ export default function App() {
     console.log("Fósforo Total: " + fosforoTotal);
     console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
     console.log("Sólidos Totais: ", SolidosTotais);
-    
   };
   return (
     <>
