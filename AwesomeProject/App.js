@@ -14,8 +14,8 @@ export default function App() {
 
 
 
-
   const handleButtonPress = () => {
+    // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
     var od = parseFloat(inputOD);
@@ -25,24 +25,15 @@ export default function App() {
     var fosforoTotal = parseFloat(inputFosforoT);
     var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
     var SolidosTotais = parseFloat(inputSolidosT)
-    var turbidezCalculada = calcularTurbidez(turbidez);
-    var nitrogenioTotalCalculado = calcularNitrogenioTotal(nitrogênioTotal);
-    var dboCalculado = calcularDBO(dbo);
-    console.log("Temperatura da água: " + tempAgua);
-    console.log("PH: " + ph);
-    console.log("OD: " + od);
-    console.log("DBO: " + dbo);
-    console.log("Turbidez: " + turbidez);
-    console.log("Nitrogênio Total: " + nitrogênioTotal);
-    console.log("Fósforo Total: " + fosforoTotal);
-    console.log("Coliformes Termotolerantes: " + ColiformesTermoTolerantes);
-    console.log("Sólidos Totais: ", SolidosTotais);
-    console.log("Turbidez Calculada: " + turbidezCalculada);
-    console.log("Nitrogênio Total Calculado: " + nitrogenioTotalCalculado);
-    console.log("DBO Calculado: " + dboCalculado);
+    
+    console.log("OD: "+calculaOD(od))
+    console.log("PH: "+calcularPH(ph))
+    console.log("Temp: "+calculaTempAgua(tempAgua))
+    console.log("Tubidez: "+calcularTurbidez(turbidez));
+    console.log("NT: "+calcularNitrogenioTotal(nitrogênioTotal));
+    console.log("DBO: "+calcularDBO(dbo));
+    
   };
-
-
 
   const calcularTurbidez = (inputTurbidez) => {
     let turbidezCalculada;
@@ -76,8 +67,36 @@ export default function App() {
     }
     return dboCalculado;
   }
-
-
+    function calculaTempAgua(tempAgua){
+      if (tempAgua < -5){
+        return 0.0;
+      } else if(tempAgua > 15){
+        return 9.0;
+      } else{
+        qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
+        return qTA;
+      }
+    }
+    function calcularPH(ph){
+      if (ph < 2.0){
+      return 2.0;
+      } else if (ph > 12.0){
+      return 3.0;
+      } else {
+        qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
+        return qPH;
+      };
+    }
+    function calculaOD(od){
+      if (od < 0){
+        return 0.0;
+      } else if(od > 140){
+        return 47.0;
+      } else {
+        qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
+        return qOD;
+      }; 
+  };
   return (
     <>
       <View style={styles.container}>
@@ -144,7 +163,27 @@ export default function App() {
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
         />   
-        
+        {/* <TextInput
+          style={style.input}
+          placeholder="IET(CL)"
+          inputMode="numeric"
+          value={inputIETCL}
+          onChangeText={setInputCL}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="IET(PT)"
+          inputMode="numeric"
+          value={inputIETPT}
+          onChangeText={setInputPT}
+        />   
+        <TextInput
+          style={style.input}
+          placeholder="IET"
+          inputMode="numeric"
+          value={inputIET}
+          onChangeText={setInputIET}
+        />    */}
         <TouchableOpacity style={style.touchableButton} onPress={handleButtonPress}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
