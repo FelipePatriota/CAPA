@@ -31,8 +31,6 @@ export default function App() {
 };
   const handleButtonPress = () => {
     // Inicializando as variáveis de parametros
-    // Inicializando as variáveis de parametros
-    // Inicializando as variáveis de parametros
     var tempAgua = parseFloat(inputTempAgua);
     var ph = parseFloat(inputPH);
     var od = parseFloat(inputOD);
@@ -41,97 +39,26 @@ export default function App() {
     var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
     var fosforoTotal = parseFloat(inputFosforoT);
     var coliformesTermoTolerantes = parseFloat(inputColiformesT);
-    var solidosTotais = parseFloat(inputSolidosT);
+    var ResiduosTotais = parseFloat(inputSolidosT);
 
-    var tempAguaCalculada = calculaTempAgua(tempAgua);
-    var phCalculado = calcularPH(ph);
-    var odCalculado = calculaOD(od);
-    var dboCalculado = calcularDBO(dbo);
-    var turbidezCalculada = calcularTurbidez(turbidez);
-    var nitrogênioTotalCalculado = calcularNitrogenioTotal(nitrogênioTotal);
-    var fosforoTotalCalculado = calculaFosforo(fosforoTotal);
-    var coliformesTermoTolerantesCalculado = calculaColiformes(coliformesTermoTolerantes);
-    var solidosTotaisCalculado = calculaSolidosTotais(solidosTotais);
-    var multi = tempAguaCalculada * phCalculado * odCalculado * dboCalculado * turbidezCalculada * nitrogênioTotalCalculado * fosforoTotalCalculado * coliformesTermoTolerantesCalculado * solidosTotaisCalculado;
-    //var ietCalculado = calculIET(IETCL, IETPT);
-    //var clCalculado = calculaCL(IETCL);
+    var IQA = calculaIQA(tempAgua, ph, od, dbo, turbidez, nitrogênioTotal, fosforoTotal, coliformesTermoTolerantes, ResiduosTotais);
 
-    console.log("Temperatura da água: ", tempAguaCalculada);
-    console.log("PH: ", phCalculado);
-    console.log("OD: ", odCalculado);
-    console.log("DBO: ", dboCalculado);
-    console.log("Turbidez: ", turbidezCalculada);
-    console.log("Nitrogênio Total: ", nitrogênioTotalCalculado);
-    console.log("Fósforo Total: ", fosforoTotalCalculado);
-    console.log("Coliformes Termotolerantes: ", coliformesTermoTolerantesCalculado);
-    console.log("Sólidos Totais: ", solidosTotaisCalculado);
-    console.log("QIA: ", multi);
+    console.log("TA: "+tempAgua);
+    console.log("PH: "+ph);
+    console.log("OD: "+od);
+    console.log("DBO: "+dbo);
+    console.log("Turbidez: "+turbidez);
+    console.log("Nitrogênio Total: "+nitrogênioTotal);
+    console.log("Fósforo Total: "+fosforoTotal);
+    console.log("Coliformes Termotolerantes: "+coliformesTermoTolerantes);
+    console.log("Residuos Totais: "+ResiduosTotais);
+    console.log("IQA: "+IQA);
 
-    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(multi) }; //formatar a data para o luxon
-    setData([...data, newDataPoint.y]); //colocar no Y
-    setDate([...date, newDataPoint.x]) //colocar no X
-    
+    var data = new Date(ano, mes - 1, dia)
+    const newDataPoint = { x: data, y: Number(IAQ) }; //formatar a data para o luxon
+    setData([...date, newDataPoint]); //colocar no Y
+    setDate([...date, data]) //colocar no X
   };
-  function calculaTempAgua(tempAgua){
-    qTA = 92*Math.exp(-((tempAgua-0**2)/2)*(0.25**2))
-    return qTA **0.1;
-  }
-
-  function calcularPH(ph){
-      qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-    return qPH**0.12;
-  }
-
-  function calculaOD(od){
-    qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-    return qOD**0.17;
-  }
-
-  const calcularDBO = (inputDBO) => {
-    dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-    return dboCalculado ** 0.1;
-  }
-
-  const calcularTurbidez = (inputTurbidez) => {
-    turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
-    return turbidezCalculada**0.08;
-  }
-
-  const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
-    nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
-    return nitrogenioTotalCalculado**0.1;
-  }
-
-  function calculaFosforo(fosforoTotal){
-    qFT = -15.49*Math.log(fosforoTotal)+37.202;
-    return qFT**0.1;
-  }
-
-  function calculaColiformes(coliformesTermoTolerantes){
-    qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-    return qCT**0.15;
-  }
-  
-  function calculaSolidosTotais(solidosTotais){ 
-    qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
-    return qRT**0.08;
-  };
-
-      //  function calculaCL(IETCL){
-      //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
-      //   return cl;
-      //  }
-    
-      //  function calculPT(IETPT){
-      //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
-      //   return pt;
-      //  }
-    
-      // function calculIET(cl, pt){
-      //   var iet = (cl + pt)/2;
-      //   return iet;
-      //
-      // }
     return (
       <ScrollView style={{ flex: 1 }}>
         <View style={[styles.container, { paddingVertical: 150 }]}>
@@ -304,8 +231,75 @@ export default function App() {
         </View>
       </ScrollView>
   );
-}
+  
+  function calcularPH(ph){
+    qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
+  return qPH**0.12;
+  };
+  function calcularOD(od){
+  qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
+  return qOD**0.17;
+  };
+  
+  function calcularDBO(inputDBO){
+  dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
+  return dboCalculado ** 0.1;
+  };
+  
+  function calcularTurbidez(inputTurbidez){
+  turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
+  return turbidezCalculada**0.08;
+  };
+  
+  function calcularNitrogenioTotal(inputNitrogênioTotal){
+  qNT = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
+  return nitrogenioTotalCalculado**0.1;
+  };
+  
+  function calcularFosforo(fosforoTotal){
+  qFT = -15.49*Math.log(fosforoTotal)+37.202;
+  return qFT**0.1;
+  };
+  
+  function calcularColiformes(coliformesTermoTolerantes){
+  qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
+  return qCT**0.15;
+  };
+  
+  function calcularResiduosTotais(residuosTotais){ 
+  qRT= 80*Math.exp(-(((residuosTotais-50)**2)/2*(0.003**2)))
+  return qRT**0.08;
+  };
 
+  function calculaIQA(qTA, qPH, qOD, qDBO, qTurbidez, qNT, qFT, qCT, qRT){
+    var qTA_C = calculaTempAgua(qTA);
+    var qPH_C = calcularPH(qPH);
+    var qOD_C = calcularOD(qOD);
+    var qDBO_C = calcularDBO(qDBO);
+    var qTurbidez_C = calcularTurbidez(qTurbidez);
+    var qNT_C = calcularNitrogenioTotal(qNT);
+    var qFT_C = calcularFosforo(qFT);
+    var qCT_C = calcularColiformes(qCT);
+    var qRT_C = calcularResiduosTotais(qRT);
+    return (qTA_C * qPH_C * qOD_C * qDBO_C * qTurbidez_C * qNT_C * qFT_C * qCT_C * qRT_C);
+    
+  }
+  // function calculaCL(IETCL){
+  //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
+  //   return cl;
+  //  }
+
+  //  function calculPT(IETPT){
+  //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
+  //   return pt;
+  //  }
+
+  // function calculIET(cl, pt){
+  //   var iet = (cl + pt)/2;
+  //   return iet;
+  //
+  // }
+}
 const style = StyleSheet.create({
   container: {
     flex: 1,
