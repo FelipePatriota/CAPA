@@ -151,6 +151,7 @@ export default function App() {
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
           inputMode="numeric"
+          a
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
         /> 
