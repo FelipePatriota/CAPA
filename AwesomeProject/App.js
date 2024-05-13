@@ -23,120 +23,6 @@ export default function App() {
   const [date, setDate] = useState([]); //array para settar as datas do X
 
 
-<<<<<<< HEAD
-
-  const handleButtonPress = () => {
-    // Inicializando as variáveis de parametros
-    // Inicializando as variáveis de parametros
-    var tempAgua = parseFloat(inputTempAgua);
-    var ph = parseFloat(inputPH);
-    var od = parseFloat(inputOD);
-    var dbo = parseFloat(inputDBO);
-    var turbidez = parseFloat(inputTurbidez);
-    var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
-    var fosforoTotal = parseFloat(inputFosforoT);
-    var coliformesTermoTolerantes = parseFloat(inputColiformesT);
-    var solidosTotais = parseFloat(inputSolidosT)
-    //var IETCL = parseFloat(inputIETCL);
-    //var IETPT = parseFloat(inputIETPT);
-
-    var tempAguaCalculada = calculaTempAgua(tempAgua);
-    var phCalculado = calcularPH(ph);
-    var odCalculado = calculaOD(od);
-    var dboCalculado = calcularDBO(dbo);
-    var turbidezCalculada = calcularTurbidez(turbidez);
-    var nitrogênioTotalCalculado = calcularNitrogenioTotal(nitrogênioTotal);
-    var fosforoTotalCalculado = calculaFosforo(fosforoTotal);
-    var coliformesTermoTolerantesCalculado = calculaColiformes(coliformesTermoTolerantes);
-    var solidosTotaisCalculado = calculaSolidosTotais(solidosTotais);
-    var multi = tempAguaCalculada * phCalculado * odCalculado * dboCalculado * turbidezCalculada * nitrogênioTotalCalculado * fosforoTotalCalculado * coliformesTermoTolerantesCalculado * solidosTotaisCalculado;
-    //var ietCalculado = calculIET(IETCL, IETPT);
-    //var clCalculado = calculaCL(IETCL);
-
-    console.log("Temperatura da água: ", tempAguaCalculada);
-    console.log("PH: ", phCalculado);
-    console.log("OD: ", odCalculado);
-    console.log("DBO: ", dboCalculado);
-    console.log("Turbidez: ", turbidezCalculada);
-    console.log("Nitrogênio Total: ", nitrogênioTotalCalculado);
-    console.log("Fósforo Total: ", fosforoTotalCalculado);
-    console.log("Coliformes Termotolerantes: ", coliformesTermoTolerantesCalculado);
-    console.log("Sólidos Totais: ", solidosTotaisCalculado);
-    console.log("QIA: ", multi);
-    //console.log("IET: ", ietCalculado);
-    //console.log("CL: ", clCalculado);
-    
-    
-
-    //console.log("IET(CL): ", IETCL);
-    //console.log("IET(PT): ", IETPT);
-    
-  };
-  function calculaTempAgua(tempAgua){
-    let qTA;
-    if (tempAgua < -5){
-      qTA = 0;
-    } else if(tempAgua > 15){
-      qTA = 9
-    } else{
-      qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
-    }
-    return qTA **0.1;
-  }
-  function calcularPH(ph){
-    let qPH;
-    if (ph < 2.0){
-      qPH = 2.0
-    } else if (ph > 12.0){
-      qPH = 3.0
-    } else {
-      qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-    }
-    return qPH**0.12;
-  }
-  function calculaOD(od){
-    let qOD;
-    if (od < 0){
-      qOD = 0
-    } else if(od > 140){
-      qOD = 47.0
-    } else {
-      qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-    }
-    return qOD**0.17;
-  };
-  const calcularDBO = (inputDBO) => {
-    let dboCalculado;
-    if (inputDBO > 30) {
-        dboCalculado = 2; 
-    } else {
-
-      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-    }
-    return dboCalculado ** 0.1;
-  }
-
-  const calcularTurbidez = (inputTurbidez) => {
-    let turbidezCalculada;
-    if (inputTurbidez > 100) {
-        turbidezCalculada = 5;
-    } else {
-
-        turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
-    }
-    return turbidezCalculada**0.08;
-  };
-
-  const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
-    let nitrogenioTotalCalculado;
-    if (inputNitrogênioTotal > 100) {
-        nitrogenioTotalCalculado = 1; 
-    } else {
-
-      nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
-    }
-    return nitrogenioTotalCalculado**0.1;
-=======
   function calculoTotal(tempAgua, ph, od, dbo, turbidez, nitrogênioTotal, fosforoTotal, coliformesTermoTolerantes, solidosTotais){
     
     var tempAguaCalculada = calculaTempAgua(tempAgua);
@@ -151,7 +37,6 @@ export default function App() {
     var multi = tempAguaCalculada * phCalculado * odCalculado * dboCalculado * turbidezCalculada * nitrogênioTotalCalculado * fosforoTotalCalculado * coliformesTermoTolerantesCalculado * solidosTotaisCalculado;
     return multi;
 
->>>>>>> 042b3d9cbad8789fe63a9bdb6c8daa5fa46ec939
   }
  
 
@@ -179,40 +64,6 @@ export default function App() {
   }
 
 
-<<<<<<< HEAD
-    function calculaFosforo(fosforoTotal){
-      let qFT;
-      if (fosforoTotal > 10){
-        qFT = 1
-      }
-      else {
-        qFT = -15.49*Math.log(fosforoTotal)+37.202;
-      }
-      return qFT**0.1;
-    };
-    function calculaColiformes(coliformesTermoTolerantes){
-      let qCT;
-      if (coliformesTermoTolerantes > 10){
-        qCT = 3;
-            }
-      else {
-        qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-  
-      }
-      return qCT**0.15;
-    };
-    
-    function calculaSolidosTotais(solidosTotais){
-      let qRT;
-      if (solidosTotais > 500){
-        qRT = 32;
-      }
-      else{ 
-        qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
-      }
-      return qRT**0.08;
-    };
-=======
   const calcularDBO = (inputDBO) => {
     dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
     return dboCalculado ** 0.1;
@@ -242,7 +93,6 @@ export default function App() {
     qRT= 80*Math.exp(-(((solidosTotais-50)**2)/2*(0.003**2)))
     return qRT**0.08;
   };
->>>>>>> 042b3d9cbad8789fe63a9bdb6c8daa5fa46ec939
 
       //  function calculaCL(IETCL){
       //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
@@ -270,10 +120,6 @@ export default function App() {
             onChangeText={setInputTA}
           />
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="PH"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
           inputMode="numeric"
@@ -287,7 +133,6 @@ export default function App() {
         <TextInput
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputPH}
           onChangeText={setInputPH}
@@ -297,13 +142,8 @@ export default function App() {
           style={styles.text} 
           >Insira o OD:</Text>
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="OD"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputOD}
           onChangeText={setInputOD}
@@ -312,13 +152,8 @@ export default function App() {
           style={styles.text} 
           >Insira o DBO:</Text>
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="DBO"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputDBO}
           onChangeText={setInputDBO}
@@ -327,13 +162,8 @@ export default function App() {
           style={styles.text} 
           >Insira a Turbidez:</Text>
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="Turbidez"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputTurbidez}
           onChangeText={setInputTurbidez}
@@ -342,13 +172,8 @@ export default function App() {
           style={styles.text} 
           >Insira o Nitrogênio Total:</Text>
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="Nitrogênio Total"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputNitrogênioTotal}
           onChangeText={setInputNitrogênioTotal}
@@ -357,13 +182,8 @@ export default function App() {
           style={styles.text} 
           >Insira o Fósforo Total:</Text>
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="Fósforo Total"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputFosforoT}
           onChangeText={setInputFosforoT}
@@ -372,13 +192,8 @@ export default function App() {
           style={styles.text} 
           >Insira os Coliformes Termotolerantes:</Text>
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="Coliformes Termotolerantes"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputColiformesT}
           onChangeText={setInputColiformesT}
@@ -387,13 +202,8 @@ export default function App() {
           style={styles.text} 
           >Insira os Solidos Totais:</Text>
         <TextInput
-<<<<<<< HEAD
-          style={style.input}
-          placeholder="Sólidos Totais"
-=======
           style={styles.input}
           placeholder="Exemplo: 8.2 , 2.4 ..."
->>>>>>> 9d6bfd06e478bfb738d3d4cf11096d1bcf85c6db
           inputMode="numeric"
           value={inputSolidosT}
           onChangeText={setInputSolidosT}
@@ -455,12 +265,7 @@ export default function App() {
         <TouchableOpacity style={style.touchableButton} onPress={addDataPoint}>
           <Text style={style.touchableButtonText}>Enviar</Text>
         </TouchableOpacity>
-<<<<<<< HEAD
-        <VictoryChart
-        
-=======
         <VictoryChart        
->>>>>>> 042b3d9cbad8789fe63a9bdb6c8daa5fa46ec939
                     theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
                 >
                     <VictoryAxis dependentAxis crossAxis
@@ -509,10 +314,6 @@ export default function App() {
 
         </View>
       </ScrollView>
-<<<<<<< HEAD
-   
-=======
->>>>>>> 042b3d9cbad8789fe63a9bdb6c8daa5fa46ec939
   );
 }
 
