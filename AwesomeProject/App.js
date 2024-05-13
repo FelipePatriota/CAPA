@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Picker } from "@react-native-picker/picker";
 import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
 
 const generateId = () => {
@@ -31,40 +32,43 @@ function SelectionScreen({ navigation }) {
         <Text style={styles.title}>Selecionar Elementos</Text>
 
         <Text style={styles.label}>Elemento:</Text>
-        {elements.map(element => (
-          <TouchableOpacity
-            key={element}
-            style={[styles.touchableButton, { backgroundColor: selectedElement === element ? '#03bf2c' : '#22a0c9' }]}
-            onPress={() => setSelectedElement(selectedElement === element ? '' : element)}
-          >
-            <Text style={styles.touchableButtonText}>{element}</Text>
-          </TouchableOpacity>
-        ))}
+        <Picker
+          selectedValue={selectedElement}
+          onValueChange={(itemValue) => setSelectedElement(itemValue)}
+          style={{ height: 50, width: 150 }}
+        >
+          <Picker.Item label="Selecione" value="" />
+          {elements.map((element) => (
+            <Picker.Item key={element} label={element} value={element} />
+          ))}
+        </Picker>
 
-        <Text style={styles.label}>Ano(s):</Text>
-        {years.map(year => (
-          <TouchableOpacity
-            key={year}
-            style={[styles.touchableButton, { backgroundColor: selectedYears.includes(year) ? '#03bf2c' : '#22a0c9' }]}
-            onPress={() => setSelectedYears(prevYears => prevYears.includes(year) ? prevYears.filter(y => y !== year) : [...prevYears, year])}
-          >
-            <Text style={styles.touchableButtonText}>{year}</Text>
-          </TouchableOpacity>
-        ))}
+        <Text style={styles.label}>Anos:</Text>
+        <Picker
+          selectedValue={selectedYears}
+          onValueChange={(itemValue) => setSelectedYears(itemValue)}
+          style={{ height: 50, width: 150 }}
+        >
+          <Picker.Item label="Selecione" value="" />
+          {years.map((year) => (
+            <Picker.Item key={year} label={year} value={year} />
+          ))}
+        </Picker>
 
         <Text style={styles.label}>Reservatórios:</Text>
-        {reservoirs.map(reservoir => (
-          <TouchableOpacity
-            key={reservoir}
-            style={[styles.touchableButton, { backgroundColor: selectedReservoirs.includes(reservoir) ? '#03bf2c' : '#22a0c9' }]}
-            onPress={() => setSelectedReservoirs(prevReservoirs => prevReservoirs.includes(reservoir) ? prevReservoirs.filter(r => r !== reservoir) : [...prevReservoirs, reservoir])}
-          >
-            <Text style={styles.touchableButtonText}>{reservoir}</Text>
-          </TouchableOpacity>
-        ))}
+        <Picker
+          selectedValue={selectedReservoirs}
+          onValueChange={(itemValue) => setSelectedReservoirs(itemValue)}
+          style={{ height: 50, width: 150 }}
+        >
+          <Picker.Item label="Selecione" value="" />
+          {reservoirs.map((reservoir) => (
+            <Picker.Item key={reservoir} label={reservoir} value={reservoir} />
+          ))}
+        </Picker>
 
         <TouchableOpacity
-          style={styles.touchableButton}
+          style={[styles.touchableButton, {backgroundColor: '#ff5959'}, {marginTop: 20}]}
           onPress={navigateToResults}
         >
           <Text style={styles.touchableButtonText}>Continuar</Text>
@@ -146,6 +150,21 @@ function ResultsScreen({ route }) {
   );
 }
 
+
+// navegação
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Selection">
+        <Stack.Screen name="Selection" component={SelectionScreen} options={{ title: 'Seleção' }} />
+        <Stack.Screen name="Results" component={ResultsScreen} options={{ title: 'Resultados' }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -185,17 +204,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-// navegação
-const Stack = createStackNavigator();
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Selection">
-        <Stack.Screen name="Selection" component={SelectionScreen} options={{ title: 'Seleção' }} />
-        <Stack.Screen name="Results" component={ResultsScreen} options={{ title: 'Resultados' }} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
