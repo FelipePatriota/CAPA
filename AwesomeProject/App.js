@@ -4,7 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
 
-// função para gerar um ID único
 const generateId = () => {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
@@ -18,7 +17,6 @@ function SelectionScreen({ navigation }) {
   const reservoirs = ['Tabocas', 'Severino Guerra', 'Pedro Moura']; // reservatórios disponíveis
   const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor']; // elementos disponíveis
 
-  // função para avançar para a próxima tela
   const navigateToResults = () => {
     if (!selectedElement || selectedYears.length === 0 || selectedReservoirs.length === 0) {
       Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, pelo menos um ano e pelo menos um reservatório.');
@@ -32,7 +30,6 @@ function SelectionScreen({ navigation }) {
       <View style={[styles.container, { paddingTop: 40 }]}>
         <Text style={styles.title}>Selecionar Elementos</Text>
 
-        {/* seleção de elemento */}
         <Text style={styles.label}>Elemento:</Text>
         {elements.map(element => (
           <TouchableOpacity
@@ -44,7 +41,6 @@ function SelectionScreen({ navigation }) {
           </TouchableOpacity>
         ))}
 
-        {/* seleção de ano */}
         <Text style={styles.label}>Ano(s):</Text>
         {years.map(year => (
           <TouchableOpacity
@@ -56,7 +52,6 @@ function SelectionScreen({ navigation }) {
           </TouchableOpacity>
         ))}
 
-        {/* seleção de reservatórios */}
         <Text style={styles.label}>Reservatórios:</Text>
         {reservoirs.map(reservoir => (
           <TouchableOpacity
@@ -68,7 +63,6 @@ function SelectionScreen({ navigation }) {
           </TouchableOpacity>
         ))}
 
-        {/* botão para avançar para a próxima tela */}
         <TouchableOpacity
           style={styles.touchableButton}
           onPress={navigateToResults}
@@ -84,13 +78,18 @@ function ResultsScreen({ route }) {
   const { selectedElement, selectedYears, selectedReservoirs } = route.params;
   const [results, setResults] = useState([]);
 
-  // função para adicionar um novo input de resultado
   const addResultInput = () => {
     const newId = generateId();
-    setResults([...results, { id: newId, value: '' }]);
+    setResults([...results, { id: newId, year: '', reservoir: '', value: '' }]);
   };
 
-  // função para gerar o gráfico
+  const saveResult = (id, year, reservoir, value) => {
+    const index = results.findIndex(r => r.id === id);
+    const updatedResults = [...results];
+    updatedResults[index] = { id, year, reservoir, value };
+    setResults(updatedResults);
+  };
+
   const generateChart = () => {
     Alert.alert('Este gráfico está em desenvolvimento...');
   };
@@ -100,28 +99,35 @@ function ResultsScreen({ route }) {
       <View style={[styles.container, { paddingTop: 40 }]}>
         <Text style={styles.title}>Inserir Resultados</Text>
         <Text style={styles.label}>Elemento: {selectedElement}</Text>
-        <Text style={styles.label}>Ano(s): {selectedYears.join(', ')}</Text>
-        <Text style={styles.label}>Reservatórios: {selectedReservoirs.join(', ')}</Text>
-
-        {/* inputs para inserir os resultados */}
+        
         {results.map(result => (
-          <TextInput
-            key={result.id}
-            style={styles.input}
-            placeholder={`Insira o valor para ${selectedElement}`}
-            placeholderTextColor="#34495e"
-            keyboardType="numeric"
-            value={result.value}
-            onChangeText={text => {
-              const index = results.findIndex(r => r.id === result.id);
-              const updatedResults = [...results];
-              updatedResults[index].value = text;
-              setResults(updatedResults);
-            }}
-          />
+          <View key={result.id}>
+            <Text style={styles.label}>Ano:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Insira o ano"
+              keyboardType="numeric"
+              value={result.year}
+              onChangeText={text => saveResult(result.id, text, result.reservoir, result.value)}
+            />
+            <Text style={styles.label}>Reservatório:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Insira o reservatório"
+              value={result.reservoir}
+              onChangeText={text => saveResult(result.id, result.year, text, result.value)}
+            />
+            <Text style={styles.label}>Resultado:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder={`Insira o valor para ${selectedElement}`}
+              keyboardType="numeric"
+              value={result.value}
+              onChangeText={text => saveResult(result.id, result.year, result.reservoir, text)}
+            />
+          </View>
         ))}
 
-        {/* botão para adicionar mais inputs de resultado */}
         <TouchableOpacity
           style={styles.touchableButton}
           onPress={addResultInput}
@@ -129,7 +135,6 @@ function ResultsScreen({ route }) {
           <Text style={styles.touchableButtonText}>Adicionar Resultado</Text>
         </TouchableOpacity>
 
-        {/* botão para gerar o gráfico */}
         <TouchableOpacity
           style={styles.touchableButton}
           onPress={generateChart}
@@ -141,7 +146,6 @@ function ResultsScreen({ route }) {
   );
 }
 
-// estilo
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -195,3 +199,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
