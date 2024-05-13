@@ -75,87 +75,75 @@ function SelectionScreen({ navigation }) {
 }
 
 function ResultsScreen({ route }) {
-  const { selectedElement } = route.params;
+  const { selectedElement, selectedYears, selectedReservoirs } = route.params;
   const [results, setResults] = useState([]);
-  const [chartData, setChartData] = useState([]);
 
   const addResultInput = () => {
-    const newId = generateId(); // Generate a new ID for the result
+    const newId = generateId();
     setResults([...results, { id: newId, year: '', reservoir: '', value: '' }]);
   };
-  
+
   const saveResult = (id, year, reservoir, value) => {
     const index = results.findIndex(r => r.id === id);
     const updatedResults = [...results];
     updatedResults[index] = { id, year, reservoir, value };
     setResults(updatedResults);
-    updateChartData(updatedResults);
   };
 
-  const updateChartData = (results) => {
-    // Generate chart data from results
-    const data = results.map(result => ({ x: result.year, y: parseFloat(result.value) }));
-    setChartData(data);
+  const generateChart = () => {
+    Alert.alert('Este gráfico está em desenvolvimento...');
   };
 
- // Dentro do componente ResultsScreen
+  return (
+    <ScrollView style={{ flex: 1 }}>
+      <View style={[styles.container, { paddingTop: 40 }]}>
+        <Text style={styles.title}>Inserir Resultados</Text>
+        <Text style={styles.label}>Elemento: {selectedElement}</Text>
 
+        {results.map(result => (
+          <View key={result.id}>
+            <Text style={styles.label}>Ano:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Insira o ano"
+              keyboardType="numeric"
+              value={result.year}
+              onChangeText={text => saveResult(result.id, text, result.reservoir, result.value)}
+            />
+            <Text style={styles.label}>Reservatório:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Insira o reservatório"
+              value={result.reservoir}
+              onChangeText={text => saveResult(result.id, result.year, text, result.value)}
+            />
+            <Text style={styles.label}>Resultado:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder={`Insira o valor para ${selectedElement}`}
+              keyboardType="numeric"
+              value={result.value}
+              onChangeText={text => saveResult(result.id, result.year, result.reservoir, text)}
+            />
+          </View>
+        ))}
 
- return (
-  <ScrollView style={{ flex: 1 }}>
-    <View style={[styles.container, { paddingTop: 40 }]}>
-      <Text style={styles.title}>Inserir Resultados</Text>
-      <Text style={styles.label}>Elemento: {selectedElement}</Text>
-      
-      {/* Renderizar apenas um conjunto de caixas de entrada */}
-      <View>
-        <Text style={styles.label}>Ano:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Insira o ano"
-          keyboardType="numeric"
-          value={results.length > 0 ? results[0].year : ''}
-          onChangeText={text => saveResult(results.length > 0 ? results[0].id : '', text, results.length > 0 ? results[0].reservoir : '', results.length > 0 ? results[0].value : '')}
-        />
-        <Text style={styles.label}>Reservatório:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Insira o reservatório"
-          value={results.length > 0 ? results[0].reservoir : ''}
-          onChangeText={text => saveResult(results.length > 0 ? results[0].id : '', results.length > 0 ? results[0].year : '', text, results.length > 0 ? results[0].value : '')}
-        />
-        <Text style={styles.label}>Resultado:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder={`Insira o valor para ${selectedElement}`}
-          keyboardType="numeric"
-          value={results.length > 0 ? results[0].value : ''}
-          onChangeText={text => saveResult(results.length > 0 ? results[0].id : '', results.length > 0 ? results[0].year : '', results.length > 0 ? results[0].reservoir : '', text)}
-        />
+        <TouchableOpacity
+          style={styles.touchableButton}
+          onPress={addResultInput}
+        >
+          <Text style={styles.touchableButtonText}>Adicionar Resultado</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.touchableButton}
+          onPress={generateChart}
+        >
+          <Text style={styles.touchableButtonText}>Gerar Gráfico</Text>
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style={styles.touchableButton}
-        onPress={addResultInput}
-      >
-        <Text style={styles.touchableButtonText}>Adicionar Resultado</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.touchableButton}
-        onPress={() => {}}
-      >
-        <Text style={styles.touchableButtonText}>Gerar Gráfico</Text>
-      </TouchableOpacity>
-
-      <View style={{ marginTop: 20 }}>
-        <VictoryChart theme={VictoryTheme.material}>
-          <VictoryBar data={chartData} />
-        </VictoryChart>
-      </View>
-    </View>
-  </ScrollView>
-);
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -198,7 +186,7 @@ const styles = StyleSheet.create({
   },
 });
 
-// Navigation
+// navegação
 const Stack = createStackNavigator();
 
 export default function App() {
