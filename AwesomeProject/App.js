@@ -79,10 +79,10 @@ function ResultsScreen({ route }) {
   const [results, setResults] = useState([]);
 
   const addResultInput = () => {
-    const newId = generateId();
-    setResults([...results, { id: newId, year: '', reservoir: '', value: '' }]);
+    const newId = results.length + 1; // Definir o id de forma incremental
+    setResults([...results, { id: newId.toString(), year: '', reservoir: '', value: '' }]);
   };
-
+  
   const saveResult = (id, year, reservoir, value) => {
     const index = results.findIndex(r => r.id === id);
     const updatedResults = [...results];
@@ -91,7 +91,20 @@ function ResultsScreen({ route }) {
   };
 
   const generateChart = () => {
-    Alert.alert('Este gráfico está em desenvolvimento...');
+    // Aqui você pode criar um objeto de dados apropriado para o gráfico
+    const chartData = results.map(result => ({ x: result.year, y: parseFloat(result.value) }));
+
+    // Exemplo de como lidar com NaN (Not a Number) ou valores vazios
+    const filteredData = chartData.filter(item => !isNaN(item.y) && item.y !== '');
+
+    // Renderizar o gráfico com os dados filtrados
+    renderChart(filteredData);
+  };
+
+  // Função para renderizar o gráfico
+  const renderChart = (data) => {
+    // Código para renderizar o gráfico com VictoryChart, VictoryBar
+    // Você pode usar a lógica do seu gráfico React da web aqui
   };
 
   return (
@@ -199,4 +212,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
