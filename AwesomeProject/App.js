@@ -26,7 +26,7 @@ function SelectionScreen({ navigation }) {
     setData(newData);
 
     // Limpe os campos após adicionar
-    setSelectedElement('');
+    setSelectedElement(selectedElement);
     setSelectedYear('');
     setSelectedReservoir('');
     setResult('');
@@ -90,12 +90,26 @@ function SelectionScreen({ navigation }) {
         
         {/* Gráfico */}
         <View style={styles.chartContainer}>
-          <VictoryChart width={350} theme={VictoryTheme.material}>
+          <VictoryChart 
+          width={360}
+          
+          domainPadding={20}
+          theme={VictoryTheme.material}>
             <VictoryBar
-              data={data}
-              x="x"
-              y="y"
+                data={data}
+                
+                style={{
+                    data: {
+                        fill: 'url(#gradiente)',
+                    },
+                }}
             />
+            <defs>
+                <linearGradient id="gradiente" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#5353ec" />
+                    <stop offset="100%" stopColor="#0000ff" />
+                </linearGradient>
+            </defs>
           </VictoryChart>
         </View>
       </View>
@@ -145,6 +159,7 @@ const styles = StyleSheet.create({
   chartContainer: {
     marginTop: 20,
     alignItems: 'center',
+    
   },
 });
 
