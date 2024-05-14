@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
+import { VictoryChart, VictoryBar, VictoryTheme, VictoryAxis } from "victory-native";
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
@@ -10,10 +10,12 @@ function SelectionScreen({ navigation }) {
   const [selectedReservoir, setSelectedReservoir] = useState('');
   const [result, setResult] = useState('');
   const [data, setData] = useState([]);
+  const [elementDisabled, setElementDisabled] = useState(false);
 
   const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor'];
-  const years = ['2020', '2021', '2022', '2023'];
-  const reservoirs = ['Tabocas', 'Severino Guerra', 'Pedro Moura'];
+  const years = [2020, 2021, 2022, 2023];
+  
+  const reservoirs = ['Tabocas', 'Severino\nGuerra', 'Pedro\nMoura'];
 
   const navigateToResults = () => {
     if (!selectedElement || !selectedYear || !selectedReservoir || !result) {
@@ -22,27 +24,57 @@ function SelectionScreen({ navigation }) {
     }
     
     // Adicione o resultado aos dados
-    const newData = [...data, { x: selectedElement, y: parseFloat(result) }];
-    setData(newData);
+    if (result < 0){
+      Alert.alert('Resultado Inválido', 'Por favor, insira um resultado válido.');
+      return;
+    } else if (result >= 0){
+      const newData = [...data, { x: parseInt(selectedYear)+offSet(selectedReservoir), y: parseFloat(result), label: selectedReservoir}];
+      setData(newData);
+    } else{
+      Alert.alert('Resultado Inválido', 'Por favor, insira um resultado válido.');
+      return;
+    }
 
     // Limpe os campos após adicionar
-    setSelectedElement('');
+    setSelectedElement(selectedElement);
     setSelectedYear('');
     setSelectedReservoir('');
     setResult('');
   };
 
+  const Legend = () => {
+    return (
+      <View style={styles.legendContainer}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: colocarCor('Tabocas') }]} />
+          <Text>Tabocas</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: colocarCor('Severino\nGuerra') }]} />
+          <Text>Severino Guerra</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: colocarCor('Pedro\nMoura') }]} />
+          <Text>Pedro Moura</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={[styles.container, { paddingTop: 10 }]}>
-        
         <Text style={styles.label}>Elemento:</Text>
         <Picker
           style={styles.input}
           selectedValue={selectedElement}
-          onValueChange={(itemValue) => setSelectedElement(itemValue)}
+          onValueChange={(itemValue) => {
+            setSelectedElement(itemValue);
+            setElementDisabled(true);
+          }}
+          enabled={!elementDisabled}
         >
-          <Picker.Item label="Selecione um elemento" value="" />
+          <Picker.Item label="Selecione um elemento" value=''enabled={false} />
           {elements.map((element, index) => (
             <Picker.Item key={index} label={element} value={element} />
           ))}
@@ -52,7 +84,9 @@ function SelectionScreen({ navigation }) {
         <Picker
           style={styles.input}
           selectedValue={selectedYear}
-          onValueChange={(itemValue) => setSelectedYear(itemValue)}
+          onValueChange={(itemValue) => {
+            setSelectedYear(itemValue);
+          }}
         >
           <Picker.Item label="Selecione um ano" value="" />
           {years.map((year, index) => (
@@ -64,7 +98,9 @@ function SelectionScreen({ navigation }) {
         <Picker
           style={styles.input}
           selectedValue={selectedReservoir}
-          onValueChange={(itemValue) => setSelectedReservoir(itemValue)}
+          onValueChange={(itemValue) => {
+            setSelectedReservoir(itemValue);
+          }}
         >
           <Picker.Item label="Selecione um reservatório" value="" />
           {reservoirs.map((reservoir, index) => (
@@ -90,13 +126,31 @@ function SelectionScreen({ navigation }) {
         
         {/* Gráfico */}
         <View style={styles.chartContainer}>
-          <VictoryChart width={350} theme={VictoryTheme.material}>
+          <VictoryChart width={400} domainPadding={25} theme={VictoryTheme.material}>
+            <VictoryAxis
+              tickValues={years} // Definindo os valores do eixo X como o array "years"
+              tickFormat={(tick) => Math.floor(tick)}
+            />
+            <VictoryAxis
+              dependentAxis
+              tickFormat={(tick) =>  tick.toFixed(1)} // Definindo os valores do eixo Y como números inteiros
+            />
             <VictoryBar
               data={data}
+              barWidth={20}
+              style={{
+                data: {
+                  fill: ({ datum }) => colocarCor(datum.label),
+                },
+                labels: {
+                  display: 'none',
+                },  
+              }}
               x="x"
               y="y"
             />
           </VictoryChart>
+          <Legend />
         </View>
       </View>
     </ScrollView>
@@ -140,7 +194,45 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
   },
+  legendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legendColor: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
 });
+
+function offSet(selectedResevoir){
+  if(selectedResevoir == "Tabocas"){
+    return -0.3;
+  }
+  else if(selectedResevoir== "Severino\nGuerra"){
+    return 0;
+  }
+  else if(selectedResevoir== "Pedro\nMoura"){
+    return 0.3;
+  }
+}
+
+function colocarCor(selectedResevoir){
+  if(selectedResevoir == "Tabocas"){
+    return '#8c1521';
+  }
+  else if(selectedResevoir== "Severino\nGuerra"){
+    return '#163da8';
+  }
+  else if(selectedResevoir== "Pedro\nMoura"){
+    return '#541782';
+  }
+}
 
 // navegação
 const Stack = createStackNavigator();
