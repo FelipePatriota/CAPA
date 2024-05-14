@@ -12,17 +12,18 @@ function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
   const [selectedYears, setSelectedYears] = useState([]);
   const [selectedReservoirs, setSelectedReservoirs] = useState([]);
+  const [result, setResult] = useState('');
 
   const years = ['2020', '2021', '2022', '2023']; // anos disponíveis nas tabelas 
   const reservoirs = ['Tabocas', 'Severino Guerra', 'Pedro Moura']; // reservatórios disponíveis
   const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor']; // elementos disponíveis
 
   const navigateToResults = () => {
-    if (!selectedElement || selectedYears.length === 0 || selectedReservoirs.length === 0) {
-      Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, pelo menos um ano e pelo menos um reservatório.');
+    if (!selectedElement || selectedYears.length === 0 || selectedReservoirs.length === 0 || !result) {
+      Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, pelo menos um ano, pelo menos um reservatório e insira um resultado.');
       return;
     }
-    navigation.navigate('Results', { selectedElement, selectedYears, selectedReservoirs });
+    navigation.navigate('Results', { selectedElement, selectedYears, selectedReservoirs, result });
   };
 
   return (
@@ -30,42 +31,62 @@ function SelectionScreen({ navigation }) {
       <View style={[styles.container, { paddingTop: 10 }]}>
         
         <Text style={styles.label}>Elemento:</Text>
-            <select style={styles.input}>
-              <option value="Magnésio">Magnésio</option>
-              <option value="Dureza">Dureza</option>
-              <option value="Condutividade">Condutividade</option>
-              <option value="Alcalinidade">Alcalinidade</option>
-              <option value="Amonia">Amonia</option>
-              <option value="Cloreto">Cloreto</option>
-              <option value="Cor">Cor</option>
-            </select>
+        <select
+          style={styles.input}
+          value={selectedElement}
+          onValueChange={(itemValue) => setSelectedElement(itemValue)}
+        >
+          {elements.map((element) => (
+            <option key={element} value={element}>
+              {element}
+            </option>
+          ))}
+        </select>
         
         <Text style={styles.label}>Ano(s):</Text>
-        <select style={styles.input}>
-              <option value="2020">2020</option>
-              <option value="2021">2021</option>
-              <option value="2022">2022</option>
-              <option value="2023">2023</option>
-            </select>
+        <select
+          style={styles.input}
+          value={selectedYears}
+          onValueChange={(itemValue) => setSelectedYears(itemValue)}
+        >
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
 
         <Text style={styles.label}>Reservatórios:</Text>
-        <select style={styles.input}>
-              <option value="Tabocas">Tabocas</option>
-              <option value="Severino Guerra">Severino Guerra</option>
-              <option value="Pedro Moura">Pedro Moura</option>
-            </select>
+        <select
+          style={styles.input}
+          value={selectedReservoirs}
+          onValueChange={(itemValue) => setSelectedReservoirs(itemValue)}
+        >
+          {reservoirs.map((reservoir) => (
+            <option key={reservoir} value={reservoir}>
+              {reservoir}
+            </option>
+          ))}
+        </select>
 
-      <TouchableOpacity
-        style={[styles.touchableButton, { borderRadius: 20 }]} 
-      >
-        
-        <Text style={styles.touchableButtonText}>Add</Text>
-      </TouchableOpacity>
+        <Text style={styles.label}>Resultado:</Text>
+        <TextInput
+          style={styles.input}
+          value={result}
+          onChangeText={(text) => setResult(text)}
+          keyboardType="numeric"
+        />
+
+        <TouchableOpacity
+          style={[styles.touchableButton, { borderRadius: 20 }]} 
+          onPress={navigateToResults}
+        >
+          <Text style={styles.touchableButtonText}>Add</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -73,11 +94,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ecf0f1',
     padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
   },
   label: {
     fontSize: 15,
@@ -119,4 +135,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
