@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedReservoir, setSelectedReservoir] = useState('');
   const [result, setResult] = useState('');
+  const [data, setData] = useState([]);
 
   const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor'];
   const years = ['2020', '2021', '2022', '2023'];
@@ -18,7 +20,16 @@ function SelectionScreen({ navigation }) {
       Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, um ano, um reservatório e insira o resultado.');
       return;
     }
-    // Aqui você pode realizar a navegação para a tela de resultados, se necessário
+    
+    // Adicione o resultado aos dados
+    const newData = [...data, { x: selectedElement, y: parseFloat(result) }];
+    setData(newData);
+
+    // Limpe os campos após adicionar
+    setSelectedElement('');
+    setSelectedYear('');
+    setSelectedReservoir('');
+    setResult('');
   };
 
   return (
@@ -67,6 +78,7 @@ function SelectionScreen({ navigation }) {
           value={result}
           onChangeText={setResult}
           placeholder="Insira o resultado"
+          keyboardType="numeric"
         />
 
         <TouchableOpacity
@@ -75,6 +87,17 @@ function SelectionScreen({ navigation }) {
         >
           <Text style={styles.touchableButtonText}>Adicionar</Text>
         </TouchableOpacity>
+        
+        {/* Gráfico */}
+        <View style={styles.chartContainer}>
+          <VictoryChart width={350} theme={VictoryTheme.material}>
+            <VictoryBar
+              data={data}
+              x="x"
+              y="y"
+            />
+          </VictoryChart>
+        </View>
       </View>
     </ScrollView>
   );
@@ -112,6 +135,10 @@ const styles = StyleSheet.create({
     borderColor: '#34495e',
     borderRadius: 8,
     marginBottom: 10,
+  },
+  chartContainer: {
+    marginTop: 20,
+    alignItems: 'center',
   },
 });
 
