@@ -125,7 +125,11 @@ function SelectionScreen({ navigation }) {
                 data: {
                     fill: ({ datum }) => colocarCor(datum.label),
                   },
+                labels: {
+                  display: 'none',
+                },  
               }}
+
               x="x"
               y="y"
             />
@@ -177,26 +181,26 @@ const styles = StyleSheet.create({
 });
 function offSet(selectedResevoir){
   if(selectedResevoir == "Tabocas"){
-    return -0.2;
+    return -0.3;
   }
   else if(selectedResevoir== "Severino\nGuerra"){
     return 0;
   }
   else if(selectedResevoir== "Pedro\nMoura"){
-    return 0.2;
+    return 0.3;
   }
 
 }
 
 function colocarCor(selectedResevoir){
   if(selectedResevoir == "Tabocas"){
-    return 'red';
+    return '#8c1521';
   }
   else if(selectedResevoir== "Severino\nGuerra"){
-    return 'orange';
+    return '#163da8';
   }
   else if(selectedResevoir== "Pedro\nMoura"){
-    return 'yellow';
+    return '#541782';
   }
 }
 
