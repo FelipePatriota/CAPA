@@ -1,29 +1,24 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
-
-const generateId = () => {
-  return '_' + Math.random().toString(36).substr(2, 9);
-};
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
-  const [selectedYears, setSelectedYears] = useState([]);
-  const [selectedReservoirs, setSelectedReservoirs] = useState([]);
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedReservoir, setSelectedReservoir] = useState('');
   const [result, setResult] = useState('');
 
-  const years = ['2020', '2021', '2022', '2023']; // anos disponíveis nas tabelas 
-  const reservoirs = ['Tabocas', 'Severino Guerra', 'Pedro Moura']; // reservatórios disponíveis
-  const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor']; // elementos disponíveis
+  const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor'];
+  const years = ['2020', '2021', '2022', '2023'];
+  const reservoirs = ['Tabocas', 'Severino Guerra', 'Pedro Moura'];
 
   const navigateToResults = () => {
-    if (!selectedElement || selectedYears.length === 0 || selectedReservoirs.length === 0 || !result) {
-      Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, pelo menos um ano, pelo menos um reservatório e insira um resultado.');
+    if (!selectedElement || !selectedYear || !selectedReservoir || !result) {
+      Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, um ano, um reservatório e insira o resultado.');
       return;
     }
-    navigation.navigate('Results', { selectedElement, selectedYears, selectedReservoirs, result });
+    // Aqui você pode realizar a navegação para a tela de resultados, se necessário
   };
 
   return (
@@ -31,57 +26,54 @@ function SelectionScreen({ navigation }) {
       <View style={[styles.container, { paddingTop: 10 }]}>
         
         <Text style={styles.label}>Elemento:</Text>
-        <select
+        <Picker
           style={styles.input}
-          value={selectedElement}
+          selectedValue={selectedElement}
           onValueChange={(itemValue) => setSelectedElement(itemValue)}
         >
-          {elements.map((element) => (
-            <option key={element} value={element}>
-              {element}
-            </option>
+          <Picker.Item label="Selecione um elemento" value="" />
+          {elements.map((element, index) => (
+            <Picker.Item key={index} label={element} value={element} />
           ))}
-        </select>
+        </Picker>
         
-        <Text style={styles.label}>Ano(s):</Text>
-        <select
+        <Text style={styles.label}>Ano:</Text>
+        <Picker
           style={styles.input}
-          value={selectedYears}
-          onValueChange={(itemValue) => setSelectedYears(itemValue)}
+          selectedValue={selectedYear}
+          onValueChange={(itemValue) => setSelectedYear(itemValue)}
         >
-          {years.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
+          <Picker.Item label="Selecione um ano" value="" />
+          {years.map((year, index) => (
+            <Picker.Item key={index} label={year} value={year} />
           ))}
-        </select>
+        </Picker>
 
-        <Text style={styles.label}>Reservatórios:</Text>
-        <select
+        <Text style={styles.label}>Reservatório:</Text>
+        <Picker
           style={styles.input}
-          value={selectedReservoirs}
-          onValueChange={(itemValue) => setSelectedReservoirs(itemValue)}
+          selectedValue={selectedReservoir}
+          onValueChange={(itemValue) => setSelectedReservoir(itemValue)}
         >
-          {reservoirs.map((reservoir) => (
-            <option key={reservoir} value={reservoir}>
-              {reservoir}
-            </option>
+          <Picker.Item label="Selecione um reservatório" value="" />
+          {reservoirs.map((reservoir, index) => (
+            <Picker.Item key={index} label={reservoir} value={reservoir} />
           ))}
-        </select>
+        </Picker>
 
         <Text style={styles.label}>Resultado:</Text>
         <TextInput
           style={styles.input}
           value={result}
-          onChangeText={(text) => setResult(text)}
-          keyboardType="numeric"
+          onChangeText={setResult}
+          placeholder="Insira o resultado"
         />
 
         <TouchableOpacity
-          style={[styles.touchableButton, { borderRadius: 20 }]} 
+          style={[styles.touchableButton, { borderRadius: 20 }]}
           onPress={navigateToResults}
         >
-          <Text style={styles.touchableButtonText}>Add</Text>
+          <Text style={styles.touchableButtonText}>Adicionar</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
