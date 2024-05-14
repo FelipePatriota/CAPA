@@ -27,124 +27,45 @@ function SelectionScreen({ navigation }) {
 
   return (
     <ScrollView style={{ flex: 1 }}>
-      <View style={[styles.container, { paddingTop: 40 }]}>
-        <Text style={styles.title}>Selecionar Elementos</Text>
-
+      <View style={[styles.container, { paddingTop: 10 }]}>
+        
         <Text style={styles.label}>Elemento:</Text>
-        {elements.map(element => (
-          <TouchableOpacity
-            key={element}
-            style={[styles.touchableButton, { backgroundColor: selectedElement === element ? '#03bf2c' : '#22a0c9' }]}
-            onPress={() => setSelectedElement(selectedElement === element ? '' : element)}
-          >
-            <Text style={styles.touchableButtonText}>{element}</Text>
-          </TouchableOpacity>
-        ))}
-
+            <select style={styles.input}>
+              <option value="Magnésio">Magnésio</option>
+              <option value="Dureza">Dureza</option>
+              <option value="Condutividade">Condutividade</option>
+              <option value="Alcalinidade">Alcalinidade</option>
+              <option value="Amonia">Amonia</option>
+              <option value="Cloreto">Cloreto</option>
+              <option value="Cor">Cor</option>
+            </select>
+        
         <Text style={styles.label}>Ano(s):</Text>
-        {years.map(year => (
-          <TouchableOpacity
-            key={year}
-            style={[styles.touchableButton, { backgroundColor: selectedYears.includes(year) ? '#03bf2c' : '#22a0c9' }]}
-            onPress={() => setSelectedYears(prevYears => prevYears.includes(year) ? prevYears.filter(y => y !== year) : [...prevYears, year])}
-          >
-            <Text style={styles.touchableButtonText}>{year}</Text>
-          </TouchableOpacity>
-        ))}
+        <select style={styles.input}>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+            </select>
 
         <Text style={styles.label}>Reservatórios:</Text>
-        {reservoirs.map(reservoir => (
-          <TouchableOpacity
-            key={reservoir}
-            style={[styles.touchableButton, { backgroundColor: selectedReservoirs.includes(reservoir) ? '#03bf2c' : '#22a0c9' }]}
-            onPress={() => setSelectedReservoirs(prevReservoirs => prevReservoirs.includes(reservoir) ? prevReservoirs.filter(r => r !== reservoir) : [...prevReservoirs, reservoir])}
-          >
-            <Text style={styles.touchableButtonText}>{reservoir}</Text>
-          </TouchableOpacity>
-        ))}
+        <select style={styles.input}>
+              <option value="Tabocas">Tabocas</option>
+              <option value="Severino Guerra">Severino Guerra</option>
+              <option value="Pedro Moura">Pedro Moura</option>
+            </select>
 
-        <TouchableOpacity
-          style={styles.touchableButton}
-          onPress={navigateToResults}
-        >
-          <Text style={styles.touchableButtonText}>Continuar</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  );
-}
-
-function ResultsScreen({ route }) {
-  const { selectedElement, selectedYears, selectedReservoirs } = route.params;
-  const [results, setResults] = useState([]);
-
-  const addResultInput = () => {
-    const newId = generateId();
-    setResults([...results, { id: newId, year: '', reservoir: '', value: '' }]);
-  };
-
-  const saveResult = (id, year, reservoir, value) => {
-    const index = results.findIndex(r => r.id === id);
-    const updatedResults = [...results];
-    updatedResults[index] = { id, year, reservoir, value };
-    setResults(updatedResults);
-  };
-
-  const generateChart = () => {
-    Alert.alert('Este gráfico está em desenvolvimento...');
-  };
-
-  return (
-    <ScrollView style={{ flex: 1 }}>
-      <View style={[styles.container, { paddingTop: 40 }]}>
-        <Text style={styles.title}>Inserir Resultados</Text>
-        <Text style={styles.label}>Elemento: {selectedElement}</Text>
+      <TouchableOpacity
+        style={[styles.touchableButton, { borderRadius: 20 }]} 
+      >
         
-        {results.map(result => (
-          <View key={result.id}>
-            <Text style={styles.label}>Ano:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Insira o ano"
-              keyboardType="numeric"
-              value={result.year}
-              onChangeText={text => saveResult(result.id, text, result.reservoir, result.value)}
-            />
-            <Text style={styles.label}>Reservatório:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Insira o reservatório"
-              value={result.reservoir}
-              onChangeText={text => saveResult(result.id, result.year, text, result.value)}
-            />
-            <Text style={styles.label}>Resultado:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder={`Insira o valor para ${selectedElement}`}
-              keyboardType="numeric"
-              value={result.value}
-              onChangeText={text => saveResult(result.id, result.year, result.reservoir, text)}
-            />
-          </View>
-        ))}
-
-        <TouchableOpacity
-          style={styles.touchableButton}
-          onPress={addResultInput}
-        >
-          <Text style={styles.touchableButtonText}>Adicionar Resultado</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.touchableButton}
-          onPress={generateChart}
-        >
-          <Text style={styles.touchableButtonText}>Gerar Gráfico</Text>
-        </TouchableOpacity>
+        <Text style={styles.touchableButtonText}>Add</Text>
+      </TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -159,7 +80,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 5,
@@ -193,8 +114,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Selection">
-        <Stack.Screen name="Selection" component={SelectionScreen} options={{ title: 'Seleção' }} />
-        <Stack.Screen name="Results" component={ResultsScreen} options={{ title: 'Resultados' }} />
+        <Stack.Screen name="Selection" component={SelectionScreen} options={{ title: 'Ensaio' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
