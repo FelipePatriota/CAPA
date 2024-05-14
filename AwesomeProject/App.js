@@ -1,28 +1,35 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
 
-const generateId = () => {
-  return '_' + Math.random().toString(36).substr(2, 9);
-};
-
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
-  const [selectedYears, setSelectedYears] = useState([]);
-  const [selectedReservoirs, setSelectedReservoirs] = useState([]);
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedReservoir, setSelectedReservoir] = useState('');
+  const [result, setResult] = useState('');
+  const [data, setData] = useState([]);
 
-  const years = ['2020', '2021', '2022', '2023']; // anos disponíveis nas tabelas 
-  const reservoirs = ['Tabocas', 'Severino Guerra', 'Pedro Moura']; // reservatórios disponíveis
-  const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor']; // elementos disponíveis
+  const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor'];
+  const years = ['2020', '2021', '2022', '2023'];
+  const reservoirs = ['Tabocas', 'Severino Guerra', 'Pedro Moura'];
 
   const navigateToResults = () => {
-    if (!selectedElement || selectedYears.length === 0 || selectedReservoirs.length === 0) {
-      Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, pelo menos um ano e pelo menos um reservatório.');
+    if (!selectedElement || !selectedYear || !selectedReservoir || !result) {
+      Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, um ano, um reservatório e insira o resultado.');
       return;
     }
-    navigation.navigate('Results', { selectedElement, selectedYears, selectedReservoirs });
+    
+    // Adicione o resultado aos dados
+    const newData = [...data, { x: selectedElement, y: parseFloat(result) }];
+    setData(newData);
+
+    // Limpe os campos após adicionar
+    setSelectedElement('');
+    setSelectedYear('');
+    setSelectedReservoir('');
+    setResult('');
   };
 
   return (
@@ -30,41 +37,67 @@ function SelectionScreen({ navigation }) {
       <View style={[styles.container, { paddingTop: 10 }]}>
         
         <Text style={styles.label}>Elemento:</Text>
-        <select style={styles.input}>
-          <option value="Magnésio">Magnésio</option>
-          <option value="Dureza">Dureza</option>
-          <option value="Condutividade">Condutividade</option>
-          <option value="Alcalinidade">Alcalinidade</option>
-          <option value="Amonia">Amonia</option>
-          <option value="Cloreto">Cloreto</option>
-          <option value="Cor">Cor</option>
-        </select>
-    
-        <Text style={styles.label}>Ano(s):</Text>
-        <select style={styles.input}>
-          <option value="2020">2020</option>
-          <option value="2021">2021</option>
-          <option value="2022">2022</option>
-          <option value="2023">2023</option>
-        </select>
+        <Picker
+          style={styles.input}
+          selectedValue={selectedElement}
+          onValueChange={(itemValue) => setSelectedElement(itemValue)}
+        >
+          <Picker.Item label="Selecione um elemento" value="" />
+          {elements.map((element, index) => (
+            <Picker.Item key={index} label={element} value={element} />
+          ))}
+        </Picker>
+        
+        <Text style={styles.label}>Ano:</Text>
+        <Picker
+          style={styles.input}
+          selectedValue={selectedYear}
+          onValueChange={(itemValue) => setSelectedYear(itemValue)}
+        >
+          <Picker.Item label="Selecione um ano" value="" />
+          {years.map((year, index) => (
+            <Picker.Item key={index} label={year} value={year} />
+          ))}
+        </Picker>
 
-        <Text style={styles.label}>Reservatórios:</Text>
-        <select style={styles.input}>
-          <option value="Tabocas">Tabocas</option>
-          <option value="Severino Guerra">Severino Guerra</option>
-          <option value="Pedro Moura">Pedro Moura</option>
-        </select>
+        <Text style={styles.label}>Reservatório:</Text>
+        <Picker
+          style={styles.input}
+          selectedValue={selectedReservoir}
+          onValueChange={(itemValue) => setSelectedReservoir(itemValue)}
+        >
+          <Picker.Item label="Selecione um reservatório" value="" />
+          {reservoirs.map((reservoir, index) => (
+            <Picker.Item key={index} label={reservoir} value={reservoir} />
+          ))}
+        </Picker>
 
         <Text style={styles.label}>Resultado:</Text>
-        <TextInput style={styles.input}>
-        </TextInput>
+        <TextInput
+          style={styles.input}
+          value={result}
+          onChangeText={setResult}
+          placeholder="Insira o resultado"
+          keyboardType="numeric"
+        />
 
-      <TouchableOpacity
-        style={[styles.touchableButton, { borderRadius: 20 }]} 
-      >
+        <TouchableOpacity
+          style={[styles.touchableButton, { borderRadius: 20 }]}
+          onPress={navigateToResults}
+        >
+          <Text style={styles.touchableButtonText}>Adicionar</Text>
+        </TouchableOpacity>
         
-        <Text style={styles.touchableButtonText}>Add</Text>
-      </TouchableOpacity>
+        {/* Gráfico */}
+        <View style={styles.chartContainer}>
+          <VictoryChart width={350} theme={VictoryTheme.material}>
+            <VictoryBar
+              data={data}
+              x="x"
+              y="y"
+            />
+          </VictoryChart>
+        </View>
       </View>
     </ScrollView>
   );
@@ -108,6 +141,10 @@ const styles = StyleSheet.create({
     borderColor: '#34495e',
     borderRadius: 8,
     marginBottom: 10,
+  },
+  chartContainer: {
+    marginTop: 20,
+    alignItems: 'center',
   },
 });
 
