@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, Te
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
+import '@expo/metro-runtime';
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
