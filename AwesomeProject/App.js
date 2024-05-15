@@ -11,6 +11,7 @@ function SelectionScreen({ navigation }) {
   const [result, setResult] = useState('');
   const [data, setData] = useState([]);
   const [elementDisabled, setElementDisabled] = useState(false);
+  const [yearDisabled, setYearDisabled] = useState(false);
 
   const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor'];
   const years = [2020, 2021, 2022, 2023];
@@ -36,10 +37,18 @@ function SelectionScreen({ navigation }) {
     }
 
     // Limpe os campos após adicionar
-    setSelectedElement(selectedElement);
-    setSelectedYear('');
+    if (!elementDisabled) {
+      setSelectedElement('');
+    }
+    if (!yearDisabled) {
+      setSelectedYear('');
+    }
     setSelectedReservoir('');
     setResult('');
+  };
+
+  const resetChart = () => {
+    setData([]); // Limpa os dados do gráfico
   };
 
   const Legend = () => {
@@ -65,34 +74,51 @@ function SelectionScreen({ navigation }) {
     <ScrollView style={{ flex: 1 }}>
       <View style={[styles.container, { paddingTop: 10 }]}>
         <Text style={styles.label}>Elemento:</Text>
-        <Picker
-          style={styles.input}
-          selectedValue={selectedElement}
-          onValueChange={(itemValue) => {
-            setSelectedElement(itemValue);
-            setElementDisabled(true);
-          }}
-          enabled={!elementDisabled}
-        >
-          <Picker.Item label="Selecione um elemento" value=''enabled={false} />
-          {elements.map((element, index) => (
-            <Picker.Item key={index} label={element} value={element} />
-          ))}
-        </Picker>
+        <View style={styles.inputContainer}>
+          <Picker
+            style={[styles.input, { flex: 1 }]}
+            selectedValue={selectedElement}
+            onValueChange={(itemValue) => {
+              setSelectedElement(itemValue);
+              setElementDisabled(true);
+            }}
+            enabled={!elementDisabled}
+          >
+            <Picker.Item label="Selecione um elemento" value=''enabled={false} />
+            {elements.map((element, index) => (
+              <Picker.Item key={index} label={element} value={element} />
+            ))}
+          </Picker>
+          <TouchableOpacity
+            style={styles.lockButton}
+            onPress={() => setElementDisabled(!elementDisabled)}
+          >
+            <Text>{elementDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
+          </TouchableOpacity>
+        </View>
         
         <Text style={styles.label}>Ano:</Text>
-        <Picker
-          style={styles.input}
-          selectedValue={selectedYear}
-          onValueChange={(itemValue) => {
-            setSelectedYear(itemValue);
-          }}
-        >
-          <Picker.Item label="Selecione um ano" value="" />
-          {years.map((year, index) => (
-            <Picker.Item key={index} label={year} value={year} />
-          ))}
-        </Picker>
+        <View style={styles.inputContainer}>
+          <Picker
+            style={[styles.input, { flex: 1 }]}
+            selectedValue={selectedYear}
+            onValueChange={(itemValue) => {
+              setSelectedYear(itemValue);
+            }}
+            enabled={!yearDisabled}
+          >
+            <Picker.Item label="Selecione um ano" value="" />
+            {years.map((year, index) => (
+              <Picker.Item key={index} label={year.toString()} value={year} />
+            ))}
+          </Picker>
+          <TouchableOpacity
+            style={styles.lockButton}
+            onPress={() => setYearDisabled(!yearDisabled)}
+          >
+            <Text>{yearDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
+          </TouchableOpacity>
+        </View>
 
         <Text style={styles.label}>Reservatório:</Text>
         <Picker
@@ -152,9 +178,15 @@ function SelectionScreen({ navigation }) {
           </VictoryChart>
           <Legend />
         </View>
-      </View>
-    </ScrollView>
-  );
+        <TouchableOpacity
+        style={[styles.touchableButton, { borderRadius: 20, marginTop: 10 }]}
+        onPress={resetChart}
+      >
+        <Text style={styles.touchableButtonText}>Resetar Gráfico</Text>
+      </TouchableOpacity>
+    </View>
+  </ScrollView>
+);
 }
 
 const styles = StyleSheet.create({
@@ -183,11 +215,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   input: {
-    width: '100%',
+    flex: 1,
     padding: 10,
     borderWidth: 1,
     borderColor: '#34495e',
     borderRadius: 8,
+    marginBottom: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
   },
   chartContainer: {
@@ -207,6 +244,12 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 5,
+  },
+  lockButton: {
+    marginLeft: 10,
+    padding: 5,
+    backgroundColor: '#ccc',
+    borderRadius: 5,
   },
 });
 
