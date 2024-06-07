@@ -1,407 +1,291 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet, TouchableOpacity, Pressable, Text } from "react-native";
-import { VictoryLine, VictoryChart, VictoryTheme, VictoryLegend, VictoryLabel, VictoryScatter, VictoryAxis } from "victory-native";
-import { ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, TextInput } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { VictoryChart, VictoryBar, VictoryTheme, VictoryAxis } from "victory-native";
 
-export default function App() {
-  const [inputTempAgua, setInputTA] = useState("");
-  const [inputPH, setInputPH] = useState("");
-  const [inputOD, setInputOD] = useState("");
-  const [inputDBO, setInputDBO] = useState("");
-  const [inputTurbidez, setInputTurbidez] = useState("");
-  const [inputNitrogênioTotal, setInputNitrogênioTotal] = useState("");
-  const [inputFosforoT, setInputFosforoT] = useState("");
-  const [inputColiformesT, setInputColiformesT] = useState("");
-  const [inputSolidosT, setInputSolidosT] = useState("");
-  cons [value, setInputValue] = useState("");
-  //const [inputIETCL, setInputCL] = useState("");
-  //const [inputIETPT, setInputPT] = useState("");
+function SelectionScreen({ navigation }) {
+  const [selectedElement, setSelectedElement] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedReservoir, setSelectedReservoir] = useState('');
+  const [result, setResult] = useState('');
+  const [data, setData] = useState([]);
+  const [elementDisabled, setElementDisabled] = useState(false);
+  const [yearDisabled, setYearDisabled] = useState(false);
 
-  const [dia, onChangeDia] = React.useState('');
-  const [mes, onChangeMes] = React.useState('');
-  const [ano, onChangeAno] = React.useState('');
-  const [value, onChangeValue] = React.useState('');
-  const [data, setData] = useState([]); //valores
-  const [date, setDate] = useState([]); //array para settar as datas do X
+  const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor'];
+  const years = [2020, 2021, 2022, 2023];
+  
+  const reservoirs = ['Tabocas', 'Severino\nGuerra', 'Pedro\nMoura'];
 
-  const addDataPoint = () => {
-    const newDataPoint = { x: new Date(ano, mes - 1, dia), y: Number(value) }; //formatar a data para o luxon
-    setData([...data, newDataPoint]); //colocar no Y
-    setDate([...date, newDataPoint.x]) //colocar no X
+  const navigateToResults = () => {
+    if (!selectedElement || !selectedYear || !selectedReservoir || !result) {
+      Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, um ano, um reservatório e insira o resultado.');
+      return;
+    }
+    
+    // Adicione o resultado aos dados
+    if (result < 0){
+      Alert.alert('Resultado Inválido', 'Por favor, insira um resultado válido.');
+      return;
+    } else if (result >= 0){
+      const newData = [...data, { x: parseInt(selectedYear)+offSet(selectedReservoir), y: parseFloat(result), label: selectedReservoir}];
+      setData(newData);
+    } else{
+      Alert.alert('Resultado Inválido', 'Por favor, insira um resultado válido.');
+      return;
+    }
+
+    // Limpe os campos após adicionar
+    if (!elementDisabled) {
+      setSelectedElement('');
+    }
+    if (!yearDisabled) {
+      setSelectedYear('');
+    }
+    setSelectedReservoir('');
+    setResult('');
   };
 
-  const handleButtonPress = () => {
-    // Inicializando as variáveis de parametros
-    // Inicializando as variáveis de parametros
-    var tempAgua = parseFloat(inputTempAgua);
-    var ph = parseFloat(inputPH);
-    var od = parseFloat(inputOD);
-    var dbo = parseFloat(inputDBO);
-    var turbidez = parseFloat(inputTurbidez);
-    var nitrogênioTotal = parseFloat(inputNitrogênioTotal);
-    var fosforoTotal = parseFloat(inputFosforoT);
-    var coliformesTermoTolerantes = parseFloat(inputColiformesT);
-    var solidosTotais = parseFloat(inputSolidosT)
-
-    //var IETCL = parseFloat(inputIETCL);
-    //var IETPT = parseFloat(inputIETPT);
-
-    console.log("OD: "+calculaOD(od))
-    console.log("PH: "+calcularPH(ph))
-    console.log("Temp: "+calculaTempAgua(tempAgua))
-    console.log("Tubidez: "+calcularTurbidez(turbidez));
-    console.log("NT: "+calcularNitrogenioTotal(nitrogênioTotal));
-    console.log("DBO: "+calcularDBO(dbo));
-    console.log("Fósforo Total: " + calculaFosforo(fosforoTotal));
-    console.log("Coliformes Termotolerantes: " + calcularcoliformes(coliformesTermoTolerantes));
-    console.log("Sólidos Totais: ", calcularsolidosTotais(solidosTotais));
-    //console.log("IET(CL): ", IETCL);
-    //console.log("IET(PT): ", IETPT);
-
-
-  };
-    var ColiformesTermoTolerantes = parseFloat(inputColiformesT);
-    var SolidosTotais = parseFloat(inputSolidosT)
-
-  const calcularTurbidez = (inputTurbidez) => {
-    let turbidezCalculada;
-    if (inputTurbidez > 100) {
-        turbidezCalculada = 5 ** 0.08;
-    } else {
-
-        turbidezCalculada = -26.45 * Math.log(inputTurbidez) + 136.39;
-    }
-    return turbidezCalculada;
+  const resetChart = () => {
+    setData([]); // Limpa os dados do gráfico
   };
 
-  const calcularNitrogenioTotal = (inputNitrogênioTotal) => {
-    let nitrogenioTotalCalculado;
-    if (inputNitrogênioTotal > 100) {
-        nitrogenioTotalCalculado = 1 ** 0.1; 
-    } else {
-
-      nitrogenioTotalCalculado = -20.8 * Math.log(inputNitrogênioTotal) + 93.092;
-    }
-    return nitrogenioTotalCalculado;
-  }
-
-  const calcularDBO = (inputDBO) => {
-    let dboCalculado;
-    if (inputDBO > 30) {
-        dboCalculado = 2 ** 0.1; 
-    } else {
-
-      dboCalculado = -30.1 * Math.log(inputDBO) + 103.45;
-    }
-    return dboCalculado;
-  }
-    function calculaTempAgua(tempAgua){
-      if (tempAgua < -5){
-        return 0.0;
-      } else if(tempAgua > 15){
-        return 9.0;
-      } else{
-        qTA = 92*Math.exp(-(((tempAgua-0)**2)/2)*(0.25**2))
-        return qTA;
-      }
-    }
-    function calcularPH(ph){
-      if (ph < 2.0){
-      return 2.0;
-      } else if (ph > 12.0){
-      return 3.0;
-      } else {
-        qPH= 93*(Math.exp(-((((ph-7.5)**2)/2)*(0.652**2))))
-        return qPH;
-      };
-    }
-    function calculaOD(od){
-      if (od < 0){
-        return 0.0;
-      } else if(od > 140){
-        return 47.0;
-      } else {
-        qOD = 100*Math.exp(-((((od-100)**2)/2)*(0.025**2)))
-        return qOD;
-      }; 
-
-      function calculaFosforo(fosforoTotal){
-        let qFT;
-        if (fosforoTotal > 10){
-          qFT = 0.1 ** 1
-        }
-        else {
-          qFT = -15.49*Math.log(fosforoTotal)+37.202;
-        }
-        return qFT;
-        }
-        function calculaColiformes(coliformesTermoTolerantes){
-          let qCT;
-          if (coliformesTermoTolerantes > 10){
-            qCT = 3 ** 0.15;
-                }
-          else {
-            qCT = -8.723*Math.log(coliformesTermoTolerantes)+88.714;
-
-          }
-          return qCT;
-      }
-
-       function calculaSolidosTotais(solidosTotais){
-        let qRT;
-        if (solidosTotais > 500){
-          qRT = 32**0.08;
-        }
-        else{ 
-          qRT=80*Math.log(-(((solidosTotais-50)^2)/2*(0.003^2)))
-        }
-        return qRT;
-
-       }
-
-      //  function calculaCL(IETCL){
-      //   var cl = (10*(6-((-0,7-(0,6*Math.log(IETCL)))/Math.log(2))))-20;
-      //   return cl;
-      //  }
-
-      //  function calculPT(IETPT){
-      //   var pt = (10*(6-((-0,42-(0,36*Math.log(IETPT)))/Math.log(2))))-20
-      //   return pt;
-      //  }
-
-      // function calculIET(cl, pt){
-      //   var iet = (cl + pt)/2;
-      //   return iet;
-      //
-      // }
-
-    };
-
-
+  const Legend = () => {
     return (
-      <ScrollView style={{ flex: 1 }}>
-        <View style={[styles.container, { paddingVertical: 150 }]}>
-          <TextInput
-            style={styles.input}
-            placeholder="Temperatura da água (°C)"
-            inputMode="numeric"
-            value={inputTempAgua}
-            onChangeText={setInputTA}
-          />
-        <TextInput
-          style={style.input}
-          placeholder="PH"
-          inputMode="numeric"
-          value={inputPH}
-          onChangeText={setInputPH}
-        />
-        <TextInput
-          style={style.input}
-          placeholder="OD"
-          inputMode="numeric"
-          value={inputOD}
-          onChangeText={setInputOD}
-        />
-        <TextInput
-          style={style.input}
-          placeholder="DBO"
-          inputMode="numeric"
-          value={inputDBO}
-          onChangeText={setInputDBO}
-        />
-        <TextInput
-          style={style.input}
-          placeholder="Turbidez"
-          inputMode="numeric"
-          value={inputTurbidez}
-          onChangeText={setInputTurbidez}
-        />
-        <TextInput
-          style={style.input}
-          placeholder="Nitrogênio Total"
-          inputMode="numeric"
-          value={inputNitrogênioTotal}
-          onChangeText={setInputNitrogênioTotal}
-        />    
-        <TextInput
-          style={style.input}
-          placeholder="Fósforo Total"
-          inputMode="numeric"
-          value={inputFosforoT}
-          onChangeText={setInputFosforoT}
-        />   
-        <TextInput
-          style={style.input}
-          placeholder="Coliformes Termotolerantes"
-          inputMode="numeric"
-          value={inputColiformesT}
-          onChangeText={setInputColiformesT}
-        />   
-        <TextInput
-          style={style.input}
-          placeholder="Sólidos Totais"
-          inputMode="numeric"
-          value={inputSolidosT}
-          onChangeText={setInputSolidosT}
-        /> 
-          <TextInput
-          style={styles.input}
-          onChangeText={onChangeDia}
-          value={dia}
-          placeholder={"Digite o dia, exemplo: 01, 10..."}
-          keyboardType='numeric'
-
-        />
-          <TextInput
-          style={styles.input}
-          onChangeText={onChangeMes}
-          value={mes}
-          placeholder={"Digite o mês, exemplo: 07, 12..."}
-          keyboardType='numeric'
-
-        />
-          <TextInput
-          style={styles.input}
-          onChangeText={onChangeAno}
-          value={ano}
-          placeholder={"Digite o ano, exemplo: 2022, 2018..."}
-          keyboardType='numeric'
-
-        />
-          <TextInput
-          style={styles.input}
-          onChangeText={onChangeValue}
-          value={value}
-          placeholder={"Digite o valor"}
-          keyboardType='numeric'
-        />  
-
-        {/* <TextInput
-          style={style.input}
-          placeholder="IET(CL)"
-          inputMode="numeric"
-          value={inputIETCL}
-          onChangeText={setInputCL}
-        />   
-        <TextInput
-          style={style.input}
-          placeholder="IET(PT)"
-          inputMode="numeric"
-          value={inputIETPT}
-          onChangeText={setInputPT}
-        />   
-        <TextInput
-          style={style.input}
-          placeholder="IET"
-          inputMode="numeric"
-          value={inputIET}
-          onChangeText={setInputIET}
-        />    */}
-        <TouchableOpacity style={style.touchableButton} onPress={ADD}>
-          <Text style={style.touchableButtonText}>Enviar</Text>
-        </TouchableOpacity>
-        <VictoryChart
-
-                    theme={VictoryTheme.mateiral} maxDomain={{ y: 100 }} minDomain={{ y: 0 }} responsive={true} scale={{ x: 'time' }}
-                >
-                    <VictoryAxis dependentAxis crossAxis
-                        tickValues={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} //valores do Y
-                    />
-                    <VictoryAxis crossAxis //Valores do X
-                        style={{ tickLabels: { fontSize: 8 } }} //font do X label
-                        data={date}
-                        tickCount={date.length}
-                        tickValues={date}
-                        tickFormat={(x) => {
-                            return x.toLocaleString("pt-BR",
-                                { day: "numeric", month: "numeric", year: 'numeric' }) //formatar datas
-                        }
-                        }
-                        tickLabelComponent={
-                            <VictoryLabel angle={-45} textAnchor="end" /> //angulo do X
-                        }
-                    />
-                    <VictoryScatter
-                        style={{ data: { fill: "#72e073" } }} //pontos
-                        size={5}
-                        data={data}
-                    />
-                    <VictoryLine sortOrder="ascending"
-                        style={{
-                            data: { stroke: "#72e073" },
-                            parent: { border: "1px solid #ccc" }, //linha
-
-                        }}
-                        data={data}
-
-                    />
-                </VictoryChart>
-                <VictoryLegend x={10} y={25}
-                    orientation="horizontal"
-                    height={150}
-                    gutter={20}
-                    itemsPerRow={3}
-                    style={{ border: { stroke: "black" } }}
-                    colorScale={["red", "orange", "yellow", "lightgreen", 'lightblue']}
-                    data={[
-                        { name: "0-25 Péssima" }, { name: "26-50 Ruim" }, { name: "51-70 Regular" }, { name: "71-90 Boa" }, { name: "91-100 Ótima" }
-                    ]}
-                />
-
+      <View style={styles.legendContainer}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: colocarCor('Tabocas') }]} />
+          <Text>Tabocas</Text>
         </View>
-      </ScrollView>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: colocarCor('Severino\nGuerra') }]} />
+          <Text>Severino Guerra</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: colocarCor('Pedro\nMoura') }]} />
+          <Text>Pedro Moura</Text>
+        </View>
+      </View>
+    );
+  };
 
-  );
+  return (
+    <ScrollView style={{ flex: 1 }}>
+      <View style={[styles.container, { paddingTop: 10 }]}>
+        <Text style={styles.label}>Elemento:</Text>
+        <View style={styles.inputContainer}>
+          <Picker
+            style={[styles.input, { flex: 1 }]}
+            selectedValue={selectedElement}
+            onValueChange={(itemValue) => {
+              setSelectedElement(itemValue);
+              setElementDisabled(true);
+            }}
+            enabled={!elementDisabled}
+          >
+            <Picker.Item label="Selecione um elemento" value=''enabled={false} />
+            {elements.map((element, index) => (
+              <Picker.Item key={index} label={element} value={element} />
+            ))}
+          </Picker>
+          <TouchableOpacity
+            style={styles.lockButton}
+            onPress={() => setElementDisabled(!elementDisabled)}
+          >
+            <Text>{elementDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
+          </TouchableOpacity>
+        </View>
+        
+        <Text style={styles.label}>Ano:</Text>
+        <View style={styles.inputContainer}>
+          <Picker
+            style={[styles.input, { flex: 1 }]}
+            selectedValue={selectedYear}
+            onValueChange={(itemValue) => {
+              setSelectedYear(itemValue);
+            }}
+            enabled={!yearDisabled}
+          >
+            <Picker.Item label="Selecione um ano" value="" />
+            {years.map((year, index) => (
+              <Picker.Item key={index} label={year.toString()} value={year} />
+            ))}
+          </Picker>
+          <TouchableOpacity
+            style={styles.lockButton}
+            onPress={() => setYearDisabled(!yearDisabled)}
+          >
+            <Text>{yearDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.label}>Reservatório:</Text>
+        <Picker
+          style={styles.input}
+          selectedValue={selectedReservoir}
+          onValueChange={(itemValue) => {
+            setSelectedReservoir(itemValue);
+          }}
+        >
+          <Picker.Item label="Selecione um reservatório" value="" />
+          {reservoirs.map((reservoir, index) => (
+            <Picker.Item key={index} label={reservoir} value={reservoir} />
+          ))}
+        </Picker>
+
+        <Text style={styles.label}>Resultado:</Text>
+        <TextInput
+          style={styles.input}
+          value={result}
+          onChangeText={setResult}
+          placeholder="Insira o resultado"
+          keyboardType="numeric"
+        />
+
+        <TouchableOpacity
+          style={[styles.touchableButton, { borderRadius: 20 }]}
+          onPress={navigateToResults}
+        >
+          <Text style={styles.touchableButtonText}>Adicionar</Text>
+        </TouchableOpacity>
+        
+        {/* Gráfico */}
+        <View style={styles.chartContainer}>
+          <VictoryChart width={400} domainPadding={25} theme={VictoryTheme.material}>
+            <VictoryAxis
+              tickValues={years} // Definindo os valores do eixo X como o array "years"
+              tickFormat={(tick) => Math.floor(tick)}
+            />
+            <VictoryAxis
+              dependentAxis
+              tickFormat={(tick) =>  tick.toFixed(1)} // Definindo os valores do eixo Y como números inteiros
+            />
+            <VictoryBar
+              data={data}
+              barWidth={20}
+              style={{
+                data: {
+                  fill: ({ datum }) => colocarCor(datum.label),
+                },
+                labels: {
+                  display: 'none',
+                },  
+              }}
+              x="x"
+              y="y"
+            />
+          </VictoryChart>
+          <Legend />
+        </View>
+        <TouchableOpacity
+        style={[styles.touchableButton, { borderRadius: 20, marginTop: 10 }]}
+        onPress={resetChart}
+      >
+        <Text style={styles.touchableButtonText}>Resetar Gráfico</Text>
+      </TouchableOpacity>
+    </View>
+  </ScrollView>
+);
 }
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 10,
-  },
-  input: {
-    width: "100%",
-    height: 30,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    paddingHorizontal: 10,
-  },
-  touchableButton: {
-    backgroundColor: "#2e97b7",
-    color: "white",
-    fontSize: 20,
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  touchableButtonText: {
-    color: "white",
-    fontSize: 20,
-  },
-  });
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
+    alignItems: 'center',
+    backgroundColor: '#ecf0f1',
+    padding: 20,
   },
-  chartContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
+  label: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  touchableButton: {
+    backgroundColor: '#22a0c9',
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  touchableButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   input: {
-    width: "100%",
-    height: 40,
-    marginBottom: 10,
+    flex: 1,
+    padding: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
-    paddingHorizontal: 10,
+    borderColor: '#34495e',
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  chartContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  legendContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legendColor: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
+  lockButton: {
+    marginLeft: 10,
+    padding: 5,
+    backgroundColor: '#ccc',
+    borderRadius: 5,
   },
 });
+
+function offSet(selectedResevoir){
+  if(selectedResevoir == "Tabocas"){
+    return -0.3;
+  }
+  else if(selectedResevoir== "Severino\nGuerra"){
+    return 0;
+  }
+  else if(selectedResevoir== "Pedro\nMoura"){
+    return 0.3;
+  }
+}
+
+function colocarCor(selectedResevoir){
+  if(selectedResevoir == "Tabocas"){
+    return '#8c1521';
+  }
+  else if(selectedResevoir== "Severino\nGuerra"){
+    return '#163da8';
+  }
+  else if(selectedResevoir== "Pedro\nMoura"){
+    return '#541782';
+  }
+}
+
+// navegação
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Selection">
+        <Stack.Screen name="Selection" component={SelectionScreen} options={{ title: 'Ensaio' }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
