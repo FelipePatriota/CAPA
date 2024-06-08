@@ -6,6 +6,9 @@ import { VictoryChart, VictoryBar, VictoryTheme, VictoryAxis } from "victory-nat
 import ViewShot from "react-native-view-shot";
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
+import '@expo/metro-runtime'
+import {Picker} from '@react-native-picker/picker';
+
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
