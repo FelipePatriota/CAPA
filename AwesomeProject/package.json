@@ -14,8 +14,10 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
     "d3-dsv": "^3.0.1",
-    "expo": "^51.0.5",
+    "expo": "^51.0.11",
     "expo-document-picker": "~12.0.1",
+    "expo-file-system": "~17.0.1",
+    "expo-sharing": "~12.0.1",
     "expo-status-bar": "~1.12.1",
     "metro-cache": "^0.80.8",
     "papaparse": "^5.4.1",
@@ -34,9 +36,7 @@
     "victory": "^37.0.2",
     "victory-native": "^37.0.2",
     "xlsx": "^0.18.5",
-    "yarn": "^1.22.22",
-    "expo-sharing": "~12.0.1",
-    "expo-file-system": "~17.0.1"
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"
