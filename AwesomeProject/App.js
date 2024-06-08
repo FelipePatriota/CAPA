@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, TextInput } from "react-native";
+import React, { useState, useRef } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, TextInput, Modal, FlatList } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { VictoryChart, VictoryBar, VictoryTheme, VictoryAxis } from "victory-native";
+import ViewShot from "react-native-view-shot";
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
@@ -12,10 +15,11 @@ function SelectionScreen({ navigation }) {
   const [data, setData] = useState([]);
   const [elementDisabled, setElementDisabled] = useState(false);
   const [yearDisabled, setYearDisabled] = useState(false);
+  const [modalVisible, setModalVisible] = useState({ element: false, year: false, reservoir: false });
+  const viewShotRef = useRef();
 
   const elements = ['Magnésio', 'Dureza', 'Condutividade', 'Alcalinidade', 'Amonia', 'Cloreto', 'Cor'];
   const years = [2020, 2021, 2022, 2023];
-  
   const reservoirs = ['Tabocas', 'Severino\nGuerra', 'Pedro\nMoura'];
 
   const navigateToResults = () => {
@@ -23,20 +27,16 @@ function SelectionScreen({ navigation }) {
       Alert.alert('Seleção Incompleta', 'Por favor, selecione um elemento, um ano, um reservatório e insira o resultado.');
       return;
     }
-    
-    // Adicione o resultado aos dados
-    if (result < 0){
-      Alert.alert('Resultado Inválido', 'Por favor, insira um resultado válido.');
-      return;
-    } else if (result >= 0){
-      const newData = [...data, { x: parseInt(selectedYear)+offSet(selectedReservoir), y: parseFloat(result), label: selectedReservoir}];
-      setData(newData);
-    } else{
+
+    const parsedResult = parseFloat(result);
+    if (isNaN(parsedResult) || parsedResult < 0) {
       Alert.alert('Resultado Inválido', 'Por favor, insira um resultado válido.');
       return;
     }
 
-    // Limpe os campos após adicionar
+    const newData = [...data, { x: parseInt(selectedYear) + offSet(selectedReservoir), y: parsedResult, label: selectedReservoir }];
+    setData(newData);
+
     if (!elementDisabled) {
       setSelectedElement('');
     }
@@ -48,26 +48,86 @@ function SelectionScreen({ navigation }) {
   };
 
   const resetChart = () => {
-    setData([]); // Limpa os dados do gráfico
+    setData([]); // Clear chart data
   };
+
+  const openModal = (type) => {
+    setModalVisible({ ...modalVisible, [type]: true });
+  };
+
+  const closeModal = (type) => {
+    setModalVisible({ ...modalVisible, [type]: false });
+  };
+
+  const selectItem = (type, value) => {
+    if (type === 'element') {
+      setSelectedElement(value);
+      setElementDisabled(true);
+    } else if (type === 'year') {
+      setSelectedYear(value);
+    } else if (type === 'reservoir') {
+      setSelectedReservoir(value);
+    }
+    closeModal(type);
+  };
+
+  const renderModal = (type, data) => (
+    <Modal
+      transparent={true}
+      animationType="slide"
+      visible={modalVisible[type]}
+      onRequestClose={() => closeModal(type)}
+    >
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <FlatList
+            data={data}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.modalItem}
+                onPress={() => selectItem(type, item)}
+              >
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => closeModal(type)}
+          >
+            <Text style={styles.closeButtonText}>Fechar</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
 
   const Legend = () => {
     return (
       <View style={styles.legendContainer}>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: colocarCor('Tabocas') }]} />
-          <Text>Tabocas</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: colocarCor('Severino\nGuerra') }]} />
-          <Text>Severino Guerra</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: colocarCor('Pedro\nMoura') }]} />
-          <Text>Pedro Moura</Text>
-        </View>
+        {reservoirs.map((reservoir) => (
+          <View key={reservoir} style={styles.legendItem}>
+            <View style={[styles.legendColor, { backgroundColor: colocarCor(reservoir) }]} />
+            <Text>{reservoir.replace('\n', ' ')}</Text>
+          </View>
+        ))}
       </View>
     );
+  };
+
+  const saveChartAsImage = async () => {
+    try {
+      const uri = await viewShotRef.current.capture();
+      const fileName = `${FileSystem.documentDirectory}chart.png`;
+      await FileSystem.moveAsync({
+        from: uri,
+        to: fileName,
+      });
+      await Sharing.shareAsync(fileName);
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível salvar a imagem. Tente novamente.');
+    }
   };
 
   return (
@@ -75,20 +135,13 @@ function SelectionScreen({ navigation }) {
       <View style={[styles.container, { paddingTop: 10 }]}>
         <Text style={styles.label}>Elemento:</Text>
         <View style={styles.inputContainer}>
-          <Picker
-            style={[styles.input, { flex: 1 }]}
-            selectedValue={selectedElement}
-            onValueChange={(itemValue) => {
-              setSelectedElement(itemValue);
-              setElementDisabled(true);
-            }}
-            enabled={!elementDisabled}
+          <TouchableOpacity
+            style={[styles.input, styles.dropdown]}
+            onPress={() => openModal('element')}
+            disabled={elementDisabled}
           >
-            <Picker.Item label="Selecione um elemento" value=''enabled={false} />
-            {elements.map((element, index) => (
-              <Picker.Item key={index} label={element} value={element} />
-            ))}
-          </Picker>
+            <Text>{selectedElement || 'Selecione um elemento'}</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.lockButton}
             onPress={() => setElementDisabled(!elementDisabled)}
@@ -96,22 +149,17 @@ function SelectionScreen({ navigation }) {
             <Text>{elementDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
           </TouchableOpacity>
         </View>
-        
+        {renderModal('element', elements)}
+
         <Text style={styles.label}>Ano:</Text>
         <View style={styles.inputContainer}>
-          <Picker
-            style={[styles.input, { flex: 1 }]}
-            selectedValue={selectedYear}
-            onValueChange={(itemValue) => {
-              setSelectedYear(itemValue);
-            }}
-            enabled={!yearDisabled}
+          <TouchableOpacity
+            style={[styles.input, styles.dropdown]}
+            onPress={() => openModal('year')}
+            disabled={yearDisabled}
           >
-            <Picker.Item label="Selecione um ano" value="" />
-            {years.map((year, index) => (
-              <Picker.Item key={index} label={year.toString()} value={year} />
-            ))}
-          </Picker>
+            <Text>{selectedYear || 'Selecione um ano'}</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.lockButton}
             onPress={() => setYearDisabled(!yearDisabled)}
@@ -119,20 +167,16 @@ function SelectionScreen({ navigation }) {
             <Text>{yearDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
           </TouchableOpacity>
         </View>
+        {renderModal('year', years)}
 
         <Text style={styles.label}>Reservatório:</Text>
-        <Picker
-          style={styles.input}
-          selectedValue={selectedReservoir}
-          onValueChange={(itemValue) => {
-            setSelectedReservoir(itemValue);
-          }}
+        <TouchableOpacity
+          style={[styles.input, styles.dropdown]}
+          onPress={() => openModal('reservoir')}
         >
-          <Picker.Item label="Selecione um reservatório" value="" />
-          {reservoirs.map((reservoir, index) => (
-            <Picker.Item key={index} label={reservoir} value={reservoir} />
-          ))}
-        </Picker>
+          <Text>{selectedReservoir || 'Selecione um reservatório'}</Text>
+        </TouchableOpacity>
+        {renderModal('reservoir', reservoirs)}
 
         <Text style={styles.label}>Resultado:</Text>
         <TextInput
@@ -149,44 +193,52 @@ function SelectionScreen({ navigation }) {
         >
           <Text style={styles.touchableButtonText}>Adicionar</Text>
         </TouchableOpacity>
-        
+
         {/* Gráfico */}
-        <View style={styles.chartContainer}>
-          <VictoryChart width={400} domainPadding={25} theme={VictoryTheme.material}>
-            <VictoryAxis
-              tickValues={years} // Definindo os valores do eixo X como o array "years"
-              tickFormat={(tick) => Math.floor(tick)}
-            />
-            <VictoryAxis
-              dependentAxis
-              tickFormat={(tick) =>  tick.toFixed(1)} // Definindo os valores do eixo Y como números inteiros
-            />
-            <VictoryBar
-              data={data}
-              barWidth={20}
-              style={{
-                data: {
-                  fill: ({ datum }) => colocarCor(datum.label),
-                },
-                labels: {
-                  display: 'none',
-                },  
-              }}
-              x="x"
-              y="y"
-            />
-          </VictoryChart>
-          <Legend />
-        </View>
+        <ViewShot ref={viewShotRef} options={{ format: "png", quality: 0.9 }}>
+          <View style={styles.chartContainer}>
+            <VictoryChart width={400} domainPadding={25} theme={VictoryTheme.material}>
+              <VictoryAxis
+                tickValues={years} // Definindo os valores do eixo X como o array "years"
+                tickFormat={(tick) => Math.floor(tick)}
+              />
+              <VictoryAxis
+                dependentAxis
+                tickFormat={(tick) => tick.toFixed(1)} // Definindo os valores do eixo Y como números inteiros
+              />
+              <VictoryBar
+                data={data}
+                barWidth={20}
+                style={{
+                  data: {
+                    fill: ({ datum }) => colocarCor(datum.label),
+                  },
+                  labels: {
+                    display: 'none',
+                  },
+                }}
+                x="x"
+                y="y"
+              />
+            </VictoryChart>
+            <Legend />
+          </View>
+        </ViewShot>
         <TouchableOpacity
-        style={[styles.touchableButton, { borderRadius: 20, marginTop: 10 }]}
-        onPress={resetChart}
-      >
-        <Text style={styles.touchableButtonText}>Resetar Gráfico</Text>
-      </TouchableOpacity>
-    </View>
-  </ScrollView>
-);
+          style={[styles.touchableButton, { borderRadius: 20, marginTop: 10 }]}
+          onPress={resetChart}
+        >
+          <Text style={styles.touchableButtonText}>Resetar Gráfico</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.touchableButton, { borderRadius: 20, marginTop: 10 }]}
+          onPress={saveChartAsImage}
+        >
+          <Text style={styles.touchableButtonText}>Salvar Gráfico</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -251,28 +303,57 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
     borderRadius: 5,
   },
+  dropdown: {
+    justifyContent: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    margin: 20,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    width: '100%',
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: '#22a0c9',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: '100%',
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
 
-function offSet(selectedResevoir){
-  if(selectedResevoir == "Tabocas"){
+function offSet(selectedReservoir) {
+  if (selectedReservoir == "Tabocas") {
     return -0.3;
-  }
-  else if(selectedResevoir== "Severino\nGuerra"){
+  } else if (selectedReservoir == "Severino\nGuerra") {
     return 0;
-  }
-  else if(selectedResevoir== "Pedro\nMoura"){
+  } else if (selectedReservoir == "Pedro\nMoura") {
     return 0.3;
   }
 }
 
-function colocarCor(selectedResevoir){
-  if(selectedResevoir == "Tabocas"){
+function colocarCor(selectedReservoir) {
+  if (selectedReservoir == "Tabocas") {
     return '#8c1521';
-  }
-  else if(selectedResevoir== "Severino\nGuerra"){
+  } else if (selectedReservoir == "Severino\nGuerra") {
     return '#163da8';
-  }
-  else if(selectedResevoir== "Pedro\nMoura"){
+  } else if (selectedReservoir == "Pedro\nMoura") {
     return '#541782';
   }
 }
