@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, TextInput, Modal, FlatList } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,6 +10,14 @@ import * as Sharing from 'expo-sharing';
 import '@expo/metro-runtime'
 import {Picker} from '@react-native-picker/picker';
 
+=======
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, TextInput } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
+import { Picker } from "@react-native-picker/picker";
+>>>>>>> b1e8e0e079b68317e76cbb1714f165d3284d6a1e
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
