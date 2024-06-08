@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, Picker, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, TextInput } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { VictoryChart, VictoryBar, VictoryTheme, VictoryAxis } from "victory-native";
+import { VictoryChart, VictoryBar, VictoryTheme } from "victory-native";
+import { Picker } from "@react-native-picker/picker";
 
 function SelectionScreen({ navigation }) {
   const [selectedElement, setSelectedElement] = useState('');
