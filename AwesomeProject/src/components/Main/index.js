@@ -14,8 +14,6 @@ export default function SelectionScreen({ navigation }) {
         setData(newData);
     }
 
- 
-
     return (
         <ScrollView style={{ flex: 1 }}>
             <View>
