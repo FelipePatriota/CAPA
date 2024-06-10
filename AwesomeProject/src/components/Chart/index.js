@@ -1,18 +1,12 @@
-import React from "react";
-import { View, StyleSheet, Text} from "react-native";
+import React, {useEffect} from "react";
+import { View, StyleSheet} from "react-native";
 import Legend from "./Legend";
 import { VictoryChart, VictoryBar, VictoryTheme, VictoryAxis } from "victory-native";
 import ResetButton from "../Buttons/ResetButton";
 
 export default function Chart(props) {
-    
-    
 
-    const { resetData } = props;
 
-    const resetChart = () => {
-        resetData();
-    };
 
     return (
 
@@ -42,8 +36,7 @@ export default function Chart(props) {
                         />
                     </VictoryChart>
                     <Legend/>
-                    <ResetButton onPress ={resetChart} />
-
+                    <ResetButton onPress={props.resetData} />
                 </View>
 
     );

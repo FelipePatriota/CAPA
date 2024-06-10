@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert, TextInput } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import AddButton from "../Buttons/AddButton";
-
+import ModalComponent from "../Modal";
 
 export default function Form(props) {
 
@@ -18,7 +17,23 @@ export default function Form(props) {
     const years = [2020, 2021, 2022, 2023];
     const reservoirs = ['Tabocas', 'Severino\nGuerra', 'Pedro\nMoura'];
 
-    const { onDataChanged } = props;
+    const { onDataChanged, resetButtonPressed, setResetButtonPressed } = props;
+  
+    const [modalVisible, setModalVisible] = useState({ element: false, year: false, reservoir: false });
+
+    const openModal = (type) => {
+        setModalVisible({ ...modalVisible, [type]: true });
+    };
+
+   useEffect(() => {
+       if (resetButtonPressed) {
+        setData([]);
+        onDataChanged([], []);
+        setResetButtonPressed(false);
+    }
+   }, [resetButtonPressed]);
+
+    
 
     const navigateToResults = () => {
         if (!selectedElement || !selectedYear || !selectedReservoir || !result) {
@@ -49,7 +64,7 @@ export default function Form(props) {
         setSelectedReservoir('');
         setResult('');
     };
-
+    setElementDisabled
     function offSet(selectedResevoir) {
         if (selectedResevoir == "Tabocas") {
             return -0.3;
@@ -64,24 +79,16 @@ export default function Form(props) {
 
     return (
 
-        
             <View style={[styles.container, { paddingTop: 10 }]}>
                 <Text style={styles.label}>Elemento:</Text>
                 <View style={styles.inputContainer}>
-                    <Picker
-                        style={[styles.input, { flex: 1 }]}
-                        selectedValue={selectedElement}
-                        onValueChange={(itemValue) => {
-                            setSelectedElement(itemValue);
-                            setElementDisabled(true);
-                        }}
-                        enabled={!elementDisabled}
+                    <TouchableOpacity
+                        style={[styles.input, styles.dropdown]}
+                        onPress={() => openModal('element')}
+                        disabled={elementDisabled}
                     >
-                        <Picker.Item label="Selecione um elemento" value='' enabled={false} />
-                        {elements.map((element, index) => (
-                            <Picker.Item key={index} label={element} value={element} />
-                        ))}
-                    </Picker>
+                        <Text>{selectedElement || 'Selecione um elemento'}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.lockButton}
                         onPress={() => setElementDisabled(!elementDisabled)}
@@ -89,22 +96,30 @@ export default function Form(props) {
                         <Text>{elementDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
                     </TouchableOpacity>
                 </View>
+                <ModalComponent 
+                type = 'element' 
+                data = {elements} 
+                modalVisible = {modalVisible} 
+                setModalVisible = {setModalVisible}
+                selectedElement = {selectedElement}
+                setSelectedElement = {setSelectedElement}
+                selectedYear = {selectedYear}
+                setSelectedYear = {setSelectedYear}
+                selectedReservoir = {selectedReservoir}
+                setSelectedReservoir = {setSelectedReservoir}
+                setElementDisabled = {setElementDisabled}
+                >
+                </ModalComponent>
 
                 <Text style={styles.label}>Ano:</Text>
                 <View style={styles.inputContainer}>
-                    <Picker
-                        style={[styles.input, { flex: 1 }]}
-                        selectedValue={selectedYear}
-                        onValueChange={(itemValue) => {
-                            setSelectedYear(itemValue);
-                        }}
-                        enabled={!yearDisabled}
+                    <TouchableOpacity
+                        style={[styles.input, styles.dropdown]}
+                        onPress={() => openModal('year')}
+                        disabled={yearDisabled}
                     >
-                        <Picker.Item label="Selecione um ano" value="" />
-                        {years.map((year, index) => (
-                            <Picker.Item key={index} label={year.toString()} value={year} />
-                        ))}
-                    </Picker>
+                        <Text>{selectedYear || 'Selecione um ano'}</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.lockButton}
                         onPress={() => setYearDisabled(!yearDisabled)}
@@ -112,21 +127,45 @@ export default function Form(props) {
                         <Text>{yearDisabled ? 'Desbloquear' : 'Bloquear'}</Text>
                     </TouchableOpacity>
                 </View>
-
-                <Text style={styles.label}>Reservatório:</Text>
-                <Picker
-                    style={styles.input}
-                    selectedValue={selectedReservoir}
-                    onValueChange={(itemValue) => {
-                        setSelectedReservoir(itemValue);
-                    }}
+                <ModalComponent
+                    type='year'
+                    data={years}
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    selectedElement={selectedElement}
+                    setSelectedElement={setSelectedElement}
+                    selectedYear={selectedYear}
+                    setSelectedYear={setSelectedYear}
+                    selectedReservoir={selectedReservoir}
+                    setSelectedReservoir={setSelectedReservoir}
+                    setElementDisabled={setElementDisabled}
                 >
-                    <Picker.Item label="Selecione um reservatório" value="" />
-                    {reservoirs.map((reservoir, index) => (
-                        <Picker.Item key={index} label={reservoir} value={reservoir} />
-                    ))}
-                </Picker>
-
+                </ModalComponent>
+               
+                <Text style={styles.label}>Reservatório:</Text>
+                <TouchableOpacity
+                    style={[styles.input, styles.dropdown]}
+                    onPress={() => openModal('reservoir')}
+                >
+                <ModalComponent
+                    type='reservoir'
+                    data={reservoirs}
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    selectedElement={selectedElement}
+                    setSelectedElement={setSelectedElement}
+                    selectedYear={selectedYear}
+                    setSelectedYear={setSelectedYear}
+                    selectedReservoir={selectedReservoir}
+                    setSelectedReservoir={setSelectedReservoir}
+                    setElementDisabled={setElementDisabled}
+                >
+                </ModalComponent>
+                    
+                
+                    <Text>{selectedReservoir || 'Selecione um reservatório'}</Text>
+                </TouchableOpacity>
+              
                 <Text style={styles.label}>Resultado:</Text>
                 <TextInput
                     style={styles.input}
@@ -137,10 +176,13 @@ export default function Form(props) {
                 />
                 <AddButton onPress={navigateToResults} />
                
+
+               
             </View>
         
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -203,5 +245,38 @@ const styles = StyleSheet.create({
         padding: 5,
         backgroundColor: '#ccc',
         borderRadius: 5,
+    },
+    dropdown: {
+        justifyContent: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        margin: 20,
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        width: '100%',
+    },
+    closeButton: {
+        marginTop: 20,
+        backgroundColor: '#22a0c9',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+        width: '100%',
+    },
+    closeButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
     },
 });

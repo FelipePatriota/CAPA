@@ -7,25 +7,24 @@ export default function SelectionScreen({ navigation }) {
     
     const [years, setYears] = useState([]);
     const [data, setData] = useState([]);
+    const [resetButtonPressed, setResetButtonPressed] = useState(false);
     
     const handleData = (newYears, newData) => {
         setYears(newYears);
         setData(newData);
     }
 
-    const resetData = () => {
-        setData([]);
-    }
+ 
 
     return (
         <ScrollView style={{ flex: 1 }}>
             <View>
             
-                <Form  onDataChanged ={handleData}/>
+                <Form onDataChanged={handleData} resetButtonPressed={resetButtonPressed} setResetButtonPressed={setResetButtonPressed}/>
                 <Chart 
                 years={years}
                 data={data}
-                resetData={resetData}
+                resetData={() => setResetButtonPressed(true)}
                 />
 
                 
