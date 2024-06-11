@@ -1,6 +1,6 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-
+import { View,Text } from "react-native";
+import { styles } from "./style/style";
 function colocarCor(selectedResevoir) {
     if (selectedResevoir == "Tabocas") {
         return '#8c1521';
@@ -31,21 +31,3 @@ export default function Legend() {
         </View>
     );
 };
-
-// Adicione aqui os estilos necessários para o componente Legend
-const styles = StyleSheet.create({
-    legendContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 10,
-    },
-    legendItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    legendColor: {
-        width: 20,
-        height: 20,
-        marginRight: 5,
-    },
-});
