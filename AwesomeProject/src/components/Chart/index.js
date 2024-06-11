@@ -1,5 +1,5 @@
 import React, {useRef} from "react";
-import { View, StyleSheet} from "react-native";
+import { View, StyleSheet, ImageBackground} from "react-native";
 import ViewShot from "react-native-view-shot";
 import Legend from "./Legend";
 import { VictoryChart, VictoryBar, VictoryTheme, VictoryAxis } from "victory-native";
@@ -31,7 +31,12 @@ export default function Chart(props) {
     return (
         
         <View style = { styles.chartContainer } >
+            
+            
             <ViewShot ref={viewShotRef} options={{ format: "png", quality: 0.9 }}>
+                <ImageBackground
+                source={require('./style/backgroundChart.png')}
+                style={styles.background}>
                     <VictoryChart width={400} domainPadding={25} theme={VictoryTheme.material}>
                         <VictoryAxis
                             tickValues={props.years} // Definindo os valores do eixo X como o array "years"
@@ -57,9 +62,11 @@ export default function Chart(props) {
                         />
                     </VictoryChart>
                     <Legend/>
+                    </ImageBackground>
             </ViewShot>
                     <ResetButton onPress={props.resetData} />
                     <SaveButton onPress={saveChartAsImage}/>
+                    
                 </View>
 
     );

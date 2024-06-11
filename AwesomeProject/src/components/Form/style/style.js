@@ -34,4 +34,5 @@ export const styles = StyleSheet.create({
     dropdown: {
         justifyContent: 'center',
     },
+    
 });
